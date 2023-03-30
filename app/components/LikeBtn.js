@@ -1,6 +1,6 @@
 import React,{useState}from "react";
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput} from "react-native";
-import { homestyles } from "../../../styles";
+import { homestyles } from "../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign } from '@expo/vector-icons';
 

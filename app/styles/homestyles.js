@@ -57,7 +57,7 @@ const homestyles = StyleSheet.create({
         top:-5,
         width:20,
         height:20,
-        backgroundColor:'#537FE7',
+        backgroundColor:'#D030D0',
         borderRadius:100,
         flexDirection:'row',
         alignItems:'center',
@@ -88,7 +88,7 @@ const homestyles = StyleSheet.create({
     post:{
         paddingHorizontal:6,
 
-        marginBottom:20,
+        marginBottom:10,
         borderStyle:'solid',
         borderBottomWidth:0.4,
         borderColor:'#777777',
@@ -171,7 +171,7 @@ const homestyles = StyleSheet.create({
         paddingHorizontal:19,
         paddingVertical:8,
         borderRadius:30,
-        backgroundColor:'#537FE7',
+        backgroundColor:'#D030D0',
         color:'white',
         flexDirection:'row',
         alignItems:'center',
@@ -252,7 +252,7 @@ const homestyles = StyleSheet.create({
         fontSize:14,
         marginRight:4,
         fontWeight:'bold',
-        color:'#537FE7',
+        color:'#D030D0',
     },
     postbtndiv:{
         flexDirection:'row',
@@ -266,7 +266,7 @@ const homestyles = StyleSheet.create({
         right:0
     },
     postbtn:{
-        backgroundColor:'#537FE7',
+        backgroundColor:'#D030D0',
           flexDirection:'row',
           justifyContent:'center',
         alignItems:'center',

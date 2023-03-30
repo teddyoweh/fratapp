@@ -1,0 +1,38 @@
+import React,{useState}from "react";
+import { View,Text,Image,TouchableOpacity, ScrollView, TextInput} from "react-native";
+import { homestyles,poststyles } from "../styles";
+import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Back, MessageSearch} from 'iconsax-react-native';
+import { FontAwesome5,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
+import PostsList from "./PostsList";
+
+
+export default function PostPage({navigation}){
+    return (
+        <View style={poststyles.container}>
+            <View style={poststyles.top}>
+            <TouchableOpacity onPress={()=>navigation.goBack()}>
+
+        
+            <Ionicons name="chevron-back" size={24} color="black" />
+            </TouchableOpacity>
+            </View>
+            <View style={poststyles.content}>
+                <PostsList navigation={navigation} index={1}/>
+                <View style={poststyles.commentssec}>
+                    <View style={poststyles.commenthead}>
+                    <Messages2 variant="Bulk" color="#D030D0" />
+                    <Text style={poststyles.commentheadtext}>
+          Comments
+
+
+                    </Text>
+                    </View>
+                    <View style={poststyles.comment}>
+                
+                    </View>
+                </View>
+            </View>
+        </View>
+
+    )
+}

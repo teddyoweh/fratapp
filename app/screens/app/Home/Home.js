@@ -4,7 +4,8 @@ import { homestyles } from "../../../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
 
-import LikeBtn from "./LikeBtn";
+import LikeBtn from "../../../components/LikeBtn";
+import PostsList from "../../../components/PostsList";
 export default function HomeScreen({navigation}){
     const filters = ['All','Announments','Events','Posts','Polls']
     const [activeFilter,setActiveFilter]=useState('All')
@@ -35,7 +36,7 @@ export default function HomeScreen({navigation}){
                 
                         <TouchableOpacity style={homestyles.msgicon} onPress={()=>navigation.navigate('MessagesScreen')}>
                        
-                            <Messages3 color="#537FE7" variant="Bulk" size={32} />
+                            <Messages3 color="#D030D0" variant="Bulk" size={32} />
                             <View style={homestyles.msgiconnumb}>
                                 <Text style={homestyles.msgiconnum}>
                                     3
@@ -66,59 +67,10 @@ export default function HomeScreen({navigation}){
             <ScrollView  contentContainerStyle={homestyles.postcontainer}>
                 {
                     [1,2,3,4,1,2,3,4].map((post,index)=>{
-                        return (
-                        <View style={homestyles.post} key={index}>
-                            <View style={homestyles.posttop}>
-                                <View style={homestyles.posttopleft}>
-                                    <View style={homestyles.posttopimg}>
-                                        <Image source={{uri:"https://www.teddyoweh.net/static/media/teddyoweh.0d737b82d1f21ff870f9.jpeg"}} style={homestyles.postuserimg}/>
-                                        
-                                    </View>
-                                    <View style={homestyles.postuserdetails}>
-                                        <View style={{flexDirection:'row',alignItems:'center'}}>
-                                            <Text style={homestyles.postname}>Teddy Oweh</Text>
-                                            <Text style={homestyles.postusername}>@teddyoweh</Text>
-                                        </View>
-
-                        
-                                        <Text style={homestyles.postuserrole}>Tarleton Computer Society President </Text>
-                                    </View>
-                                </View>
-                                <View style={homestyles.posttopright}>
-                                    <TouchableOpacity>
-                                        <More color="grey" size={16}/>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                            <View style={homestyles.postcontent}>
-                                <Text style={homestyles.postcontenttext}>
-                                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iure quidem et dignissimos voluptas omnis praesentium consequuntur soluta est perspiciatis labore repudiandae necessitatibus at culpa eius dolore aliquid, cupiditate quia non?
-                                </Text>
-                            </View>
-                            <View style={homestyles.postinsights1}>
-                                <Text style={homestyles.postinsights1text}>
-                                    10 Likes
-                                </Text>
-                                <Text style={homestyles.postinsights1text}>
-                                 /
-                                </Text>
-                                <Text style={homestyles.postinsights1text}>
-                                    0 Comments
-                                </Text>
-                            </View>
-                            <View style={homestyles.postinsights}>
-                                <View style={homestyles.postcommentbox}>
-                                    <TextInput
-                                    placeholder="Add Comment"
-                                    />
-                                </View>
-                                <View style={homestyles.postinsight}>
-                                 <LikeBtn/>
-                                </View>
-
-                            </View>
-                        </View>
+                        return(
+                            <PostsList index={index}  navigation={navigation} />
                         )
+     
                     })
                 }
           

@@ -5,6 +5,7 @@ import HomeScreen from './Home';
 import { useRoute } from '@react-navigation/native';
 
 import MessagesScreen from './Messages';
+import PostPage from '../../../components/PostPage';
 const HomeStack = createStackNavigator()
 
 function HomeStacks({navigation,route}) {
@@ -22,8 +23,11 @@ function HomeStacks({navigation,route}) {
 
       <HomeStack.Screen name="HomeScreen" component={HomeScreen} />
       <HomeStack.Screen name="MessagesScreen" component={MessagesScreen}
+
            options={{ navigationBarHidden:true,hideNavigationBar:false }}
       />
+
+      <HomeStack.Screen name="PostPage" component={PostPage}/>
     </HomeStack.Navigator>
  
  

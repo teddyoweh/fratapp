@@ -10,6 +10,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import HomeStacks from "./Home";
 import DiscoverStacks from "./Discover";
 import CalendarStacks from "./Calendar";
+import ProfileStacks from "./Profile";
 const AppTab = createBottomTabNavigator()  
 export default function AppScreens(){
     return (
@@ -85,18 +86,18 @@ export default function AppScreens(){
           options={{
             tabBarBadge:10,
             tabBarBadgeStyle:{
-              backgroundColor:'#537FE7'
+              backgroundColor:'#D030D0'
             }
           }}
           />
           <AppTab.Screen name="Notification" component={SafeHome} options={{
                   tabBarBadge:1,
                   tabBarBadgeStyle:{
-                    backgroundColor:'#537FE7'
+                    backgroundColor:'#D030D0'
                   }
 
           }} />
-          <AppTab.Screen name="Profile" component={SafeHome} />
+          <AppTab.Screen name="Profile" component={ProfileStacks} />
          
         </AppTab.Navigator>
       </NavigationContainer>
