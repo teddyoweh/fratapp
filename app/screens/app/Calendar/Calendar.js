@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useRoute } from '@react-navigation/native';
 import {View,Text,ScrollView, TouchableOpacity} from 'react-native'
 import { calendarstyles } from '../../../styles';
+import { CalendarAdd } from 'iconsax-react-native';
 const monthsvar = {
     January: 31,
     February: 28,
@@ -58,6 +59,13 @@ const monthsvar = {
     return (
       <View style={calendarstyles.container}>
         <View style={calendarstyles.top}>
+          <View style={{flexDirection:'row',justifyContent:'flex-end',paddingBottom:10}}>
+            <TouchableOpacity>
+
+  
+            <CalendarAdd/>
+            </TouchableOpacity>
+          </View>
           <ScrollView
             horizontal
             contentContainerStyle={calendarstyles.monthscroll}
@@ -88,6 +96,9 @@ const monthsvar = {
               </TouchableOpacity>
             )})}
           </View>
+        </View>
+        <View style={calendarstyles.bottom}>
+          
         </View>
       </View>
     );

@@ -39,6 +39,9 @@ const discoverstyles = StyleSheet.create({
     },
     results:{
         flexDirection:'column',
+   
+        height:'100%',
+      
 
     }
 ,   result:{
