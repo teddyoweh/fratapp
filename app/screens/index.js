@@ -14,8 +14,8 @@ function AuthScreens(){
 export default function Screens(){
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-            <AppScreens />
-            {/* <AuthScreens/> */}
+            {/* <AppScreens /> */}
+            <AuthScreens/>
 
         </SafeAreaView>
     )

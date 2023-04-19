@@ -46,11 +46,11 @@ export default function DiscoverScreen(){
                     {greeks.map(
                         (greek,index)=>{
                             const orglog = `../../../greekdata/${greek.logo}`
-                            const orglogo = '../../../greekdata/'+greek.logo
+                            var orglogo = '../../../greekdata/'+greek.logo
                  
                             return(
                                 <View style={discoverstyles.result}>
-                                <Image source={require(''+orglogo)} style={discoverstyles.resultlogo}/>
+                                {/* <Image source={require(orglogo)} style={discoverstyles.resultlogo}/> */}
                                 <View style={discoverstyles.resultinfo}>
                                     <Text style={discoverstyles.resultname}>{greek.name} ({greek.letters})</Text>
                                     <Text style={discoverstyles.resultaddress}> - Tarleton State University</Text>
