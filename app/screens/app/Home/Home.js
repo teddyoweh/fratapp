@@ -7,7 +7,7 @@ import { FontAwesome5,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icon
 import LikeBtn from "../../../components/LikeBtn";
 import PostsList from "../../../components/PostsList";
 export default function HomeScreen({navigation}){
-    const filters = ['All','Announments','Events','Posts','Polls']
+    const filters = ['All','Announments','Events','Posts','Polls','Opportunities']
     const [activeFilter,setActiveFilter]=useState('All')
 
     function swapFeed(item){

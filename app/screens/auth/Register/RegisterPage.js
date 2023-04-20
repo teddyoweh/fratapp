@@ -54,11 +54,11 @@ function RegisterPage({navigation}) {
   const [username,setUserName]=useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [emailerror,setEmailError] = useState(false)
+  const [emailerror,setEmailError] = useState(null)
   const [passworderror,setPasswordError] = useState(null)
   const [firstnameerror,setFirstNameError] = useState(null)
-  const [lastnameerror,setLastNameError] = useState(false)
-  const [usernameerror,setUsernameError] = useState(false)
+  const [lastnameerror,setLastNameError] = useState(null)
+  const [usernameerror,setUsernameError] = useState(null)
   const [emailerrortxt,setEmailErrortxt] = useState('')
   const [passworderrortxt,setPasswordErrortxt] = useState('')
   const [firstnameerrortxt,setFirstNameErrortxt] = useState('')
@@ -68,12 +68,66 @@ function RegisterPage({navigation}) {
 
   const [viewpass,setViewPass] = useState(false)
 
+  function isValidEmail(email) {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+  }
+function validateReg(firstname,lastname,email,username,password){
+  
+  if(firstname.length<1){
+    setFirstNameError(false)
+    setFirstNameErrortxt("Firstname is required")
+  }else{
+    setFirstNameError(true)
+  }
+  if(lastname.length<1){
+    setLastNameError(false)
+    setLastNameErrortxt("Lastname is required")
 
+  }else{
+    setLastNameError(true)
+  }
 
+  if(email.length<1){
+    setEmailError(false)
+    setEmailErrortxt("Email is required")
+    }
+    else{
+if(isValidEmail(email)){
+  setEmailError(true)
+  
+}else{
+  setEmailError(false)
+  setEmailErrortxt("Invalid Email")
+}
+
+    }
+
+    if(username.length<1){
+      setUsernameError(false)
+      setUsernameErrortxt("Username is required")
+      }
+      else{
+        setUsernameError(true)
+      }
+
+      if(password.length<1){
+        setPasswordError(false)
+        setPasswordErrortxt("Password is required")
+        
+      }else{
+        if(password.length<6){
+          setPasswordError(false)
+          setPasswordErrortxt("Password must be at least 6 characters long")
+        }else{
+          setPasswordError(true)
+        }
+      }
+}
  
   function onSubmit(){
-    
-    RegisterAction(firstname,lastname,username,email,password,navigation)
+    validateReg(firstname,lastname,email,username,password)
+    //RegisterAction(firstname,lastname,username,email,password,navigation)
 
   }
   return (
@@ -108,6 +162,10 @@ function RegisterPage({navigation}) {
             &&
                   <InputStatusIcon state={firstnameerror}/>  }
           </View>
+          {
+            firstnameerror==false &&
+         
+            <InputStatusText text={firstnameerrortxt}/>}
           </View>
 
           <View style={authstyles.formgrp}>
@@ -124,6 +182,11 @@ function RegisterPage({navigation}) {
             {lastnameerror!=null &&
              <InputStatusIcon state={lastnameerror}/>            }
           </View>
+          {
+            lastnameerror==false &&
+            <InputStatusText text={lastnameerrortxt}/>
+            }
+
           </View>
           
           <View style={authstyles.formgrp}>
@@ -142,7 +205,14 @@ function RegisterPage({navigation}) {
             
              <InputStatusIcon state={usernameerror}/>}
                       </View>
-          </View>
+
+          {
+            usernameerror==false &&
+            <InputStatusText text={usernameerrortxt}/>
+            }          
+            </View>
+
+   
           <View style={authstyles.formgrp}>
             <Text style={authstyles.formtxt}
             >Email</Text>
@@ -159,6 +229,11 @@ function RegisterPage({navigation}) {
             {emailerror!=null&&
             <InputStatusIcon state={emailerror}/>}
             </View>
+            {
+              emailerror==false &&
+              <InputStatusText text={emailerrortxt}/>
+              
+            }
           </View>
           <View style={authstyles.formgrp}>
             <Text style={authstyles.formtxt}>Password</Text>
@@ -170,7 +245,7 @@ function RegisterPage({navigation}) {
              autoCapitalize="none"
              autoCorrect={false}
              secureTextEntry={!viewpass}
-             onChangeText={(text)=>setPassword(password)}
+             onChangeText={(text)=>setPassword(text)}
             placeholder="" />
 
             <TouchableOpacity style={{marginRight:10}}onPress={()=>setViewPass(!viewpass)}>
@@ -182,7 +257,7 @@ function RegisterPage({navigation}) {
               <InputStatusIcon state={passworderror}/>  }
                     </View>
                   {
-                    passworderror!=null&&
+                    passworderror==false&&
                   
 <InputStatusText text={passworderrortxt}/>}
           </View>
@@ -217,7 +292,7 @@ function RegisterPage({navigation}) {
               paddingVertical: 20,
             }}
           >
-            <Pressable style={authstyles.actionbtn}>
+            <Pressable style={authstyles.actionbtn} onPress={()=>onSubmit()}>
               <Text style={{ color: "white", fontSize: 17, fontWeight: 600 }}>Sign Up</Text>
             </Pressable>
           </View>

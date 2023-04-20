@@ -8,7 +8,7 @@ import PostsList from "../../../components/PostsList";
 import ProfileActionbtn from "../../../components/ProfileActionbtn";
 
 export default function ProfileScreen({navigation}){
-    const [filters,setFilters]=useState(['All','Posts','Polls','Media','Tagged'])
+    const [filters,setFilters]=useState(['All','Posts','Polls','Media','Info','Tagged'])
     const [activeFilter,setActiveFilter]=useState('All')
     return (
         <View style={profilestyles.container}>
@@ -77,7 +77,7 @@ export default function ProfileScreen({navigation}){
                        
                     </View>
                     
-                    <View style={profilestyles.profilesocials}>
+                    {/* <View style={profilestyles.profilesocials}>
                     <View style={profilestyles.profilesocial}>
                     <Entypo name="twitter" size={14} color="grey" />
                     <Text style={profilestyles.profilesocialtxt}>@teddyoweh</Text>
@@ -102,7 +102,7 @@ export default function ProfileScreen({navigation}){
                     
                 
         
-                    </View>
+                    </View> */}
                     <View style={profilestyles.profilebtns}>
                             <ProfileActionbtn/>
                             <TouchableOpacity style={profilestyles.profilemsgbtn}>

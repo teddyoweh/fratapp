@@ -12,7 +12,7 @@ export default function ProfileActionbtn(){
     }
     return (
              <TouchableOpacity style={followState?profilestyles.profilebtnu:profilestyles.profilebtn} onPress={()=>btnAction()}>
-                                <Text style={followState?profilestyles.profilebtntxtu:profilestyles.profilebtntxt}>{followState?"Following":"Follow"}</Text>
+                                <Text style={followState?profilestyles.profilebtntxtu:profilestyles.profilebtntxt}>{followState?"Linked":"Link"}</Text>
             </TouchableOpacity>
     )
 }
