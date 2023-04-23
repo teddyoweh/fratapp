@@ -33,7 +33,7 @@ const authstyles = StyleSheet.create({
         marginBottom:10,
         paddingHorizontal:20,
         paddingVertical:20,
-        backgroundColor:'#D030D0',
+        backgroundColor:'#a330d0',
         borderRadius:30,
         width:'80%'
     },
@@ -55,7 +55,7 @@ const authstyles = StyleSheet.create({
 
     },
     landingbtntxt1:{
-        color:'#D030D0',
+        color:'#a330d0',
         fontSize:16,
         fontWeight:600
     },
@@ -109,7 +109,7 @@ const authstyles = StyleSheet.create({
         marginBottom:10,
         paddingHorizontal:20,
         paddingVertical:20,
-        backgroundColor:'#D030D0',
+        backgroundColor:'#a330d0',
         borderRadius:30,
         width:'80%'
     }

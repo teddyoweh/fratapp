@@ -4,9 +4,14 @@ import { homestyles,poststyles } from "../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Back, MessageSearch} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
 import PostsList from "./PostsList";
+import axios from "axios";
+import { endpoints } from "../config/endpoints";
 
 
-export default function PostPage({navigation}){
+export default function PostPage({navigation,route}){
+   
+
+    const {post} = route.params
     return (
         <View style={poststyles.container}>
             <View style={poststyles.top}>
@@ -17,10 +22,10 @@ export default function PostPage({navigation}){
             </TouchableOpacity>
             </View>
             <View style={poststyles.content}>
-                <PostsList navigation={navigation} index={1}/>
+                <PostsList navigation={navigation} index={1} post={post}/>
                 <View style={poststyles.commentssec}>
                     <View style={poststyles.commenthead}>
-                    <Messages2 variant="Bulk" color="#D030D0" />
+                    <Messages2 variant="Bulk" color="#a330d0" />
                     <Text style={poststyles.commentheadtext}>
           Comments
 

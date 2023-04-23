@@ -14,35 +14,46 @@ const PostSchema = new Schema({
     repostid: {},
 
     userid:{},
-    isverified: {
-        type: Boolean,
-    },
+   
 
     content: {
         type: String,
     },
-    isanony:{},
+    
     imgurls: {
         type: Array,
     },
-    ispublic: {
-        type: Boolean,
-    },
+   viewaccess:{
+    type: Array
+   },
+
     isanouncement:{
         type: Boolean,
     },
     isevent:{
         type: Boolean,
     },
-    ispinned:{
+    isjob:{
         type: Boolean,
     },
     ip: {
         type: String,
     },
+    links:{
+        type: Array,
+    },
+    pollsoptions:{
+        type: Array,
+    },
+    pollsvotes:{
+ 
+    },
     likesno: {
 
         type: Number,
+    },
+    eventgoinglist:{
+        type: Array,
     },
     likesuserlist: {},
     commentuserlist: {},
@@ -71,7 +82,7 @@ type:Number
 
 
 
-ispublic:{},
+ 
 networkinfo:{},
     date: {
         type: Date,

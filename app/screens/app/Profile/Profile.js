@@ -1,4 +1,4 @@
-import React,{useState}from "react";
+import React,{useState,useContext}from "react";
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput} from "react-native";
 import { homestyles,profilestyles } from "../../../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Profile, MessageText1, CloudLightning, MessageAdd, MessageQuestion} from 'iconsax-react-native';
@@ -6,8 +6,10 @@ import { FontAwesome5,Ionicons,AntDesign, MaterialIcons,EvilIcons,Entypo} from '
 
 import PostsList from "../../../components/PostsList";
 import ProfileActionbtn from "../../../components/ProfileActionbtn";
-
+import { AppContext } from "../../../context/appContext";
+import MyPosts from "./MyPosts";
 export default function ProfileScreen({navigation}){
+    const {user} = useContext(AppContext)
     const [filters,setFilters]=useState(['All','Posts','Polls','Media','Info','Tagged'])
     const [activeFilter,setActiveFilter]=useState('All')
     return (
@@ -28,43 +30,28 @@ export default function ProfileScreen({navigation}){
 
                         </View>
                         <View style={profilestyles.profiledetailssec}>
-                        <Text style={profilestyles.profilename}>Ifechukwudeni (Teddy) Oweh</Text>
-                        <Text style={profilestyles.profileusername}>@teddyoweh</Text>
-                        <View style={profilestyles.profileuserfol}>
-                        <View style={profilestyles.profilefollowers}>
-                                <Text  style={profilestyles.profilefollowersno}>
-                                12
-                                </Text>
-                                <Text style={profilestyles.profilefollowerstxt}>
-                                    Posts
-                                </Text>
-                            </View>
-                            <View style={profilestyles.profilefollowers}>
-                                <Text style={profilestyles.profilefollowersno}>
-                                1,200
-                                </Text>
-                                <Text style={profilestyles.profilefollowerstxt}>
-                                    Followers
-                                </Text>
-                            </View>
-                            <View style={profilestyles.profilefollowers}>
-                                <Text style={profilestyles.profilefollowersno}>
-                                1,200
-                                </Text>
-                                <Text style={profilestyles.profilefollowerstxt}>
-                                    Following
-                                </Text>
-                            </View>
-                        </View>
-                        </View>
-
-
-                    </View>
-                    <View style={profilestyles.profilebio}>
+                            <View style={{flexDirection:'row',alignItems:'center'}}><Text style={profilestyles.profilename}>{`${user.firstname} ${user.lastname}`}</Text>
+                        <Text style={profilestyles.profileusername}>{`@${user.username}`}</Text></View>
+                        <View style={profilestyles.profilebio}>
                         <Text style={profilestyles.profilebiotxt}>
                           Software Engineer.
                         </Text>
                     </View>
+                       
+                        
+                            {/* <View style={profilestyles.profilefollowers}>
+                                <Text style={profilestyles.profilefollowersno}>
+                                1,200 Links
+                                </Text>
+                                 
+                  
+                            
+                        </View> */}
+                        </View>
+
+
+                    </View>
+                   
                     <View style={profilestyles.profileorgs}>
                     <View style={profilestyles.profileorg}>
                             <Image source={require('../../../assets/tcs.png')} style={profilestyles. profileorglogo}/>
@@ -76,6 +63,7 @@ export default function ProfileScreen({navigation}){
                         </View>
                        
                     </View>
+                    
                     
                     {/* <View style={profilestyles.profilesocials}>
                     <View style={profilestyles.profilesocial}>
@@ -106,7 +94,7 @@ export default function ProfileScreen({navigation}){
                     <View style={profilestyles.profilebtns}>
                             <ProfileActionbtn/>
                             <TouchableOpacity style={profilestyles.profilemsgbtn}>
-                                <MessageText1 variant="Broken" color="#D030D0"/>
+                                <MessageText1 variant="Broken" color="#a330d0"/>
                             </TouchableOpacity>
                         </View>
                 </View>
@@ -127,14 +115,7 @@ export default function ProfileScreen({navigation}){
                      
                 </View>
                     <View style={profilestyles.profileposts}>
-                    {
-                        [1,2,3,4,1,2,3,4].map((post,index)=>{
-                            return(
-                                <PostsList index={index}  navigation={navigation} />
-                            )
-        
-                        })
-                    }
+                    <MyPosts  navigation={navigation}/>
                     </View>
                 </View>
             </ScrollView>

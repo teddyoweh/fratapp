@@ -28,25 +28,23 @@ const userSchema = new Schema({
         type: Boolean,
         default: false
     },
-    major:{
+    password:{
         type: String,
     },
+     
 
     uimg:{
         type:String,
- 
- 
     },
     date: {
         type: Date,
         default: Date.now
     },
-    verificationcode:{
-        type: String,
-    },
-    groups:{
-        type:Array
+    isfirsttime:{
+        type:Boolean,
     }
+    
+    
 
 });
     

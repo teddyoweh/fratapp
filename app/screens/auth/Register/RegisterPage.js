@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import {
   View,
   Text,
@@ -27,6 +27,12 @@ import {
 import { FontAwesome5, Ionicons, AntDesign, MaterialIcons,Entypo } from "@expo/vector-icons";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { RegisterAction } from "../../../actions/auth";
+import axios from "axios";
+import { serverip } from "../../../config/ip";
+import { endpoints } from "../../../config/endpoints";
+import { AuthContext } from "../../../context/authContext";
+import { AppContext } from "../../../context/appContext";
+import  { getData,getJSONData,storeData,storeJSONData } from "../../../utils/storage";
 function borderError(error){
 if(error==false){
   return {borderColor:'#FF4136'}
@@ -49,6 +55,8 @@ function InputStatusText({text}){
 }
 
 function RegisterPage({navigation}) {
+  const {user,setUser}=useContext(AppContext)
+  const {isAuth,setIsAuth} = useContext(AuthContext)
   const [firstname, setFirstName] = useState('')
   const [lastname, setLastName] = useState('')
   const [username,setUserName]=useState('')
@@ -72,62 +80,112 @@ function RegisterPage({navigation}) {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   }
-function validateReg(firstname,lastname,email,username,password){
+  function validateReg(firstname, lastname, email, username, password) {
+    let isValid = true;
   
-  if(firstname.length<1){
-    setFirstNameError(false)
-    setFirstNameErrortxt("Firstname is required")
-  }else{
-    setFirstNameError(true)
-  }
-  if(lastname.length<1){
-    setLastNameError(false)
-    setLastNameErrortxt("Lastname is required")
-
-  }else{
-    setLastNameError(true)
-  }
-
-  if(email.length<1){
-    setEmailError(false)
-    setEmailErrortxt("Email is required")
+    if (firstname.length < 1) {
+      setFirstNameError(false);
+      setFirstNameErrortxt("Firstname is required");
+      isValid = false;
+    } else {
+      setFirstNameError(true);
     }
-    else{
-if(isValidEmail(email)){
-  setEmailError(true)
   
-}else{
-  setEmailError(false)
-  setEmailErrortxt("Invalid Email")
-}
-
+    if (lastname.length < 1) {
+      setLastNameError(false);
+      setLastNameErrortxt("Lastname is required");
+      isValid = false;
+    } else {
+      setLastNameError(true);
     }
-
-    if(username.length<1){
-      setUsernameError(false)
-      setUsernameErrortxt("Username is required")
+  
+    if (email.length < 1) {
+      setEmailError(false);
+      setEmailErrortxt("Email is required");
+      isValid = false;
+    } else {
+      if (isValidEmail(email)) {
+        setEmailError(true);
+      } else {
+        setEmailError(false);
+        setEmailErrortxt("Invalid Email");
+        isValid = false;
       }
-      else{
-        setUsernameError(true)
+    }
+  
+    if (username.length < 1) {
+      setUsernameError(false);
+      setUsernameErrortxt("Username is required");
+      isValid = false;
+    } else {
+      setUsernameError(true);
+    }
+  
+    if (password.length < 1) {
+      setPasswordError(false);
+      setPasswordErrortxt("Password is required");
+      isValid = false;
+    } else {
+      if (password.length < 6) {
+        setPasswordError(false);
+        setPasswordErrortxt("Password must be at least 6 characters long");
+        isValid = false;
+      } else {
+        setPasswordError(true);
       }
-
-      if(password.length<1){
-        setPasswordError(false)
-        setPasswordErrortxt("Password is required")
-        
-      }else{
-        if(password.length<6){
-          setPasswordError(false)
-          setPasswordErrortxt("Password must be at least 6 characters long")
-        }else{
-          setPasswordError(true)
-        }
-      }
-}
+    }
+  
+    return isValid;
+  }
+  
  
   function onSubmit(){
-    validateReg(firstname,lastname,email,username,password)
-    //RegisterAction(firstname,lastname,username,email,password,navigation)
+    if(validateReg(firstname,lastname,email,username,password)){
+      //RegisterAction(firstname,lastname,username,email,password,navigation)
+      axios
+      .post(endpoints["register"], {
+        firstname: firstname,
+        lastname: lastname,
+        username: username,
+        email: email,
+        password: password,
+      })
+      .then((res) => {
+        console.log(res.data)
+        //setIsAuth(true)
+        //setUser(res.data.payload)
+        //storeData('token',res.data.token)
+        //storeJSONData('user',res.data.payload)
+
+        navigation.navigate('LoginStack')
+        
+
+       })
+      .catch((error) => {
+        if (error.response && error.response.status === 400) {
+          const errors = error.response.data;
+          errors.forEach((errorObj) => {
+ 
+            switch (errorObj.type) {
+              case "username":
+              setUsernameError(false);
+              setUsernameErrortxt(errorObj.message);
+                break;
+              case "email":
+              setEmailError(false);
+              setEmailErrortxt(errorObj.message);
+                break;
+              default:
+ 
+                break;
+            }
+          });
+        }  
+      });
+    
+
+    }
+  
 
   }
   return (
@@ -265,7 +323,7 @@ if(isValidEmail(email)){
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <BouncyCheckbox
                 size={25}
-                fillColor="#D030D0"
+                fillColor="#a330d0"
                 unfillColor="#FFFFFF"
                 iconStyle={{ borderColor: "red", borderRadius: 10 }}
                 innerIconStyle={{ borderWidth: 1, borderRadius: 10 }}

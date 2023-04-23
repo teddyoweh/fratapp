@@ -1,11 +1,13 @@
 const Posts = require('../models/Posts');
 
 function fetchpostscontroller(req, res) {
-    const { cursor,user} = req.body;
+    const { cursor,userid} = req.body;
     const limit = 40;
-  
-    let query = { ispublic: true };
-  
+    
+    let query = { };
+    if(userid){
+      query.userid = userid;
+    }
     if (cursor) {
       query._id = { $lt: cursor };
     }

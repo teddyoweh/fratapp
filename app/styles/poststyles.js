@@ -28,7 +28,7 @@ const poststyles = StyleSheet.create({
         marginLeft:4,
         fontSize:15,
         fontWeight:'600',
-        color:'#D030D0'
+        color:'#a330d0'
     }
 
 })

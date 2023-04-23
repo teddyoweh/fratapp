@@ -33,12 +33,12 @@ const profilestyles = StyleSheet.create({
 
     },
     profileimage:{
-        width:110,
-        height:110,
+        width:70,
+        height:70,
         borderRadius:100
     },
     profiledetailssec:{
-
+ 
         paddingHorizontal:10
     },
     profilename:{
@@ -46,7 +46,8 @@ const profilestyles = StyleSheet.create({
         fontWeight:'bold',
     },
     profileusername:{
-        fontSize:17,
+        marginLeft:5,
+        fontSize:15,
         fontWeight:'600',
         color:'#8a8a8a', //#343434 - black
     },
@@ -64,7 +65,7 @@ const profilestyles = StyleSheet.create({
         paddingHorizontal:10,
         borderRadius:30,
         width:'84%',
-        backgroundColor:'#D030D0'
+        backgroundColor:'#a330d0'
     },
     profilebtnu:{
         paddingVertical:15,
@@ -72,7 +73,7 @@ const profilestyles = StyleSheet.create({
         borderRadius:30,
         width:'84%',
         backgroundColor:'#F5DAF5',
-        borderColor:'#D030D0',
+        borderColor:'#a330d0',
         borderStyle:'solid',
         borderWidth:1,
     },
@@ -84,7 +85,7 @@ const profilestyles = StyleSheet.create({
     },
     profilebtntxtu:{
         fontSize:19,
-        color:    '#D030D0',
+        color:    '#a330d0',
         fontWeight:'500',
         textAlign:'center'
     },
@@ -92,7 +93,7 @@ const profilestyles = StyleSheet.create({
     profilemsgbtn:{
         paddingVertical:15,
         paddingHorizontal:15,
-        borderColor:'#D030D0',
+        borderColor:'#a330d0',
         borderStyle:'solid',
         borderWidth:1,
         borderRadius:100
@@ -100,8 +101,8 @@ const profilestyles = StyleSheet.create({
 
     },
     profilebio:{
-        paddingHorizontal:10,
-        paddingVertical:14
+        //paddingHorizontal:10,
+        paddingVertical:3
     },
     
     profilebiotxt:{
@@ -115,6 +116,7 @@ const profilestyles = StyleSheet.create({
         flexWrap:'wrap',
         paddingHorizontal:10,
         paddingBottom:10,
+        paddingTop:10,
     },
     profileorg:{
         flexDirection:'row',
@@ -213,7 +215,8 @@ const profilestyles = StyleSheet.create({
     },
     profilefollowersno:{
         fontSize:15,
-        fontWeight:'600'
+        fontWeight:'600',
+        color:'#a330d0'
     },
     profilefollowerstxt:{
         fontSize:14,

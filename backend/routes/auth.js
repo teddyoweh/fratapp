@@ -32,7 +32,7 @@ return hashedData
  }
 var upload = multer({ storage: storage });
 router.post('/login', logincontroller);
-router.post('/register', upload.single('fileData'), registercontroller);
+router.post('/register', registercontroller);
 router.post('/checkusername', checkUsername);
 router.post('/finduser',findUser)
 router.post('/me', mecontroller);

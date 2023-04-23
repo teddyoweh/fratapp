@@ -4,7 +4,7 @@ const Membership = require('../models/Memberships')
 const Message = require('../models/Message')
 const bodyParser = require('body-parser');
 const generateCode = require('../utils/code');
-const {sendEmail} = require('../utils/mailer');
+const {sendEmail,emailHtml} = require('../utils/mailer');
 const jwt = require('jsonwebtoken');
 const {validateEmail, isEmpty } = require('../utils/validate');
 const Codes = require('../models/Code');
@@ -22,136 +22,88 @@ function hashcode(data){
     
     return hashedData
      } 
-     function hashfilename(filename,email,randomNumberString1){
-       
-        return hashcode(hashcode(filename)+hashcode(hashcode(email)+hashcode(randomNumberString1)));
-    
-     }
-var upload = multer({ dest: 'uploads/' });
- function logincontroller(req, res,) {
-    const { email,code,step } = req.body;
-    const code1 = generateCode();
-    
-    let errors = 0
-    if(isEmpty(email)){
-        res.status(404).json({message:'Email is required'});
-        errors+=1
-    }
-    if(!validateEmail(email)){
-        res.status(401).json({message:'Email is not valid'});
-        errors+=1
-    }
-    if(errors==0){
-        if(step=='1'){
-
-        sendEmail(email,code1)
-        const NewCode = new Codes({
-            email: email,
-            code:code1
-        })
-        NewCode.save()
-        .then(
-            res.status(200).json({ state: true, message: "Message sent successfully" })
-        )
-    }
-
-
-    if(step=='2'){
-        Codes.findOne({ email: email, code:code}).then(usercode=>{
-            if(usercode){
-              
-                    User.findOne({ email:email}).then(userm=>{
-                    if(userm){
-                        const data =   {
-                            email:userm.email,
-                            firstname:userm.firstname,
-                            lastname:userm.lastname,
-                            username:userm.username,
-                            isverified:userm.isverified,
-                            major:userm.major,
-                            id:userm.id,
-                            uimg:userm.uimg
-                        }
-                        const token = jwt.sign({
-                             data
-                          }, 'secret');
-                          Codes.deleteOne({email:email,code:code}).then(()=>{
-                            res.status(200).json({token:token, isreg:true, message: "Verified successfully",user:data })
-
-                          })
-                   
-                    }
-                    else{
-                     
-                        res.status(200).json({ isreg:false, message: "Verified successfully" })
-          
-                }
-            })
-   
-           
-                
-            }
-            else{
-                res.status(400).json({message:'Invalid Code, Try Again'})
-            }
-        })
-
-    }
-
-   
-
+  
  
-}
- 
- 
+async function logincontroller(req, res) {
+    const { email, password } = req.body;
+    const errors = [];
+  
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      errors.push({ type: "email", message: "Email not found" });
+    } else if (hashcode(password) !== user.password) {
+      errors.push({ type: "password", message: "Incorrect password" });
+    }
+  
+    if (errors.length > 0) {
+      res.status(400).json(errors);
+    } else {
+      const payload = {
+        id: user.id,
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        username: user.username,
+        joinedAt: user.joinedAt,
+        isfirsttime: user.isfirsttime,
+        isverified: user.isverified
+      };
+      var token = jwt.sign({ user: payload }, process.env.JWT_SECRET);
+  
+      res.status(200).json({ token: token, payload: payload, status: true });
+    }
+  }
+  
 
-}
-
-function registercontroller(req,res){
-    const {email,firstname,lastname,username,password}= req.body;
-    console.log(req.body)
-    User.findOne({username: username}).then(user => {
-        if(user){
-            res.status(400).json({'message':'Username already Exists','type':'username'})
-        } 
-
-    })
-    User.findOne({email: email}).then(user => {
-        if(user){
-            res.status(400).json({'message':'Email already Exists','type':'email'})
-            } 
-
-    })
-
-    const dateJoined = new Date()
-    newUser = new User({
+async function registercontroller(req, res) {
+    const { email, firstname, lastname, username, password } = req.body;
+    const errors = [];
+  
+    const userWithUsername = await User.findOne({ username: username });
+    if (userWithUsername) {
+      errors.push({ type: "username", message: "Username already exists" });
+    }
+  
+    const userWithEmail = await User.findOne({ email: email });
+    if (userWithEmail) {
+      errors.push({ type: "email", message: "Email already exists" });
+    }
+  
+    if (errors.length > 0) {
+      res.status(400).json(errors);
+    } else {
+      const dateJoined = new Date();
+      console.log(password)
+      console.log(hashcode(password))
+      const newUser = new User({
         email: email,
         firstname: firstname,
         lastname: lastname,
         username: username,
-        password:password
-   
-    
-    })
-    
-   
-   
-    newUser.save().then(user=>{
-        const payload = {
-            email:user.email,
-            firstname:user.firstname,
-            lastname:user.lastname,
-            username:user.username,
-         
-        }
-        const payload1=payload
-        payload1['joinedat']= dateJoined
-        res.status(200).json({payload:payload,status:true})
-         
+        password: hashcode(password),
+        isfirsttime:true,
+        isverified:false
+      });
+  
+      const savedUser = await newUser.save();
+      const payload = {
+        id:savedUser.id,
+        email: savedUser.email,
+        firstname: savedUser.firstname,
+        lastname: savedUser.lastname,
+        username: savedUser.username,
+        joinedAt: dateJoined,
+        isfirstime:savedUser.isfirsttime,
+        isverified:savedUser.isverified
+      };
+      sendEmail(email,emailHtml(firstname,hashcode(`${generateCode()}`)))
+      console.log(`New User Saved [${dateJoined}]`);
+      const token = jwt.sign({ user: payload }, process.env.JWT_SECRET);
 
-        
-    })
-}
+      res.status(200).json({ token:token,payload:payload, status: true });
+    }
+  }
+  
 function checkUsername(req, res) {
 
     const {username} = req.body;
@@ -164,7 +116,7 @@ function checkUsername(req, res) {
 function findUser(req, res) {
 
     User.findById(req.body.id).then(user=>{
-        res.json({firstname:user.firstname,lastname:user.lastname,uimg:user.uimg,username:user.username})
+        res.json({firstname:user.firstname,lastname:user.lastname,username:user.username})
     })
 }
 module.exports = { logincontroller, registercontroller,checkUsername,findUser }

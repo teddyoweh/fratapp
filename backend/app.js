@@ -29,6 +29,7 @@ app.use('/api/posts', posts);
 app.use('/api/auth', auth);
  
 app.use('/images', express.static(__dirname + '/uploads'));
+app.use('/images/assets', express.static(__dirname + '/assets/imgs'));
 const ip = require('./ip');
 
 app.get('/', function(req, res) {

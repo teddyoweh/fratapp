@@ -1,13 +1,28 @@
-import React,{useState}from "react";
+import React,{useState,useEffect}from "react";
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput, Pressable} from "react-native";
 import { homestyles } from "../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
 
 import LikeBtn from "./LikeBtn";
-export default function PostsList({index,navigation}){
+import axios from "axios";
+import { endpoints } from "../config/endpoints";
+export default function PostsList({index,navigation,post}){
+    const [userdetails,setUserDetails]= useState(null)
+   
+    function loadUserDetails(){
+        axios.post(endpoints['finduser'],{id:post.userid}).then(res=>{
+            setUserDetails(res.data)
+        })
+    }
+
+    useEffect(() => {
+        loadUserDetails();
+
+    },[] )
     return (
-        <Pressable style={homestyles.post} key={index} onPress={()=>navigation.navigate("PostPage")}>
+        userdetails &&
+        <Pressable style={homestyles.post} key={index} onPress={()=>navigation.navigate("PostPage",{post:post})}>
             <View style={homestyles.posttop}>
                 <View style={homestyles.posttopleft}>
                     <View style={homestyles.posttopimg}>
@@ -16,8 +31,8 @@ export default function PostsList({index,navigation}){
                     </View>
                     <View style={homestyles.postuserdetails}>
                         <View style={{flexDirection:'row',alignItems:'center'}}>
-                            <Text style={homestyles.postname}>Teddy Oweh</Text>
-                            <Text style={homestyles.postusername}>@teddyoweh</Text>
+                            <Text style={homestyles.postname}>{`${userdetails.firstname} ${userdetails.lastname}`}</Text>
+                            <Text style={homestyles.postusername}>@{`${userdetails.username}`}</Text>
                         </View>
 
         
@@ -32,18 +47,38 @@ export default function PostsList({index,navigation}){
             </View>
             <View style={homestyles.postcontent}>
                 <Text style={homestyles.postcontenttext}>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iure quidem et dignissimos voluptas omnis praesentium consequuntur soluta est perspiciatis labore repudiandae necessitatibus at culpa eius dolore aliquid, cupiditate quia non?
+                   {post.content}
                 </Text>
-            </View>
+            </View>{post.links.length>0&&
+            <View style={{flexDirection:'column',marginVertical:8,borderRadius:30,paddingVertical:2}}>
+                
+        {
+            post.links.map((link,index)=>{
+                return(
+                    <View key={index} style={{flexDirection:'row',justifyContent
+                    :'space-between',alignItems:'center',paddingVertical:3}}>
+                    
+                    <View key={index}style={{flexDirection:'row',alignItems:'center'}}>
+                    
+                    <Text style={{marginLeft:5,color:'blue'}}>{link}</Text>
+                    </View>
+                    <TouchableOpacity onPress={()=>remove(link)}>
+                    
+                    </TouchableOpacity>
+                    </View>
+                )
+            })
+        }
+        </View>}
             <View style={homestyles.postinsights1}>
                 <Text style={homestyles.postinsights1text}>
-                    10 Likes
+                    {post.likesno} Like{post.likesno>1&&'s'}
                 </Text>
                 <Text style={homestyles.postinsights1text}>
                  /
                 </Text>
                 <Text style={homestyles.postinsights1text}>
-                    0 Comments
+                    {post.commentsno} Comments
                 </Text>
             </View>
             <View style={homestyles.postinsights}>

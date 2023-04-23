@@ -86,14 +86,14 @@ export default function AppScreens(){
           options={{
             tabBarBadge:10,
             tabBarBadgeStyle:{
-              backgroundColor:'#D030D0'
+              backgroundColor:'#a330d0'
             }
           }}
           />
           <AppTab.Screen name="Notification" component={SafeHome} options={{
                   tabBarBadge:1,
                   tabBarBadgeStyle:{
-                    backgroundColor:'#D030D0'
+                    backgroundColor:'#a330d0'
                   }
 
           }} />

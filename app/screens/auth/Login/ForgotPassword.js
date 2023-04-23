@@ -37,7 +37,7 @@ function ForgotPasswordPage({navigation}){
       
                 <BouncyCheckbox
   size={25}
-  fillColor="#D030D0"
+  fillColor="#a330d0"
   unfillColor="#FFFFFF"
  
   iconStyle={{ borderColor: "red",borderRadius:10 }}
@@ -56,7 +56,7 @@ function ForgotPasswordPage({navigation}){
     </Text>
  
                 </View>
-                <Text style={{ color:'#D030D0',
+                <Text style={{ color:'#a330d0',
         fontSize:14,
         fontWeight:600,
         position:'relative',
