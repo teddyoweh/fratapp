@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
 
-const { logincontroller, registercontroller,checkUsername,findUser } = require('../controllers/auth.controller')
+const { logincontroller, registercontroller,checkUsername,findUser ,verifyEmailController} = require('../controllers/auth.controller')
 const mecontroller =require('../controllers/me.controller');
 var multer  = require('multer');
 var storage = multer.diskStorage({
@@ -33,6 +33,7 @@ return hashedData
 var upload = multer({ storage: storage });
 router.post('/login', logincontroller);
 router.post('/register', registercontroller);
+router.post('/verify',verifyEmailController)
 router.post('/checkusername', checkUsername);
 router.post('/finduser',findUser)
 router.post('/me', mecontroller);

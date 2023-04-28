@@ -157,7 +157,10 @@ function RegisterPage({navigation}) {
         //storeData('token',res.data.token)
         //storeJSONData('user',res.data.payload)
 
-        navigation.navigate('LoginStack')
+        navigation.navigate('VerificationPage',
+        {
+          email:email,
+        })
         
 
        })

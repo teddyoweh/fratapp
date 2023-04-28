@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import RegisterPage from "./RegisterPage";
 import { useRoute } from '@react-navigation/native';
+import VerificationPage from "./VerificationPage";
  
 
  
@@ -26,7 +27,7 @@ function RegisterStacks({navigation,route}) {
 
 
       <RegisterStack.Screen name="RegisterPage" component={RegisterPage} />
-     
+      <RegisterStack.Screen name="VerificationPage" component={VerificationPage}/>
 
     </RegisterStack.Navigator>
  

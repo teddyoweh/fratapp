@@ -11,10 +11,13 @@ import HomeStacks from "./Home";
 import DiscoverStacks from "./Discover";
 import CalendarStacks from "./Calendar";
 import ProfileStacks from "./Profile";
+import MessagesScreen from "./Messages";
 const AppTab = createBottomTabNavigator()  
-export default function AppScreens(){
+const AppStack = createStackNavigator()
+
+ function AppScreen(){
     return (
-        <NavigationContainer>
+       
         <AppTab.Navigator
         
           screenOptions={({ route }) => ({
@@ -100,10 +103,31 @@ export default function AppScreens(){
           <AppTab.Screen name="Profile" component={ProfileStacks} />
          
         </AppTab.Navigator>
-      </NavigationContainer>
+ 
     )
 }
  
 
  
  
+export default function AppScreens(){
+  return (
+
+
+  <NavigationContainer>
+      <AppStack.Navigator
+      
+      screenOptions={
+        { 
+            headerShown:false,
+        }
+    }>
+
+
+    <AppStack.Screen name='AppScreen' component={AppScreen}/>
+    <AppStack.Screen name='MessagesScreen' component={MessagesScreen}/>
+    </AppStack.Navigator>
+  </NavigationContainer>
+  )
+
+}

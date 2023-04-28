@@ -72,24 +72,12 @@ export default function Screens(){
               console.log('error:', err);
               setIsAuth(false);
               setToken(null);
+              clearData()
             }
           }
 
     }
-    // const getToken = async () => {
-    
-    
-    //       const value = await AsyncStorage.getItem('token')
-    //       console.log(value)
-    //       if(value !== null) {
-    //         console.log(value)
-    //         setIsAuth(true)
-    //         setToken(value)
- 
-    //       }
-    
-      
-    //   }   
+   
       const getUser = async () => {
     
     

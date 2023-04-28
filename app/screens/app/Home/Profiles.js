@@ -9,16 +9,18 @@ import ProfileActionbtn from "../../../components/ProfileActionbtn";
 import { AppContext } from "../../../context/appContext";
 import ProfilePosts from "../../../components/ProfilePosts";
 import { wrapUIMG } from "../../../utils/utils";
-export default function ProfileScreen({navigation}){
+export default function ProfilesScreen({navigation,route}){
     const {user} = useContext(AppContext)
     const [filters,setFilters]=useState(['All','Posts','Polls','Media','Info','Tagged'])
     const [activeFilter,setActiveFilter]=useState('All')
+    const {userdetails} = route.params
+    console.log(userdetails)
     return (
         <View style={profilestyles.container}>
             <View style={profilestyles.settingstop}>
-                <TouchableOpacity style={profilestyles.settingstopitem} >
-                <EvilIcons name="gear" size={30} color="black" />
-                </TouchableOpacity>
+            <TouchableOpacity onPress={()=>navigation.goBack()}>
+                        <Ionicons name="chevron-back" size={24} color="black" />
+                    </TouchableOpacity>
             </View>
             <ScrollView>
 
@@ -26,13 +28,13 @@ export default function ProfileScreen({navigation}){
                 <View style={profilestyles.profilebox}>
                     <View style={profilestyles.profileboxtop}>
                         <View style={profilestyles.profileimagesec}> 
-                        <Image source={{uri:wrapUIMG(user.uimg)}} style={profilestyles.profileimage}/>
+                        <Image source={{uri:wrapUIMG(userdetails.uimg)}} style={profilestyles.profileimage}/>
 
 
                         </View>
                         <View style={profilestyles.profiledetailssec}>
-                            <View style={{flexDirection:'row',alignItems:'center'}}><Text style={profilestyles.profilename}>{`${user.firstname} ${user.lastname}`}</Text>
-                        <Text style={profilestyles.profileusername}>{`@${user.username}`}</Text></View>
+                            <View style={{flexDirection:'row',alignItems:'center'}}><Text style={profilestyles.profilename}>{`${userdetails.firstname} ${userdetails.lastname}`}</Text>
+                        <Text style={profilestyles.profileusername}>{`@${userdetails.username}`}</Text></View>
                         <View style={profilestyles.profilebio}>
                         <Text style={profilestyles.profilebiotxt}>
                           Software Engineer.
@@ -93,9 +95,9 @@ export default function ProfileScreen({navigation}){
         
                     </View> */}
                     <View style={profilestyles.profilebtns}>
-                    <TouchableOpacity style={profilestyles.profilebtn} onPress={()=>navigation.navigate('EditProfile')}>
-                                <Text style={profilestyles.profilebtntxt}>Edit Profile</Text>
-            </TouchableOpacity>
+                        <ProfileActionbtn userid={user.id} partyid={userdetails.userid }/>
+
+                 
                             <TouchableOpacity style={profilestyles.profilemsgbtn}>
                                 <MessageText1 variant="Broken" color="#a330d0"/>
                             </TouchableOpacity>
@@ -107,7 +109,7 @@ export default function ProfileScreen({navigation}){
                     {
                         filters.map((filter,index)=>{
                             return(
-                                <TouchableOpacity style={activeFilter==filter?profilestyles.postfiltera:profilestyles.postfilter} onPress={()=>setActiveFilter(filter)}>
+                                <TouchableOpacity key={index}style={activeFilter==filter?profilestyles.postfiltera:profilestyles.postfilter} onPress={()=>setActiveFilter(filter)}>
                                 <Text style={activeFilter==filter?profilestyles.postfiltertxta:profilestyles.postfiltertxt}>
                                    {filter}</Text>
                                </TouchableOpacity>
@@ -118,7 +120,7 @@ export default function ProfileScreen({navigation}){
                      
                 </View>
                     <View style={profilestyles.profileposts}>
-                    <ProfilePosts  navigation={navigation}/>
+                    <ProfilePosts  navigation={navigation} userid={userdetails.userid }/>
                     </View>
                 </View>
             </ScrollView>

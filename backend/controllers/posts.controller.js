@@ -19,6 +19,7 @@ function hashcode(data){
 function postscontroller(req, res) {
  
        console.log(req.body)
+       
      
     const newPost = new Posts({
  

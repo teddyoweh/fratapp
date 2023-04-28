@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User')
+const Link = require('../models/Links')
 function mecontroller(req,res){
     const {token} =req.body
  console.log(req.body)
@@ -24,5 +25,6 @@ function mecontroller(req,res){
 
 
 }
+ 
 
 module.exports = mecontroller;

@@ -8,22 +8,53 @@ import LikeBtn from "../../../components/LikeBtn";
 import PostsList from "../../../components/PostsList";
 import MakePost from "./MakePost";
 import Feed from "./Feed";
+import { wrapUIMG } from "../../../utils/utils";
 export default function HomeScreen({navigation}){
     const filters = ['All','Announments','Events','Posts','Polls','Opportunities']
     const [activeFilter,setActiveFilter]=useState('All')
     const {user} = useContext(AppContext)
     const postBottomSheet = useRef()
-    function swapFeed(item){
-        setActiveFilter(item)
-
-    }
+    function swapFeed(item) {
+        setActiveFilter(item);
+        navigateToFeed(item);
+      }
+      
+      function navigateToFeed(filter) {
+        switch (filter) {
+          case 'All':
+            navigation.navigate('AllFeed');
+            break;
+          case 'Announments':
+            navigation.navigate('AnnouncementFeed');
+            break;
+          case 'Events':
+            navigation.navigate('EventFeed');
+            break;
+          case 'Posts':
+            navigation.navigate('PostFeed');
+            break;
+          case 'Polls':
+            navigation.navigate('PollsFeed');
+            break;
+          case 'Opportunities':
+            navigation.navigate('OpportunitiesFeed');
+            break;
+          default:
+            navigation.navigate('AllFeed');
+            break;
+        }
+      }
+ 
+      
+      
+      
  
     return (
         <View style={homestyles.container}>
             <View style={homestyles.top}>
                 <View style={homestyles.toptop}>
                    <View style={homestyles.topleft}>
-                        <Image source={{uri:"https://www.teddyoweh.net/static/media/teddyoweh.0d737b82d1f21ff870f9.jpeg"}} style={homestyles.topuserimg}/>
+                        <Image source={{uri:wrapUIMG(user.uimg)}} style={homestyles.topuserimg}/>
                         <View style={homestyles.topuser}>
                             <Text style={homestyles.topusername}>{`${user.firstname} ${user.lastname}`}</Text>
                             <View style={homestyles.topusergroup}>
@@ -69,6 +100,9 @@ export default function HomeScreen({navigation}){
 
                 </ScrollView>
             </View>
+        <View>
+            
+        </View>
         <Feed navigation={navigation}/>
             <View style={homestyles.postbtndiv}>
                 <TouchableOpacity style={homestyles.postbtn} onPress={()=>postBottomSheet.current.show()}> 

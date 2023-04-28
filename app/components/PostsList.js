@@ -7,29 +7,22 @@ import { FontAwesome5,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icon
 import LikeBtn from "./LikeBtn";
 import axios from "axios";
 import { endpoints } from "../config/endpoints";
-export default function PostsList({index,navigation,post}){
-    const [userdetails,setUserDetails]= useState(null)
+import { wrapUIMG } from "../utils/utils";
+export default function PostsList({index,navigation,post,userdetails}){
+    
    
-    function loadUserDetails(){
-        axios.post(endpoints['finduser'],{id:post.userid}).then(res=>{
-            setUserDetails(res.data)
-        })
-    }
-
-    useEffect(() => {
-        loadUserDetails();
-
-    },[] )
+  
+    
     return (
         userdetails &&
-        <Pressable style={homestyles.post} key={index} onPress={()=>navigation.navigate("PostPage",{post:post})}>
+        <Pressable style={homestyles.post} key={index} onPress={()=>navigation.navigate("PostPage",{post:post,userdetails:userdetails})}>
             <View style={homestyles.posttop}>
                 <View style={homestyles.posttopleft}>
                     <View style={homestyles.posttopimg}>
-                        <Image source={{uri:"https://www.teddyoweh.net/static/media/teddyoweh.0d737b82d1f21ff870f9.jpeg"}} style={homestyles.postuserimg}/>
+                        <Image source={{uri:wrapUIMG(userdetails.uimg)}} style={homestyles.postuserimg}/>
                         
                     </View>
-                    <View style={homestyles.postuserdetails}>
+                    <Pressable style={homestyles.postuserdetails} onPress={()=>navigation.navigate('ProfilesScreen',{userdetails:userdetails})}>
                         <View style={{flexDirection:'row',alignItems:'center'}}>
                             <Text style={homestyles.postname}>{`${userdetails.firstname} ${userdetails.lastname}`}</Text>
                             <Text style={homestyles.postusername}>@{`${userdetails.username}`}</Text>
@@ -37,7 +30,7 @@ export default function PostsList({index,navigation,post}){
 
         
                         <Text style={homestyles.postuserrole}>Tarleton Computer Society President </Text>
-                    </View>
+                    </Pressable>
                 </View>
                 <View style={homestyles.posttopright}>
                     <TouchableOpacity>

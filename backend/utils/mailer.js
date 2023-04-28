@@ -19,13 +19,13 @@ from: '"Union " <info@beardb.net>',
 to: email,
 subject: "Union - Verification Code",
 text: "Hello world?",
-html: "Code: " + code,
+html:code
 });
 
 console.log("Message sent: %s", info.messageId);
 return true;
 }
-function emailHtml(firstname,link){
+function emailHtml(firstname,code){
     const logo =`http://${ip}:9990/images/assets/union.png`
     
     return `
@@ -78,6 +78,12 @@ function emailHtml(firstname,link){
             color: #999999;
             margin-top: 40px;
         }
+        b{
+            font-size: 1.5em;
+            color: #D030D0;
+            margin-top: 40px;
+            text-spacing:1px;
+        }
     </style>
      
 
@@ -86,10 +92,10 @@ function emailHtml(firstname,link){
       
         <img class="logo" src="${logo}" alt="Union Logo" width="150" />
         <h2>${firstname}</h2>
-        <p class="message">Thank you for signing up with Union! Please click the button below to verify your email address:</p>
-
-        <a href="https://yourdomain.com/verify?token=your_verification_token" class="button">Verify Email</a>
-    
+        <p class="message">Thank you for signing up with Union! Please use the verification code below to verify your email address</p>
+        <b>
+        ${code}
+        </b>    
         <p class="footer">If you didn't request this, please ignore this email.</p>
     </div>
                 

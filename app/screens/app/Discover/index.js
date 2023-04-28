@@ -1,11 +1,11 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import DiscoverScreen from './Discover';
-import ProfilesScreen from './Profiles';
-const HomeStack = createStackNavigator();
+import ProfilesScreen from '../Home/Profiles';
+const DiscoverStack = createStackNavigator();
 
 function DiscoverStacks() {
   return (
-    <HomeStack.Navigator
+    <DiscoverStack.Navigator
     screenOptions={
         {
             headerShown:false,
@@ -14,9 +14,9 @@ function DiscoverStacks() {
     >
 
 
-      <HomeStack.Screen name="DiscoverScreen" component={DiscoverScreen} />
-      <HomeStack.Screen name="ProfilesScreen" component={ProfilesScreen}/>
-    </HomeStack.Navigator>
+      <DiscoverStack.Screen name="DiscoverScreen" component={DiscoverScreen} />
+ 
+    </DiscoverStack.Navigator>
  
  
   );

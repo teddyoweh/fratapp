@@ -6,10 +6,13 @@ const endpoints = {
     'register':`${serverip}/api/auth/register`,
     'finduser':`${serverip}/api/auth/finduser`,
     'checkusername':`${serverip}/api/auth/checkusername`,
+    'verify':`${serverip}/api/auth/verify`,
 
-
+    'getlinkstat':`${serverip}/api/link/stat`,
+    'updatelink':`${serverip}/api/link/link`,
     'makepost':`${serverip}/api/posts/add`,
     'getposts':`${serverip}/api/posts/fetch`,
+    'fetchmyposts':`${serverip}/api/posts/fetchmyposts`,
     'fetchhotposts':`${serverip}/api/posts/fetchhot`,
     'fetchannouncement':`${serverip}/api/posts/fetchannouncements`,
     'fetchpinned':`${serverip}/api/posts/fetchpinned`,

@@ -1,3 +1,5 @@
+import { serverip } from "../config/ip";
+
 function isLink(input) {
     const urlRegex = new RegExp(
       '^(https?:\\/\\/)' +  
@@ -11,7 +13,13 @@ function isLink(input) {
     return urlRegex.test(input);
   }
 
+const wrapUIMG= (img)=>{
+ 
+ 
+  return `${serverip}${img}`
+}
 
   export {
-    isLink
+    isLink,
+    wrapUIMG
   }

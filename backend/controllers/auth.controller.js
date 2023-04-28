@@ -46,9 +46,10 @@ async function logincontroller(req, res) {
         username: user.username,
         joinedAt: user.joinedAt,
         isfirsttime: user.isfirsttime,
-        isverified: user.isverified
+        isverified: user.isverified,
+        uimg:user.uimg
       };
-      var token = jwt.sign({ user: payload }, process.env.JWT_SECRET);
+      const token = jwt.sign({ user: payload }, process.env.JWT_SECRET);
   
       res.status(200).json({ token: token, payload: payload, status: true });
     }
@@ -94,9 +95,17 @@ async function registercontroller(req, res) {
         username: savedUser.username,
         joinedAt: dateJoined,
         isfirstime:savedUser.isfirsttime,
-        isverified:savedUser.isverified
+        isverified:savedUser.isverified,
+        uimg:savedUser.uimg
       };
-      sendEmail(email,emailHtml(firstname,hashcode(`${generateCode()}`)))
+      const code = generateCode();
+      const newCode = new Codes({
+        code:code,
+        email:email
+      })
+      const savedCode = await newCode.save();
+      const strcode = code.toLocaleString()
+      sendEmail(email,emailHtml(firstname, strcode))
       console.log(`New User Saved [${dateJoined}]`);
       const token = jwt.sign({ user: payload }, process.env.JWT_SECRET);
 
@@ -112,11 +121,49 @@ function checkUsername(req, res) {
 
 }
 
+function verifyEmailController(req, res) {
+  const { code, email } = req.body;
+  console.log(req.body)
+  Codes.findOne({ code, email }).then(codeResult => {
+    if (codeResult) {
+      User.findOneAndUpdate(
+        { email },
+        { $set: { isVerified: true } },
+        { new: true,}
+      ).then(updatedUser => {
+        const payload = {
+          id: updatedUser.id,
+          email: updatedUser.email,
+          firstname: updatedUser.firstname,
+          lastname: updatedUser.lastname,
+          username: updatedUser.username,
+          joinedAt: updatedUser.joinedAt,
+          isFirstTime: updatedUser.isfirstTime,
+          isVerified: updatedUser.isverified,
+          uimg:updatedUser.uimg,
+        };
+        const token = jwt.sign({ user: payload }, process.env.JWT_SECRET);
+
+        res.status(200).json({ token:token, payload:payload, status: true });
+      });
+    } else {
+      console.log('eeef')
+      res.status(400).json({ status: false, message: 'Invalid Code' });
+    }
+  });
+}
 
 function findUser(req, res) {
-
+    console.log(req.body)
     User.findById(req.body.id).then(user=>{
-        res.json({firstname:user.firstname,lastname:user.lastname,username:user.username})
+      if(user){
+
+    
+        res.json({firstname:user.firstname,lastname:user.lastname,username:user.username,uimg:user.uimg,userid:user.id,bio:user.bio,pinnedorgs:user.pinnedorgs})
+
+      }else{
+        res.json(null)
+      }
     })
 }
-module.exports = { logincontroller, registercontroller,checkUsername,findUser }
+module.exports = { logincontroller, registercontroller,checkUsername,findUser, verifyEmailController}

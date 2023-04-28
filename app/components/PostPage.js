@@ -11,7 +11,7 @@ import { endpoints } from "../config/endpoints";
 export default function PostPage({navigation,route}){
    
 
-    const {post} = route.params
+    const {post,userdetails} = route.params
     return (
         <View style={poststyles.container}>
             <View style={poststyles.top}>
@@ -22,7 +22,7 @@ export default function PostPage({navigation,route}){
             </TouchableOpacity>
             </View>
             <View style={poststyles.content}>
-                <PostsList navigation={navigation} index={1} post={post}/>
+                <PostsList navigation={navigation} index={1} post={post} userdetails={userdetails}/>
                 <View style={poststyles.commentssec}>
                     <View style={poststyles.commenthead}>
                     <Messages2 variant="Bulk" color="#a330d0" />

@@ -12,11 +12,12 @@ const profilestyles = StyleSheet.create({
     },
     settingstop:{
         flexDirection:'row',
-        alignItems:'flex-end',
-        justifyContent:'flex-end',
+        alignItems:'flex-start',
+        justifyContent:'flex-start',
         alignContent:'flex-end',
         paddingHorizontal:10,
         paddingVertical:10,
+        paddingBottom:15,
         width:'100%'
     },
     settingstopitem:{
@@ -72,7 +73,7 @@ const profilestyles = StyleSheet.create({
         paddingHorizontal:10,
         borderRadius:30,
         width:'84%',
-        backgroundColor:'#F5DAF5',
+        backgroundColor:'#f9e9ff',
         borderColor:'#a330d0',
         borderStyle:'solid',
         borderWidth:1,
@@ -165,7 +166,8 @@ const profilestyles = StyleSheet.create({
         paddingVertical:10
     },
     profileposts:{
-        paddingVertical:10
+        paddingVertical:10,
+      
     },
     postfilters:{
         paddingTop:10,

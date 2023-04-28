@@ -5,7 +5,7 @@ const homestyles = StyleSheet.create({
  
     container:{
         flex:1,
-        backgroundColor:'#fff',
+        backgroundColor:'white',
     },
     toptop:{
         flexDirection:'row',
@@ -72,6 +72,7 @@ const homestyles = StyleSheet.create({
         fontWeight:'bold',
         fontSize:20,
         color:'#181823',
+        textTransform:'capitalize'
     },
     topuserimg:{
         width:50,
@@ -79,11 +80,13 @@ const homestyles = StyleSheet.create({
         marginRight:10,
         borderRadius:100,
         borderStyle:'solid',
-        borderWidth:2,
-        borderColor:'#grey',
+        borderWidth:1,
+        borderColor:'#ccc',
     },
     postcontainer:{
-        paddingVertical:30
+        paddingVertical:30,
+        backgroundColor:'white',
+     
     },
     post:{
         paddingHorizontal:6,
@@ -209,7 +212,7 @@ const homestyles = StyleSheet.create({
         width:35,
         backgroundColor:'white',
         borderStyle:'solid',
-        borderColor:'#537FE7',
+        borderColor:'#a330d0',
         borderWidth:0.4,
         borderRadius:100,
         flexDirection:'row',
@@ -222,8 +225,8 @@ const homestyles = StyleSheet.create({
         width:35,
         backgroundColor:'white',
         borderStyle:'solid',
-        borderColor:'#537FE7',
-        backgroundColor:'#537FE7',
+        borderColor:'#a330d0',
+        backgroundColor:'#a330d0',
         borderWidth:0.4,
         borderRadius:100,
         flexDirection:'row',

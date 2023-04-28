@@ -13,7 +13,7 @@ export default function LikeBtn(){
     }
     return(
         <TouchableOpacity  style={isLike?homestyles.likebtna:homestyles.likebtn} onPress={()=>onClick()}>
-            <Like1 color={isLike?"white":"#537FE7"} size={18} variant={isLike?"Bulk":"Broken"}/>
+            <Like1 color={isLike?"white":"#a330d0"} size={18} variant={isLike?"Bulk":"Broken"}/>
         </TouchableOpacity> 
     )
 }

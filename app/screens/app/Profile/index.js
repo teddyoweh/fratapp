@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ProfileScreen from './Profile';
 import PostPage from '../../../components/PostPage';
+import EditProfile from './EditProfile';
 import { useRoute } from '@react-navigation/native';
 
 const ProfileStack = createStackNavigator()
@@ -19,9 +20,10 @@ function ProfileStacks({navigation,route}) {
     
     >
 
-
       <ProfileStack.Screen name="ProfileScreen" component={ProfileScreen} />
       <ProfileStack.Screen name="PostPage" component={PostPage}/>
+      <ProfileStack.Screen name="EditProfile" component={EditProfile}/>
+
     
     </ProfileStack.Navigator>
  

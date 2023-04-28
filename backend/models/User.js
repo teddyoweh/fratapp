@@ -20,6 +20,20 @@ const userSchema = new Schema({
  
         minlength: 3
     },
+    bio:{
+        type:String,
+        
+    },
+    schools:{
+        type:Array
+    },
+    orgs:{
+        type:Array
+    },
+    pinnedorgs:{
+        type:Array,
+        default:[]
+    },
     isverified: {
         type: Boolean,
         default: false
@@ -35,6 +49,7 @@ const userSchema = new Schema({
 
     uimg:{
         type:String,
+        default:'/profileimg/profile.png'
     },
     date: {
         type: Date,
@@ -42,6 +57,7 @@ const userSchema = new Schema({
     },
     isfirsttime:{
         type:Boolean,
+        default:true
     }
     
     
