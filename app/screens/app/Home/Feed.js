@@ -22,12 +22,9 @@ function MapOutPosts({posts,navigation,users}){
  
     return(
 
-        posts.map((post,index)=>{
-         
-            return(
-                Object.keys(users).includes(post.userid)&&<PostsList index={index} navigation={navigation} post={post} userdetails={users[post.userid]}/>
-            )
-        })
+        posts.map((post, index) => (
+            Object.keys(users).includes(post.userid) && <PostsList index={index} navigation={navigation} post={post} userdetails={users[post.userid]} />
+        ))
     )
 }
 
@@ -76,10 +73,10 @@ function AllFeed({navigation,route,type}){
     const [postData, setPostData] = useState(null)
     const [users,setUsers] = useState(null)
     const onRefresh = React.useCallback(() => {
-      setRefreshing(true);
-      setTimeout(() => {
-        setRefreshing(false);
-      }, 2000);
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
     }, []);
  
 
@@ -97,13 +94,16 @@ async function loadPosts(){
     })
 
 }
-const memoizedLoadPosts = useCallback(() => {
-    loadPosts();
-  });
+const MemoizedMapOutPosts = React.memo(MapOutPosts);
+
+const memoizedLoadPosts = useCallback(async () => {
+    const res = await axios.post(endpoints['getposts'], { cursor: null });
+    setPostData(res.data);
+}, []);
   
   useEffect(() => {
     memoizedLoadPosts()
-  });
+  }, [memoizedLoadPosts]);
 
 return (
     <ScrollView  contentContainerStyle={homestyles.postcontainer}
@@ -112,8 +112,7 @@ return (
         <RefreshControl refreshing={refreshing} onRefresh={()=>loadPosts()} />
       }>
 
-{postData==null?<LoadingScreen/>:<MapOutPosts posts={postData.posts} navigation={navigation} users={postData.users} />
-        }
+{postData ? <MemoizedMapOutPosts posts={postData.posts} navigation={navigation} users={postData.users} /> : <LoadingScreen />}
   
 
     </ScrollView>

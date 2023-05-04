@@ -6,6 +6,7 @@ import { useRoute } from '@react-navigation/native';
 import {View,Text,ScrollView, TouchableOpacity} from 'react-native'
 import { calendarstyles } from '../../../styles';
 import { CalendarAdd } from 'iconsax-react-native';
+import MakeEvent from './MakeEvent';
 const monthsvar = {
     January: 31,
     February: 28,
@@ -36,8 +37,13 @@ const monthsvar = {
     };
     return currentDate;
   }
+
   
   export default function CalendarScreen() {
+    const eventBottomSheet = useRef()
+    function showEventMaker(){
+      eventBottomSheet.current.show()
+    }
     const [months, setMonths] = useState(Object.keys(monthsvar));
     const [activeDates, setActiveDates] = useState(getCurrentDate());
     const [activeMonth, setActiveMonth] = useState(getCurrentDate()['month']);
@@ -60,7 +66,7 @@ const monthsvar = {
       <View style={calendarstyles.container}>
         <View style={calendarstyles.top}>
           <View style={{flexDirection:'row',justifyContent:'flex-end',paddingBottom:10}}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>showEventMaker()}>
 
   
             <CalendarAdd/>
@@ -100,6 +106,7 @@ const monthsvar = {
         <View style={calendarstyles.bottom}>
           
         </View>
+        <MakeEvent eventBottomSheet={eventBottomSheet} />
       </View>
     );
   }

@@ -33,3 +33,4 @@ function HomeStacks({navigation,route}) {
 
 
 export default HomeStacks
+export {HomeStack}

@@ -1,4 +1,4 @@
-import React,{useState,useEffect}from "react";
+import React,{useState,useEffect,useContext}from "react";
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput, Pressable} from "react-native";
 import { homestyles } from "../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle} from 'iconsax-react-native';
@@ -8,10 +8,21 @@ import LikeBtn from "./LikeBtn";
 import axios from "axios";
 import { endpoints } from "../config/endpoints";
 import { wrapUIMG } from "../utils/utils";
+import { AppContext } from "../context/appContext";
 export default function PostsList({index,navigation,post,userdetails}){
     
-   
-  
+const {user} = useContext(AppContext)
+  function navigateToUser(){
+ 
+    if(userdetails.userid==user.id){
+        navigation.navigate('ProfileScreen')
+    }
+    else{
+
+    
+    navigation.navigate('ProfilesScreen',{userdetails:userdetails})
+}
+  }
     
     return (
         userdetails &&
@@ -22,7 +33,7 @@ export default function PostsList({index,navigation,post,userdetails}){
                         <Image source={{uri:wrapUIMG(userdetails.uimg)}} style={homestyles.postuserimg}/>
                         
                     </View>
-                    <Pressable style={homestyles.postuserdetails} onPress={()=>navigation.navigate('ProfilesScreen',{userdetails:userdetails})}>
+                    <Pressable style={homestyles.postuserdetails} onPress={()=>navigateToUser()}>
                         <View style={{flexDirection:'row',alignItems:'center'}}>
                             <Text style={homestyles.postname}>{`${userdetails.firstname} ${userdetails.lastname}`}</Text>
                             <Text style={homestyles.postusername}>@{`${userdetails.username}`}</Text>

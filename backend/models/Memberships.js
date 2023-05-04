@@ -3,9 +3,7 @@ const Schema = mongoose.Schema;
 
 const MembershipSchema = new Schema({
 
-major_id:{
-
- },
+ 
  group_id:{
 
  },

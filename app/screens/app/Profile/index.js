@@ -5,8 +5,8 @@ import ProfileScreen from './Profile';
 import PostPage from '../../../components/PostPage';
 import EditProfile from './EditProfile';
 import { useRoute } from '@react-navigation/native';
-
-const ProfileStack = createStackNavigator()
+import { HomeStack } from '../Home';
+const ProfileStack = HomeStack
 
 function ProfileStacks({navigation,route}) {
 
@@ -30,7 +30,7 @@ function ProfileStacks({navigation,route}) {
  
   );
 }
-
+ 
 
 
 export default ProfileStacks

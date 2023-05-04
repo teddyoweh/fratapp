@@ -27,6 +27,7 @@ const discoverstyles = StyleSheet.create({
         }
     ,search:{
         paddingHorizontal:10
+        
     },
     resultlogo:{
         width:40,

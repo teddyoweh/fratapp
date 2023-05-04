@@ -1,2 +1,2 @@
-const serverip = 'http://10.46.171.241:9990'
+const serverip = 'http://10.15.171.99:9990'
 export {serverip}
