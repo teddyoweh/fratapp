@@ -34,6 +34,8 @@ const endpoints = {
     'fetchmsgs':`${serverip}/api/messages/fetchmsgs`,
     'sendmsg':`${serverip}/api/messages/sendmsg`,
     'viewedby':`${serverip}/api/messages/viewedby`,
+
+    'addcalendar':`${serverip}/api/calendar/add`
 }
 
 export {endpoints}

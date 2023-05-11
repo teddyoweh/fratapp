@@ -18,7 +18,7 @@ const CalendarSchema = new Schema({
         type:String,}
     ,
     eventlocation:{
-        type:String,
+ 
     },
     eventtype:{},
     
@@ -26,7 +26,8 @@ const CalendarSchema = new Schema({
         type:Array,
     },
     createdat:{
-        type:Date
+        type:Date,
+        default:Date.now()
     },
     createdby:{
         type:String

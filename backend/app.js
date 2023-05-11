@@ -9,6 +9,7 @@ var cors = require('cors')
 const posts = require('./routes/posts');
 const auth = require('./routes/auth');
 const link = require('./routes/link')
+const calendar = require('./routes/calendar')
 //const discover = require('./routes/discover')
 const ModDB = require('./services/db-mod')
 
@@ -28,7 +29,8 @@ app.use(bodyParser.json());
 // app.use('/api/discover',discover)
 app.use('/api/posts', posts);
 app.use('/api/auth', auth);
-app.use('/api/link',link)
+app.use('/api/link',link);
+app.use('/api/calendar',calendar);
  
 app.use('/images', express.static(__dirname + '/uploads'));
 app.use('/images/assets', express.static(__dirname + '/assets/imgs'));
