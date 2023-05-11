@@ -22,19 +22,37 @@ export default function EditProfile({navigation}){
     const dataBottomSheet= useRef()
     const [selectedDate, setSelectedDate] = useState('');
     const [medata,setMeData]  = useState(user)
+    const [firstname,setFirstname] = useState(user.firstname)
+    const [lastname,setLastname] = useState(user.lastname)
+    const [username,setUsername] = useState(user.username)
+    const [bio,setBio] = useState(user.bio)
+    const [dob,setDob] = useState(user.DOB)
+
+
     function toggleDateBtm(){
         
     }
-    function getMeData(){
-        axios.post(endpoints['getmedata',{user:user.id}]).then(res=>{
+    async function getMeData(){
+        axios.post(endpoints['finduser',{user:user.id}]).then(res=>{
+            setMeData(res.data)
             
         })
+    }
+    async function saveMeData(){
+        await axios.post(endpoints['editprofile'],{uid:user.id,firstname:firstname,lastname:lastname,username:username,bio:bio,dob:dob}).then(res=>{
+            console.log(res.data)
+        })
+    
+    
+    }
+    function saveProfile(){
+        saveMeData()
     }
     return (
         <View style={{backgroundColor:'white',flex:1}}>
             <View style={{flexDirection:'row',justifyContent:'space-between'}}>
                 <Button title="Cancel"onPress={()=>navigation.goBack()}/>
-                <Button title="Save"/>
+                <Button title="Save" onPress={()=>saveProfile()}/>
 
             </View>
             <View>
@@ -51,19 +69,15 @@ export default function EditProfile({navigation}){
                                 </View>
                             <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>First Name</Text>
-                                <TextInput style={editprofilestyles.frminput} value={medata.firstname}/>
+                                <TextInput style={editprofilestyles.frminput} value={firstname} onChangeText={(text)=>setFirstname(text)}/>
                             </View>
                             <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>Last Name</Text>
-                                <TextInput style={editprofilestyles.frminput} value={medata.lastname}/>
+                                <TextInput style={editprofilestyles.frminput} value={lastname} onChangeText={(text)=>setLastname(text)}/>
                             </View>
                             <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>UserName</Text>
-                                <TextInput style={editprofilestyles.frminput} value={medata.username}/>
-                            </View>
-                            <View style={editprofilestyles.formgrp}>
-                                <Text style={editprofilestyles.frmttxt}>Email</Text>
-                                <TextInput style={editprofilestyles.frminput} value={medata.email}/>
+                                <TextInput style={editprofilestyles.frminput} value={username} onChangeText={(text)=>setUsername(text)}/>
                             </View>
                             <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>DOB</Text>
@@ -83,7 +97,7 @@ export default function EditProfile({navigation}){
                                 </View>
                             <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>Bio</Text>
-                                <TextInput style={[editprofilestyles.frminput,{height:100}]} multiline={true}/>
+                                <TextInput style={[editprofilestyles.frminput,{height:100}]} multiline={true} value={bio} onChangeText={(text)=>setBio(text)}/>
                             </View>
                             <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>Pinned Orgs</Text>

@@ -107,7 +107,7 @@ export default function ProfileScreen({navigation}){
                     {
                         filters.map((filter,index)=>{
                             return(
-                                <TouchableOpacity style={activeFilter==filter?profilestyles.postfiltera:profilestyles.postfilter} onPress={()=>setActiveFilter(filter)}>
+                                <TouchableOpacity key={index} style={activeFilter==filter?profilestyles.postfiltera:profilestyles.postfilter} onPress={()=>setActiveFilter(filter)}>
                                 <Text style={activeFilter==filter?profilestyles.postfiltertxta:profilestyles.postfiltertxt}>
                                    {filter}</Text>
                                </TouchableOpacity>

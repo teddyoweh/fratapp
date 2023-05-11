@@ -7,6 +7,7 @@ const endpoints = {
     'finduser':`${serverip}/api/auth/finduser`,
     'checkusername':`${serverip}/api/auth/checkusername`,
     'verify':`${serverip}/api/auth/verify`,
+    'editprofile':`${serverip}/api/auth/editprofile`,
 
     'getlinkstat':`${serverip}/api/link/stat`,
     'updatelink':`${serverip}/api/link/link`,

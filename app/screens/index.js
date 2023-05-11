@@ -51,25 +51,31 @@ export default function Screens(){
     const [token,setToken] = useState(null)
 
     async function VerifyAuth(){
-        console.log('Verify')
+ 
         const token1 = await AsyncStorage.getItem('token')
-        console.log('token--',token1)
         try {
             const res = await axios.post(endpoints['me'], { token: token1 });
           
             if (res.data.status) {
-              console.log(res.data.payload.user);
-              storeJSONData('user', res.data.payload.user);
+ 
+              
               storeData('token', res.data.payload.token);
-              setIsAuth(true);
               setToken(res.data.payload.token);
+              setUser(res.data.payload.user)
+              setIsAuth(true);
+    
+      
+          
+            
+           
+              
 
             }
           } catch (err) {
            
         
             if (err.response && err.response.status === 401) {
-              console.log('error:', err);
+        
               setIsAuth(false);
               setToken(null);
               clearData()
@@ -80,13 +86,14 @@ export default function Screens(){
    
       const getUser = async () => {
     
-    
+       
         const value = await AsyncStorage.getItem('user')
+ 
         console.log(value)
         if(value !== null) {
           console.log(value)
     
-          setUser(JSON.parse(value))
+
 
         }
   
@@ -96,7 +103,7 @@ export default function Screens(){
       useEffect(() => {
         VerifyAuth()
       console.log(user)
-      getUser()
+ 
         
       }, [])
       

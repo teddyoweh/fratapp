@@ -154,7 +154,7 @@ function verifyEmailController(req, res) {
 }
 
 function findUser(req, res) {
-    console.log(req.body)
+    console.log(req.body,'finduser')
     User.findById(req.body.id).then(user=>{
       if(user){
 

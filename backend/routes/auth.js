@@ -4,6 +4,7 @@ const crypto = require('crypto');
 
 const { logincontroller, registercontroller,checkUsername,findUser ,verifyEmailController} = require('../controllers/auth.controller')
 const mecontroller =require('../controllers/me.controller');
+const {editprofilecontroller} = require('../controllers/profile.controller')
 var multer  = require('multer');
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -34,6 +35,7 @@ var upload = multer({ storage: storage });
 router.post('/login', logincontroller);
 router.post('/register', registercontroller);
 router.post('/verify',verifyEmailController)
+router.post('/editprofile',editprofilecontroller)
 router.post('/checkusername', checkUsername);
 router.post('/finduser',findUser)
 router.post('/me', mecontroller);

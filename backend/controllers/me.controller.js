@@ -10,7 +10,8 @@ function mecontroller(req,res){
         User.findById(payload.user.id).then(user=>{
          
             if(user){
-                 
+                 payload['user']={firstname:user.firstname,lastname:user.lastname,username:user.username,uimg:user.uimg,userid:user.id,bio:user.bio,pinnedorgs:user.pinnedorgs}
+                 console.log(payload,'palta')
                 res.status(200).json({payload:payload,status:true});
             }else{
       
