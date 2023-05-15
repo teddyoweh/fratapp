@@ -1,7 +1,7 @@
 import React,{useState,useContext}from "react";
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput} from "react-native";
 import { homestyles,profilestyles } from "../../../styles";
-import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Profile, MessageText1, CloudLightning, MessageAdd, MessageQuestion} from 'iconsax-react-native';
+import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Profile, MessageText1, CloudLightning, MessageAdd, MessageQuestion, Category2} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons,EvilIcons,Entypo} from '@expo/vector-icons';
 
 import PostsList from "../../../components/PostsList";
@@ -16,7 +16,7 @@ export default function ProfileScreen({navigation}){
     return (
         <View style={profilestyles.container}>
             <View style={profilestyles.settingstop}>
-                <TouchableOpacity style={profilestyles.settingstopitem} >
+                <TouchableOpacity style={profilestyles.settingstopitem} onPress={()=>navigation.navigate('Settings')} >
                 <EvilIcons name="gear" size={30} color="black" />
                 </TouchableOpacity>
             </View>
@@ -97,7 +97,7 @@ export default function ProfileScreen({navigation}){
                                 <Text style={profilestyles.profilebtntxt}>Edit Profile</Text>
             </TouchableOpacity>
                             <TouchableOpacity style={profilestyles.profilemsgbtn}>
-                                <MessageText1 variant="Broken" color="#a330d0"/>
+                                <Category2 variant="Bulk" color="#a330d0"/>
                             </TouchableOpacity>
                         </View>
                 </View>

@@ -12,8 +12,8 @@ const profilestyles = StyleSheet.create({
     },
     settingstop:{
         flexDirection:'row',
-        alignItems:'flex-start',
-        justifyContent:'flex-start',
+        alignItems:'flex-end',
+        justifyContent:'flex-end',
         alignContent:'flex-end',
         paddingHorizontal:10,
         paddingVertical:10,

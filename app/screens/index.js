@@ -111,7 +111,7 @@ export default function Screens(){
 
       
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             <AuthContext.Provider value={{isAuth,setIsAuth}}>
 <AppContext.Provider value={{user,setUser}}>
     {

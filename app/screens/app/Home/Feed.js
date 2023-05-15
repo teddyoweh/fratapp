@@ -98,6 +98,7 @@ const MemoizedMapOutPosts = React.memo(MapOutPosts);
 
 const memoizedLoadPosts = useCallback(async () => {
     const res = await axios.post(endpoints['getposts'], { cursor: null });
+    console.log(res.data)
     setPostData(res.data);
 }, []);
   
@@ -106,16 +107,25 @@ const memoizedLoadPosts = useCallback(async () => {
   }, [memoizedLoadPosts]);
 
 return (
+  
+
+  
     <ScrollView  contentContainerStyle={homestyles.postcontainer}
             
     refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={()=>loadPosts()} />
       }>
+ 
+{
+postData ?
 
-{postData ? <MemoizedMapOutPosts posts={postData.posts} navigation={navigation} users={postData.users} /> : <LoadingScreen />}
+<MemoizedMapOutPosts posts={postData.posts} navigation={navigation} users={postData.users} />
+
+: <LoadingScreen />}
   
 
     </ScrollView>
+ 
 )
 
 }

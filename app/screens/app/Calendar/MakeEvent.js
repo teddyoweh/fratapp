@@ -710,3 +710,6 @@ const makeeventstyles = StyleSheet.create({
     }, 
 
 })
+
+
+export { makeeventstyles}

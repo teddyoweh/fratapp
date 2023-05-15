@@ -35,7 +35,13 @@ const endpoints = {
     'sendmsg':`${serverip}/api/messages/sendmsg`,
     'viewedby':`${serverip}/api/messages/viewedby`,
 
-    'addcalendar':`${serverip}/api/calendar/add`
+    'addcalendar':`${serverip}/api/calendar/add`,
+    'getcalendar':`${serverip}/api/calendar/getcalendar`,
+    'getcalendarevents':`${serverip}/api/calendar/getcalendarevents`,
+
+    'createorg':`${serverip}/api/orgs/create`,
+    'getorg':`${serverip}/api/orgs/getorg`,
+    'getorgs':`${serverip}/api/orgs/getorgs`,
 }
 
 export {endpoints}

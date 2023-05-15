@@ -17,10 +17,10 @@ export default function ProfilePosts({navigation,userid}){
     const [users,setUsers] = useState(null)
  
     async function loadMyPosts(){
-        
-       await axios.post(endpoints['getposts'],{userid:userid})
+ 
+       await axios.post(endpoints['getposts'],{userid:user.userid})
         .then(function(res){
-            console.log(res.data)
+        console.log(res.data.users)
            setPosts(res.data.posts)
            setUsers(res.data.users)
         })
@@ -35,7 +35,7 @@ export default function ProfilePosts({navigation,userid}){
  
             return(
                 
-                <PostsList key={index }index={index} post={post} navigation={navigation} users={users}/>
+                <PostsList key={index }index={index} post={post} navigation={navigation} userdetails ={users}/>
             )
         })
         
