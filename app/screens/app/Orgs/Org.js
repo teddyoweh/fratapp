@@ -7,7 +7,8 @@ import { AppContext } from "../../../context/appContext";
 import axios from "axios";
 import { endpoints } from "../../../config/endpoints";
 import Spinner from '../../../components/Spinner'
-function RenderOrgs({Orgs,setOrgs,FetchOrgs}){
+import Loading from "../../../components/Loading";
+function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
     const {user} = useContext(AppContext);
   
     useEffect(
@@ -43,7 +44,11 @@ function RenderOrgs({Orgs,setOrgs,FetchOrgs}){
                             borderBottomWidth:1,
                             borderStyle:'solid',
                             borderColor:'#eee'
-                        }}>
+                        }}
+                        onPress={()=>navigation.navigate('OrgStack',{
+                            org:org
+                        })}
+                        >
 
                         <View
                         style={{
@@ -104,17 +109,7 @@ function RenderOrgs({Orgs,setOrgs,FetchOrgs}){
                 )
             }):
             
-                <View
-                style={{
-                    flex:1,
-                    height:'100%',
-                justifyContent:'center',
-                alignItems:'center',
-   
-                }}
-                >
-                    <Spinner/>
-                </View>
+           <Loading/>
                 
                 }
    
@@ -196,7 +191,7 @@ export default function OrgHome({navigation}){
                   }>
          
            
-                    <RenderOrgs Orgs={Orgs} setOrgs={setOrgs} FetchOrgs={FetchOrgs} />
+                    <RenderOrgs Orgs={Orgs} setOrgs={setOrgs} FetchOrgs={FetchOrgs} navigation={navigation}/>
                 
                 </ScrollView>
 

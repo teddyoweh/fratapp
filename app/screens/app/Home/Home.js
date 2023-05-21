@@ -1,7 +1,7 @@
 import React,{useState,useContext,useRef}from "react";
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,  RefreshControl} from "react-native";
 import { homestyles } from "../../../styles";
-import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle} from 'iconsax-react-native';
+import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Add, Send2} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
 import { AppContext } from "../../../context/appContext";
 import LikeBtn from "../../../components/LikeBtn";
@@ -72,7 +72,7 @@ export default function HomeScreen({navigation}){
                 
                         <TouchableOpacity style={homestyles.msgicon} onPress={()=>navigation.navigate('MessagesScreen')}>
                        
-                            <Messages3 color="#a330d0" variant="Bulk" size={32} />
+                            <Send2 color="#a330d0" variant="Outline" size={32} />
                             <View style={homestyles.msgiconnumb}>
                                 <Text style={homestyles.msgiconnum}>
                                     3
@@ -103,10 +103,14 @@ export default function HomeScreen({navigation}){
         <View>
             
         </View>
+      
+
+  
         <Feed navigation={navigation}/>
+   
             <View style={homestyles.postbtndiv}>
                 <TouchableOpacity style={homestyles.postbtn} onPress={()=>postBottomSheet.current.show()}> 
-                <AddCircle color="white" variant="Broken" size={32} />
+                <Add color="white" variant="Broken" size={42} />
                 {/* <Text style={homestyles.postbtntext}>New Post</Text> */}
                 </TouchableOpacity>
 

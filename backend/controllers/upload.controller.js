@@ -16,16 +16,22 @@ function hashcode(data){
         return hashcode(hashcode(filename)+hashcode(hashcode(email)+hashcode(randomNumberString1)));
     
      }
-var upload = multer({ dest: 'uploads/' });
-function uploadcontroller(req,res){
-    const {randomNumberString1,email}= req.body;
-    const uimg = hashfilename(req.file.originalname,email,randomNumberString1)
-    fs.readFile(req.file.path,(err, contents)=> {
-        if (err) {
-        console.log('Error: ', err);
-       }else{
-        console.log('File contents ',contents);
-       }
-      });
+
+function uploadPostImg(req,res){
+   
+
+        console.log(req.file);//this will be automatically set by multer
+        console.log(req.body);
+         
+        fs.readFile(req.file.path,(err, contents)=> {
+         if (err) {
+         console.log('Error: ', err);
+        }else{
+         console.log('File contents ',contents);
+        }
+       });
+      
 }
-module.exports = {uploadcontroller}
+
+
+module.exports = {uploadPostImg}

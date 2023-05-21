@@ -9,20 +9,27 @@ import ProfileActionbtn from "./ProfileActionbtn";
 import { AppContext } from "../context/appContext";
 import axios from "axios";
 import { endpoints } from "../config/endpoints";
+ 
+import Loading from "./Loading";
 
 
 export default function ProfilePosts({navigation,userid}){
     const {user} = useContext(AppContext)
-    const [posts,setPosts] = useState(null)
-    const [users,setUsers] = useState(null)
- 
+    const [postData,setPostData] = useState(null)
+    let id;
+    if(userid){
+        id = userid
+
+    }else{
+        id = user.userid
+    }
     async function loadMyPosts(){
  
-       await axios.post(endpoints['getposts'],{userid:user.userid})
-        .then(function(res){
-        console.log(res.data.users)
-           setPosts(res.data.posts)
-           setUsers(res.data.users)
+       await axios.post(endpoints['getposts'],{userid:id})
+        .then(res=>{
+        
+            setPostData(res.data)
+  
         })
     }
 
@@ -30,14 +37,16 @@ export default function ProfilePosts({navigation,userid}){
         loadMyPosts()
     },[])
     return (
-        posts&&users&&
-        posts.map((post,index)=>{
+        postData!=null?
+        postData.posts.map((post,index)=>{
  
             return(
                 
-                <PostsList key={index }index={index} post={post} navigation={navigation} userdetails ={users}/>
+                <PostsList key={index }index={index} post={post} navigation={navigation} move={false} userdetails ={postData.users[post.userid]}/>
             )
-        })
+        }):
+        
+        <Loading/>
         
     )
 }  

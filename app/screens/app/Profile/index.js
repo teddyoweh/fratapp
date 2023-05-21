@@ -7,7 +7,7 @@ import EditProfile from './EditProfile';
 import { useRoute } from '@react-navigation/native';
 import { HomeStack } from '../Home';
 import Settings from './Settings';
-const ProfileStack = HomeStack
+const ProfileStack =createStackNavigator()
 
 function ProfileStacks({navigation,route}) {
 
@@ -36,3 +36,4 @@ function ProfileStacks({navigation,route}) {
 
 
 export default ProfileStacks
+

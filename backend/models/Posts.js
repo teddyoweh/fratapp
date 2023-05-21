@@ -13,7 +13,9 @@ const PostSchema = new Schema({
 
     repostid: {},
 
-    userid:{},
+    userid:{
+        type: String,
+    },
    
 
     content: {

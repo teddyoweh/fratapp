@@ -33,11 +33,7 @@ export default function ProfileScreen({navigation}){
                         <View style={profilestyles.profiledetailssec}>
                             <View style={{flexDirection:'row',alignItems:'center'}}><Text style={profilestyles.profilename}>{`${user.firstname} ${user.lastname}`}</Text>
                         <Text style={profilestyles.profileusername}>{`@${user.username}`}</Text></View>
-                        <View style={profilestyles.profilebio}>
-                        <Text style={profilestyles.profilebiotxt}>
-                          Software Engineer.
-                        </Text>
-                    </View>
+                
                        
                         
                             {/* <View style={profilestyles.profilefollowers}>
@@ -52,7 +48,11 @@ export default function ProfileScreen({navigation}){
 
 
                     </View>
-                   
+                    <View style={profilestyles.profilebio}>
+                        <Text style={profilestyles.profilebiotxt}>
+                          {user.bio}
+                        </Text>
+                    </View>
                     <View style={profilestyles.profileorgs}>
                     <View style={profilestyles.profileorg}>
                             <Image source={require('../../../assets/tcs.png')} style={profilestyles. profileorglogo}/>

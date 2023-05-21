@@ -10,6 +10,7 @@ import { HomeStack } from '../../Home';
 const OrgStack = HomeStack
 
 function OrgPageStacks({navigation,route}) {
+  const {org} = route.params
 
   return (
     <OrgStack.Navigator
@@ -20,7 +21,9 @@ function OrgPageStacks({navigation,route}) {
     }
     
     >
-        <OrgStack.Screen name='OrgPage' component={OrgPage}/>
+        <OrgStack.Screen name='OrgPage' component={OrgPage}
+        initialParams={{org:org}}
+        />
       
 
        

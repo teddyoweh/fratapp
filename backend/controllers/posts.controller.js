@@ -10,17 +10,22 @@ function hashcode(data){
     const hashedData = hash.digest('hex');
     
     return hashedData
-     } 
+     }
      function hashfilename(filename,email,randomNumberString1){
-       
-        return hashcode(hashcode(filename)+hashcode(hashcode(email)+hashcode(randomNumberString1)));
+     
+        return hashcode(hashcode(filename)+hashcode(hashcode(email)+hashcode(randomNumberString1)))+'.jpeg';
     
      }
 function postscontroller(req, res) {
- 
-       console.log(req.body)
-       
+    const images = []
      
+
+    req.body.images.map((image,index)=>{
+        images.push(hashfilename(image.assets[0].uri,req.body.email,req.body.random))
+
+    })
+     
+    console.log(images)
     const newPost = new Posts({
  
   
@@ -46,6 +51,7 @@ function postscontroller(req, res) {
         repostid: req.body.repostid,
         repostlist: [],
         repostno:0,
+        imgurls:images
         // imgurls:imagedata
 
 
@@ -62,7 +68,7 @@ function postscontroller(req, res) {
                     
                 })
             }
-            console.log(post)
+ 
     res.json(post)
             
 

@@ -12,10 +12,7 @@ const homestyles = StyleSheet.create({
         paddingHorizontal:10,
         alignItems:'center',
         justifyContent:'space-between',
-        borderStyle:'solid',
-        borderBottomWidth:0.4,
-        borderColor:'#777777',
-        paddingBottom:10,
+  
     },
     topleft:{
         flexDirection:'row',
@@ -79,13 +76,15 @@ const homestyles = StyleSheet.create({
         height:50,
         marginRight:10,
         borderRadius:100,
-        borderStyle:'solid',
+ 
         borderWidth:1,
         borderColor:'#ccc',
     },
     postcontainer:{
         paddingVertical:30,
         backgroundColor:'white',
+ 
+        
      
     },
     post:{
@@ -94,7 +93,7 @@ const homestyles = StyleSheet.create({
         marginBottom:10,
         borderStyle:'solid',
         borderBottomWidth:0.4,
-        borderColor:'#777777',
+        borderColor:'#aaa',
         paddingBottom:15,
 
     },
@@ -102,6 +101,7 @@ const homestyles = StyleSheet.create({
         flexDirection:'row',
         alignItems:'flex-start',
         justifyContent:'space-between',
+        paddingHorizontal:10
     },
     posttopleft:{
         flexDirection:'row',
@@ -119,11 +119,16 @@ const homestyles = StyleSheet.create({
     },
     postuserdetails:{
         flexDirection:'column',
-        alignItems:'flex-start',
+        alignItems:'flex-start'
     },
     postusername:{
         marginLeft:4,
         fontSize:14,
+        fontWeight:'400',
+        color:'#828282',
+    },
+    postdate:{
+        fontSize:13,
         fontWeight:'400',
         color:'#828282',
     },
@@ -150,10 +155,8 @@ const homestyles = StyleSheet.create({
     },
     filters:{
         paddingHorizontal:10,
-      paddingVertical:12,
-        borderStyle:'solid',
-        borderBottomWidth:0.4,
-        borderColor:'#777777',
+      paddingVertical:22,
+     
     },
     filter:{
         marginRight:10,
@@ -161,7 +164,7 @@ const homestyles = StyleSheet.create({
         borderColor:"grey",
         borderWidth:0.4,
         paddingHorizontal:15,
-        paddingVertical:5,
+        paddingVertical:15,
         borderRadius:30,
         flexDirection:'row',
         alignItems:'center',
@@ -172,7 +175,7 @@ const homestyles = StyleSheet.create({
         borderStyle:'solid',
         borderWidth:0.4,
         paddingHorizontal:15,
-        paddingVertical:5,
+        paddingVertical:15,
         borderRadius:30,
         backgroundColor:'#a330d0',
         color:'white',
@@ -183,13 +186,13 @@ const homestyles = StyleSheet.create({
     },
     filtertext:{
         fontSize:15,
-        fontWeight:'300',
-        color:'grey',
+        fontWeight:'600',
+        color:'#333',
     },
     filtertexta:{
         fontSize:15,
         fontWeight:'600',
-        color:'white',
+        color:'#fff',
     },
     postinsights:{
         flexDirection:'row-reverse',
@@ -199,6 +202,7 @@ const homestyles = StyleSheet.create({
     postinsight:{
         flexDirection:'row',
         alignItems:'center',
+        marginRight:10
      
     },
     postinsighttext:{
@@ -207,13 +211,14 @@ const homestyles = StyleSheet.create({
         color:'#777777',
         fontWeight:'bold',
     },
-    likebtn:{
-        height:35,
-        width:35,
+    insightbtn:{
+      paddingHorizontal:4,
+      paddingVertical:5,
+      
         backgroundColor:'white',
-        borderStyle:'solid',
-        borderColor:'#a330d0',
-        borderWidth:0.4,
+        // borderStyle:'solid',
+        // // borderColor:'#aaa',
+        // borderWidth:0.4,
         borderRadius:100,
         flexDirection:'row',
         justifyContent:'center',
@@ -237,13 +242,13 @@ const homestyles = StyleSheet.create({
     postcommentbox:{
         flexDirection:'row',
         borderRadius:30,
-        paddingHorizontal:10,
-        paddingVertical:9,
+        paddingHorizontal:15,
+        paddingVertical:13,
         borderStyle:'solid',
-        borderColor:'#777777',
+        borderColor:'#aaa',
 
         borderWidth:0.4,
-        width:'89%'
+        width:'100%'
     },
     postinsights1:{
         flexDirection:'row',
@@ -252,10 +257,10 @@ const homestyles = StyleSheet.create({
         paddingBottom:10,
     },
     postinsights1text:{
-        fontSize:14,
-        marginRight:4,
-        fontWeight:'bold',
-        color:'#a330d0',
+        fontSize:22,
+        marginLeft:4,
+        fontWeight:'400',
+        color:'#333',
     },
     postbtndiv:{
         flexDirection:'row',
@@ -273,9 +278,9 @@ const homestyles = StyleSheet.create({
           flexDirection:'row',
           justifyContent:'center',
         alignItems:'center',
-     
-        paddingHorizontal:15,
-        paddingVertical:10,
+        
+       height:60,
+         width:60,
         borderRadius:100
         
         

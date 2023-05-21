@@ -336,7 +336,7 @@ export default function CreateOrgs({navigation}){
  
     </View>
                          
-                            <TextInput style={makeeventstyles.forminput} placeholder="Organization Phone " value={orgPhone} onChangeText={(text)=>setOrgPhone(text)}/>
+                            <TextInput style={makeeventstyles.forminput} placeholder="Organization Phone" value={orgPhone} onChangeText={(text)=>setOrgPhone(text)}/>
                         </View>
 
                     </View>
@@ -344,7 +344,7 @@ export default function CreateOrgs({navigation}){
                 </ScrollView>
             </View>
             <LoadingModal isVisible={modalVisible} onClose={hideModal} success={success} />
-            <View style={{paddingVertical:10,flexDirection:"row",alignItems:'center',justifyContent:'center'}}>
+            <View style={{paddingVertical:10,flexDirection:"row",alignItems:'center',justifyContent:'center',backgroundColor:'transparent'}}>
             <TouchableOpacity style={makeeventstyles.createeventbtn} onPress={()=>createOrgMethod()}>
                 <Text style={makeeventstyles.createeventbtntext}>Create Organization</Text>
             </TouchableOpacity>

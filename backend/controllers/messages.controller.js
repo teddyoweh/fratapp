@@ -2,6 +2,7 @@ const Course = require('../models/Courses');
 const User = require('../models/User')
 const Membership = require('../models/Memberships')
 const Message = require('../models/Message')
+const Links = require('../models/Links')
 function fetchmessagescontroller(req, res) {
   console.log(req.body)
 
@@ -66,4 +67,10 @@ function messagesViewedByController(req, res) {
       });
   }
   
+function getSuggested(req,res){
+  const {userid} = req.body;
+  Links.find(
+    { $or: [{ partyid: userid }, { userid: userid }] },
+  )
+}
 module.exports ={fetchmessagescontroller,sendmessagescontroller,messagesViewedByController}

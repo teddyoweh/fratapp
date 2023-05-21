@@ -1,4 +1,4 @@
-import React,{useState,useContext,useMemo ,useCallback,useRef}from "react";
+import React,{useState,useContext,useMemo ,useCallback,useRef,useEffect}from "react";
 import { View,Text,Image,TouchableOpacity, ScrollView,   Vibration,    TextInput, Pressable, Button, KeyboardAvoidingView} from "react-native";
 import { homestyles } from "../../../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle,PictureFrame,Chart, Link, Link1, Link21, VoiceCricle, Calendar, VolumeHigh, Volume,Briefcase, Send, Send2, Link2, Xd, Minus, MinusCirlce, MinusSquare, BoxRemove, NoteRemove} from 'iconsax-react-native';
@@ -10,6 +10,9 @@ import BottomSheet from "react-native-gesture-bottom-sheet";
 import { isLink } from "../../../utils/utils";
 import axios from "axios";
 import { endpoints } from "../../../config/endpoints";
+import * as ImagePicker from 'expo-image-picker';
+import {Dimensions} from 'react-native';
+
 
 function LinkInputBox({addLinks}){
     const [link,setLink] = useState('')
@@ -72,13 +75,90 @@ function LinkBox({links,removeLinks}){
         </View>
     )
 }
+
+function RenderImages({images,setImages}){
+    return (
+        <View
+        style={{
+        width:'100%'
+        }}
+        >
+            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                {images.length>0 &&
+                    images.map((image,index)=>{
+                        return(
+                            <View key={index} style={{marginHorizontal:5,flexDirection:'row'}}>
+                                <Image source={{uri:image.uri}} style={{width:300,height:300,borderRadius:6,borderWidth:0.6,borderColor:'#aaa'}}/>
+                                <TouchableOpacity onPress={()=>setImages((prevImages)=>prevImages.filter((img)=>img!==image))}
+                                style={{
+                                    position:'absolute',
+                                    top:5,
+                                    right:4
+                                }}
+                                >
+                                    <MaterialIcons name="cancel" size={15} color="white" />
+                                </TouchableOpacity>
+                            </View>
+                        )
+                    }
+                    )
+                }
+            </ScrollView>
+        </View>
+    )
+}
 export default function MakePost({navigation, postBottomSheet}){
  const [postinput,setPostInput] = useState('')
+    const [images,setImages] = useState([])
+ 
  const posttypes = ['All','Announments','Events','Posts','Polls','Opportunities']
     const [userposttypes,setUserPostTypes] = useState([])
 const [linkStore, setLinkStore] = useState([])
 const snapPoints = useMemo(() => ['25%', '50%'], []);
 const {user} = useContext(AppContext)
+const windowHeight = Dimensions.get('window').height;
+function randomNumberString() {
+    var min = 10000; // Minimum 5-digit number (10,000)
+    var max = 99999; // Maximum 5-digit number (99,999)
+    var randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+    return randomNumber.toString();
+  }
+const uploadImages = async (random) =>{
+
+   images.map(async (image,index)=>{
+    const data = new FormData();
+    data.append('name', 'avatar');
+    data.append('email',user.username)
+    data.append('random',`${random}`)
+    data.append('uri', image.uri)
+    
+    data.append('fileData', {
+     uri : image.uri,
+     type: image.type,
+        name: 'jacked',
+  
+
+    });
+  
+
+
+ 
+    const config = {
+     method: 'POST',
+     headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'multipart/form-data',
+     },
+    
+    };
+   
+   await axios.post(endpoints['uploadpost'],data).then(res=>{
+    
+   })
+   })
+  
+}
+ 
 const handleSheetChanges = useCallback((index) => {
     console.log('handleSheetChanges', index);
   }, []);
@@ -108,6 +188,7 @@ const handleSheetChanges = useCallback((index) => {
     switch (option) {
         case 'media':
           setMediaOptionActive(!mediaOptionActive);
+          addImage()
           break;
         case 'poll':
           setPollOptionActive(!pollOptionActive);
@@ -145,11 +226,17 @@ const handleSheetChanges = useCallback((index) => {
 
 
 async function axiosMakePost(){
-   await axios.post(endpoints['makepost'],{links:linkStore, content:postinput,isjob:opportunityOptionActive,isevent:eventOptionActive,isanouncement:announcementOptionActive,userid:user.id,repostid:null,isrepost:false,})
-    .then((res)=>{
+    const random = randomNumberString()
+  
+   await axios.post(endpoints['makepost'],{links:linkStore, random:random, email:user.username,content:postinput,isjob:opportunityOptionActive,isevent:eventOptionActive,isanouncement:announcementOptionActive,userid:user.userid,repostid:null,isrepost:false,images:images})
+    .then(async (res)=>{
         console.log(res.data);
-        postBottomSheet.current.close()
+        await uploadImages(random).then(res=>{
+            postBottomSheet.current.close()
+        })
+   
     })
+    
 
 
 }
@@ -157,74 +244,55 @@ async function axiosMakePost(){
 function onSubmit(){
     axiosMakePost()
 }
+const addImage = async () => {
+    let _image = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4,3],
+      quality: 1,
+      allowsMultipleSelection:true
+    });
+    console.log(JSON.stringify(_image));
+    if (!_image.canceled) {
+        console.log(_image)
+        setImages((prevImages) => [...prevImages, _image]);
+    }
+  };
+  const  checkForCameraRollPermission=async()=>{
+    const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert("Please grant camera roll permissions inside your system's settings");
+    }else{
+      console.log('Media Permissions are granted')
+    }
+}
+// useEffect(() => {
+//     checkForCameraRollPermission()
+//   }, []);
 return (
     <BottomSheet hasDraggableIcon ref={postBottomSheet} height={850} >
-        <KeyboardAvoidingView>
+        <KeyboardAvoidingView
+        style={{
+            
+            height:'100%'
+        }}
+        >
 
 
         <ScrollView
               keyboardShouldPersistTaps="always"
                 keyboardDismissMode="on-drag"
+                style={{
+                  height:'100%'
+                }}
               >
 
-<View style={{flexDirection:'column',height:480,justifyContent:'space-between'}}>
+<View style={{flexDirection:'column',flex:1}}>
 
 
 
-        <View style={{flexDirection:'column'}}>
-            <View style={{flexDirection:'row',justifyContent:'flex-end',padding:10}}>
-                <Button title="Cancel" onPress={()=>postBottomSheet.current.close()}></Button>
-          
-                {/* <Pressable style={{backgroundColor:'#a330d0',paddingVertical:10,paddingHorizontal:15,borderRadius:30}}><Text style={{color:'white'}}>Post</Text></Pressable> */}
-            </View>
-            <View style={{paddingHorizontal:10}}>
-                <TextInput placeholder="Whats going on?"
-                multiline={true}
-                autoFocus={true}
-                onChangeText={(text)=>setPostInput(text)}
-                style={{
-                    // backgroundColor:'#E8E8E8',
-                    padding:10,
-                    paddingTop:20,
-                    borderRadius:10,
-                    width:'99%',
-                    fontWeight:'600',
-                    fontSize:17,
-                    // height:200,
-             
-                }}
-                />
-
-                {linkStore.length>0&& 
-                <LinkBox links={linkStore} removeLinks={removeLinks}/>
-                }
-            </View>
-
-
-          
-      
-        </View>
-        <View>
-
-
-        {/* <View style={{paddingHorizontal:10}}>
-            <ScrollView                keyboardShouldPersistTaps="always" horizontal={true} showsHorizontalScrollIndicator={false}>
-                    {
-                        posttypes.map((posttype,i)=>{
-                            return(
-                                <TouchableOpacity key={i} style={userposttypes.includes(posttype)==true?homestyles.filtera:homestyles.filter} onPress={()=>updateUserPostType(posttype)}>
-                                    <Text style={userposttypes.includes(posttype)?homestyles.filtertexta:homestyles.filtertext}>{posttype}</Text>
-                                </TouchableOpacity>
-                            )
-                        })
-                    }
-
-
-                </ScrollView>
-
-            </View> */}
-        {linkOptionActive&& <LinkInputBox addLinks={addLinks}/>}
-            <View style={{paddingHorizontal:10,flexDirection:'row',borderColor:'#b777d0',borderTopWidth:1, justifyContent:'space-between', paddingTop:8}}>
+        <View style={{flexDirection:'column',paddingBottom:0}}>
+        <View style={{paddingHorizontal:10,flexDirection:'row', justifyContent:'space-between', paddingTop:8}}>
                 <View style={{paddingHorizontal:10,flexDirection:'row',justifyContent:'space-between',width:'78%'}}>
 
           
@@ -267,9 +335,61 @@ return (
             </Pressable>
                 </View>
             </View>
+            <View style={{paddingHorizontal:10}}>
+                <TextInput placeholder="Whats going on?"
+                multiline={true}
+                autoFocus={true}
+                onChangeText={(text)=>setPostInput(text)}
+                style={{
+                    // backgroundColor:'#E8E8E8',
+                    padding:10,
+                    paddingTop:20,
+                    borderRadius:10,
+                    width:'99%',
+                    fontWeight:'600',
+                    fontSize:17,
+                    // height:200,
+             
+                }}
+                />
+
+                {linkStore.length>0&& 
+                <LinkBox links={linkStore} removeLinks={removeLinks}/>
+                }
             </View>
+            <View style={{paddingHorizontal:10}}>
+                <RenderImages images={images} setImages={setImages}/>
+            </View>
+
+
+          
+      
+        </View>
         </View>
         </ScrollView>
+        <View>
+
+
+        {/* <View style={{paddingHorizontal:10}}>
+            <ScrollView                keyboardShouldPersistTaps="always" horizontal={true} showsHorizontalScrollIndicator={false}>
+                    {
+                        posttypes.map((posttype,i)=>{
+                            return(
+                                <TouchableOpacity key={i} style={userposttypes.includes(posttype)==true?homestyles.filtera:homestyles.filter} onPress={()=>updateUserPostType(posttype)}>
+                                    <Text style={userposttypes.includes(posttype)?homestyles.filtertexta:homestyles.filtertext}>{posttype}</Text>
+                                </TouchableOpacity>
+                            )
+                        })
+                    }
+
+
+                </ScrollView>
+
+            </View> */}
+        {linkOptionActive&& <LinkInputBox addLinks={addLinks}/>}
+         
+            </View>
+      
         </KeyboardAvoidingView>
   </BottomSheet>
 )

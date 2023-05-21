@@ -10,18 +10,19 @@ const searchpostscontroller = require('../controllers/searchposts.controller');
 const likespostscontoller = require('../controllers/likesposts.controller')
 const addcommentscontroller = require('../controllers/addcomment.controller')
 const fetchcommentscontroller = require('../controllers/fetchcomments.controller')
-const {uploadcontroller} = require('../controllers/upload.controller')
+const {uploadcontroller, uploadPostImg} = require('../controllers/upload.controller')
 
 var multer  = require('multer');
 const crypto = require('crypto');
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, 'uploads/');
+      cb(null, 'uploads/posts');
     },
     filename: function (req, file, cb) {
         console.log(file)
         console.log(req.body)
-      cb(null, hashfilename(file.originalname,req.body.email, req.body.randomNumberString1));
+      cb(null, hashfilename(req.body.uri,req.body.email,req.body.random));
+      // hashfilename(file.originalname,req.body.email)
     }
   });
 
@@ -40,6 +41,7 @@ return hashedData
 
  }
 var upload = multer({ storage: storage });
+// var upload = multer({ dest: 'uploads' , limits: { fieldSize: 2 * 1024 * 1024 }});
 router.post('/add', (req, res) => { postscontoller(req, res) })
 router.post('/like', (req, res) => { likespostscontoller(req, res) })
 router.post('/find', (req, res) => { findpostcontroller(req, res) })
@@ -55,7 +57,7 @@ router.post('/fetchpinned', (req, res) => { fetchpinnedposts(req, res) })
 router.post('/search', (req, res) => { searchpostscontroller(req,res)})
 router.post('/addcomment', (req, res) => { addcommentscontroller(req, res) })
 router.post('/fetchcomments', (req, res) => { fetchcommentscontroller(req, res) })
-router.post('/upload',upload.single('fileData'),uploadcontroller)
+router.post('/uploadpost',upload.single('fileData'),uploadPostImg)
 
 
 module.exports = router

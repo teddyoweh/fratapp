@@ -28,7 +28,8 @@ const profilestyles = StyleSheet.create({
     profileboxtop:{
         paddingHorizontal:10,
         flexDirection:'row',
-        alignItems:'center',
+        alignItems:'flex-start',
+        width:'85%'
     },
     profileimagesec:{
 
@@ -102,8 +103,8 @@ const profilestyles = StyleSheet.create({
 
     },
     profilebio:{
-        //paddingHorizontal:10,
-        paddingVertical:3
+        paddingHorizontal:10,
+        paddingVertical:10
     },
     
     profilebiotxt:{

@@ -15,9 +15,20 @@ export default function ProfilesScreen({navigation,route}){
     const [activeFilter,setActiveFilter]=useState('All')
     const {userdetails} = route.params
     console.log(userdetails)
+
+
     return (
         <View style={profilestyles.container}>
-            <View style={profilestyles.settingstop}>
+            <View style={{
+                flexDirection:'row',
+                alignItems:'flex-start',
+                justifyContent:'flex-start',
+                alignContent:'flex-start',
+                paddingHorizontal:10,
+                paddingVertical:10,
+                paddingBottom:15,
+                width:'100%'
+            }}>
             <TouchableOpacity onPress={()=>navigation.goBack()}>
                         <Ionicons name="chevron-back" size={24} color="black" />
                     </TouchableOpacity>
@@ -35,11 +46,7 @@ export default function ProfilesScreen({navigation,route}){
                         <View style={profilestyles.profiledetailssec}>
                             <View style={{flexDirection:'row',alignItems:'center'}}><Text style={profilestyles.profilename}>{`${userdetails.firstname} ${userdetails.lastname}`}</Text>
                         <Text style={profilestyles.profileusername}>{`@${userdetails.username}`}</Text></View>
-                        <View style={profilestyles.profilebio}>
-                        <Text style={profilestyles.profilebiotxt}>
-                          Software Engineer.
-                        </Text>
-                    </View>
+                        
                        
                         
                             {/* <View style={profilestyles.profilefollowers}>
@@ -54,7 +61,11 @@ export default function ProfilesScreen({navigation,route}){
 
 
                     </View>
-                   
+                    <View style={profilestyles.profilebio}>
+                        <Text style={profilestyles.profilebiotxt}>
+                          {userdetails.bio}
+                        </Text>
+                    </View>
                     <View style={profilestyles.profileorgs}>
                     <View style={profilestyles.profileorg}>
                             <Image source={require('../../../assets/tcs.png')} style={profilestyles. profileorglogo}/>

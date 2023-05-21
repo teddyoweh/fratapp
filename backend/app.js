@@ -37,6 +37,7 @@ app.use('/api/orgs',orgs);
 app.use('/images', express.static(__dirname + '/uploads'));
 app.use('/images/assets', express.static(__dirname + '/assets/imgs'));
 app.use('/profileimg', express.static(__dirname + '/assets/profiles'));
+app.use('/postimg', express.static(__dirname + '/uploads/posts'));
 
 const ip = require('./ip');
 

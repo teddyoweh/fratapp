@@ -8,6 +8,7 @@ const endpoints = {
     'checkusername':`${serverip}/api/auth/checkusername`,
     'verify':`${serverip}/api/auth/verify`,
     'editprofile':`${serverip}/api/auth/editprofile`,
+    'uploadprofile':`${serverip}/api/auth/uploadprofile`,
 
     'getlinkstat':`${serverip}/api/link/stat`,
     'updatelink':`${serverip}/api/link/link`,
@@ -23,7 +24,7 @@ const endpoints = {
     'likepost':`${serverip}/api/posts/like`,
     'addcomment':`${serverip}/api/posts/addcomment`,
     'findpost':`${serverip}/api/posts/find`,
-    'upload':`${serverip}/api/posts/upload`,
+    'uploadpost':`${serverip}/api/posts/uploadpost`,
     //
 
     'majorslist':`${serverip}/api/discover/fetchmajors`,

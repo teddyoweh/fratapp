@@ -11,16 +11,17 @@ import axios from "axios";
 import { endpoints } from "../../../config/endpoints";
 
 
-export default function MyPosts({navigation}){
+export default function MyPosts({navigation,route}){
     const {user} = useContext(AppContext)
     const [posts,setPosts] = useState(null)
     const [users,setUsers] = useState(null)
-    function loadMyPosts(){
+    const [postData,setPostData] = useState(null)
+   async function loadMyPosts(){
         
-        axios.post(endpoints['getposts'],{userid:user.id})
+       await axios.post(endpoints['getposts'],{userid:user.userid})
         .then(function(res){
-           setPosts(res.data.posts)
-           setUsers(res.data.users)
+            setPostData(res.data)
+   
         })
     }
 
@@ -28,10 +29,10 @@ export default function MyPosts({navigation}){
         loadMyPosts()
     },[])
     return (
-        posts&&users&&
-        posts.map((post,index)=>{
+        postData&&
+        postData.map((post,index)=>{
             return(
-                <PostsList index={index} post={post} navigation={navigation} users={users}/>
+                <PostsList index={index} post={post} route={route} navigation={navigation} users={postData.users}/>
             )
         })
         
