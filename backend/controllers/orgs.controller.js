@@ -1,5 +1,6 @@
 const Organizations = require('../models/Organizations')
 const OrgMembership = require('../models/OrgMemberships')
+const User = require('../models/User')
 async function createOrg(req, res) {
     try {
       const { name, description, uid, type, org_school, logo, shortname, positions, teams } = req.body;
@@ -20,7 +21,7 @@ async function createOrg(req, res) {
       const org = await newOrg.save();
   
       const newOrgMembership = new OrgMembership({
-        org_id: org._id,
+        org_id: org.id,
         org_type: type,
         user_id: uid,
         role: 'admin',
@@ -76,15 +77,26 @@ async function createOrg(req, res) {
       const org = await Organizations.findById(org_id).exec();
       const memberships = await OrgMembership.find({ org_id }).exec();
   
+      const memberUserIds = memberships.slice(0, 6).map((membership) => membership.user_id);
+  
+      const members = await User.find({ _id: { $in: memberUserIds } }).exec();
+  
+      const memberDetails = members.map((member) => ({
+        name: `${member.firstname} ${member.lastname}`,
+        userid: member._id,
+        uimg: member.uimg,
+      }));
+  
       res.status(200).json({
         status: true,
         org: org,
-        memberships: memberships,
+        members: memberDetails,
       });
     } catch (error) {
       res.status(500).json({ status: false, error: error.message });
     }
   }
+  
   
 module.exports =  {
     createOrg,

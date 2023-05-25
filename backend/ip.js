@@ -21,3 +21,4 @@ for (const name of Object.keys(nets)) {
 
 const ans = results['en0'][0];
 module.exports = ans
+
