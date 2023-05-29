@@ -5,6 +5,7 @@ const endpoints = {
     'login':`${serverip}/api/auth/login`,
     'register':`${serverip}/api/auth/register`,
     'finduser':`${serverip}/api/auth/finduser`,
+    'searchuser':`${serverip}/api/auth/searchuser`,
     'checkusername':`${serverip}/api/auth/checkusername`,
     'verify':`${serverip}/api/auth/verify`,
     'editprofile':`${serverip}/api/auth/editprofile`,

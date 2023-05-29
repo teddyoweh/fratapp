@@ -4,6 +4,7 @@ const crypto = require('crypto');
 
 const { logincontroller, registercontroller,checkUsername,findUser ,verifyEmailController} = require('../controllers/auth.controller')
 const mecontroller =require('../controllers/me.controller');
+const {searchUser} = require('../controllers/user.controller')
 const {editprofilecontroller} = require('../controllers/profile.controller')
 var multer  = require('multer');
 const { uploadPostImg } = require('../controllers/upload.controller');
@@ -43,6 +44,7 @@ router.post('/verify',verifyEmailController)
 router.post('/editprofile',editprofilecontroller)
 router.post('/checkusername', checkUsername);
 router.post('/finduser',findUser)
+router.post('/searchuser',searchUser)
 router.post('/me', mecontroller);
 router.post('/uploadprofile',upload.single('file'),uploadPostImg)
 

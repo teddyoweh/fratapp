@@ -1,7 +1,7 @@
-import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,  RefreshControl,KeyboardAvoidingView} from "react-native";
+import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,  RefreshControl,KeyboardAvoidingView, Button} from "react-native";
 import { homestyles,discoverstyles } from "../../../../styles";
 import { Message, Messages1,Message2, Messages2, SearchNormal, Messages3, MessageSquare,More,Like, Like1,AddCircle, ElementPlus, UserCirlceAdd, Add} from 'iconsax-react-native';
-import { FontAwesome5,Ionicons,AntDesign, MaterialIcons,Entypo} from '@expo/vector-icons';
+import { FontAwesome5,Feather, Ionicons,AntDesign, MaterialIcons,Entypo} from '@expo/vector-icons';
 import { useContext, useEffect,useRef, useState,useCallback } from "react";
 import { AppContext } from "../../../../context/appContext";
 import axios from "axios";
@@ -12,30 +12,195 @@ import { wrapUIMG } from "../../../../utils/utils";
 import BottomSheet from "react-native-gesture-bottom-sheet";
 
 function AddUserAccessSheet({bottomSheet}){
-
+    const {user} = useContext(AppContext)
     const [users,setUsers] = useState(null)
+    const [selectedUsers,setSelectedUsers] = useState([])
+    const [input,setInput] = useState('')
+    async function searchUsers(input){
+        setInput(input)
+        await axios.post(endpoints['searchuser'],{
+            search:input.toLowerCase(),
+            userid:user.userid
+        }).then(res=>{
+            console.log(res.data)
+            setUsers(res.data)
+        })
+    }
+    const addUser = (uid) => {
+        if(!selectedUsers.includes(uid)){
+            setSelectedUsers([...selectedUsers,uid])
+        }else{
+            removeUser(uid)
+        }
+        console.log(selectedUsers)
+    }
+    const removeUser = (uid) =>{
+        setSelectedUsers(selectedUsers.filter(u=>u!==uid))
+    }
+        
+        
 
     return (
         <>
 
         <BottomSheet  hasDraggableIcon={false} ref={bottomSheet} height={850}  >
         <KeyboardAvoidingView style={{backgroundColor:"white",flex:1,
-    paddingTop:20,paddingHorizontal:10}}>
+    paddingTop:20}}>
 
-        <View style={discoverstyles.searchbox}>
+        <View style={[discoverstyles.searchbox,{marginHorizontal:10}]}>
                     <SearchNormal variant="Broken" color="grey" />
-                    <TextInput style={discoverstyles.search} placeholderTextColor={'#aaa'} placeholder="Search Username, Firstname, Lastname"/>
+                    <TextInput style={discoverstyles.search}    autoCapitalize="none"  placeholderTextColor={'#aaa'} placeholder="Search Username, Firstname, Lastname" value={input} onChangeText={(text)=>searchUsers(text)}/>
                 </View>
         <ScrollView
               keyboardShouldPersistTaps="always"
                 keyboardDismissMode="on-drag"
-                contentContainerStyle={{backgroundColor:"white"}}
+                contentContainerStyle={{backgroundColor:"white",flex:1}}
               >
 
-<View style={{flexDirection:'column', backgroundColor:'white', paddingHorizontal:10,paddingTop:10}}>
+<View style={{flexDirection:'column', backgroundColor:'white', height:"100%",paddingTop:10}}>
 
  
+{
+    users!=null?
+    
+    users.length==0?
+    <View
+    style={{
+        flexDirection: 'row',
+        justifyContent:'center',
+        alignItems:'center',
+        height:'90%'
+    }}
+    >
+        <Text
+        style={{
+            fontSize: 18,
+            color:'#333',
+            fontWeight:'700'
+        }}
+        >
+           No Users Found
+        </Text>
+    </View>
+    :
+    <View
+    style={{
+        flexDirection:"column",
+        justifyContent:'flex-start'
 
+    }}
+    >
+        <View
+        style={{
+            flexDirection:'row',
+            justifyContent:'space-between',
+            paddingHorizontal:20
+        }}
+        >
+            <Text
+            style={{
+                fontSize: 15,
+                fontWeight:600
+            }}
+            >
+            Selected Users ({selectedUsers.length}) 
+            </Text>
+        <Button title="Add"/>
+        </View>
+        {
+            users.map((suser,index)=>{
+                const bgcolor = selectedUsers.includes(suser._id)?'#f5f5f5':'transparent'
+                const isSelected = selectedUsers.includes(suser._id)
+                return (
+                    <TouchableOpacity
+                    key={index}
+                    onPress={()=>{
+                        addUser(suser._id)}}
+                    style={{
+
+                        flexDirection:'row',
+                        alignItems:'center',
+                        justifyContent:'space-between',
+                     
+                        borderStyle:'solid',
+                        borderColor:'#f5f5f5',
+                        borderBottomWidth:2.4,
+                        paddingHorizontal:10,
+                        paddingVertical:10,
+                        backgroundColor:bgcolor
+                        
+                    }}
+                    >
+                    <View
+                    style={{
+                        flexDirection:'row',
+                        alignItems:'center',
+                        justifyContent:'flex-start'
+                    }}
+                    >
+                        <Image source={{uri:wrapUIMG(suser.uimg)}} style={{
+                            width:50,
+                            height:50,
+                            borderRadius:100,
+                            marginRight:10
+                        }}/>
+                        <View
+                        style={{
+                            flexDirection:'column'
+                        }}
+                        >
+                            <Text style={{
+                                fontSize:18,
+                                fontWeight:'bold',
+                                color:'#333'
+                            
+                            }}>
+                                {suser.firstname+' '+suser.lastname}
+                            </Text>
+                            <Text
+                            style={{
+                                fontSize:14,
+                                color:'#888'
+                            }}
+                            >
+                                @{suser.username}
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={{}}>
+                        {isSelected==true &&
+                        <View>
+                            <Feather name="check" size={24} color="blue" />
+                        </View>
+                        }
+                    </View>
+                        
+                    </TouchableOpacity>
+                )
+            })
+        }
+
+        </View>:
+
+        <View
+        style={{
+            flexDirection: 'row',
+            justifyContent:'center',
+            alignItems:'center',
+            height:'90%'
+        }}
+        >
+            <Text
+            style={{
+                fontSize: 18,
+                color:'#333',
+                fontWeight:'700'
+            }}
+            >
+                Search for Users
+            </Text>
+        </View>
+}
 
 
      
