@@ -13,6 +13,7 @@ import CalendarStacks from "./Calendar";
 import ProfileStacks from "./Profile";
 import MessagesScreen from "./Messages";
 import OrgStacks from "./Orgs";
+import OrgPageStacks from "./Orgs/OrgPage";
 const AppTab = createBottomTabNavigator()  
 const AppStack = createStackNavigator()
 
@@ -142,6 +143,8 @@ export default function AppScreens(){
 
     <AppStack.Screen name='AppScreen' component={AppScreen}/>
     <AppStack.Screen name='MessagesScreen' component={MessagesScreen}/>
+    <AppStack.Screen name='OrgPageStacks' component={OrgPageStacks}/>
+
     </AppStack.Navigator>
   </NavigationContainer>
   )

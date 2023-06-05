@@ -17,9 +17,7 @@ export default function LikeBtn({likesno}){
             <Heart color={isLike?"#FF0000":"#333"} size={24} variant={isLike?"Bulk":"Linear"}
           
             />
-            <Text style={homestyles.postinsights1text}>
-                    {likeno} 
-                </Text>
+         
         </TouchableOpacity> 
     )
 }

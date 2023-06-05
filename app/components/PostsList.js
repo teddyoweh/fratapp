@@ -1,8 +1,8 @@
 import React,{useState,useEffect,useContext}from "react";
 import { View,Text,Dimensions, Image,TouchableOpacity, ScrollView, TextInput, Pressable} from "react-native";
 import { homestyles } from "../styles";
-import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, MessageText, Link2, Link} from 'iconsax-react-native';
-import { FontAwesome5,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
+import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, MessageText, Link2, Link, MessageText1, Send2} from 'iconsax-react-native';
+import { FontAwesome5,Entypo,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
 
 import LikeBtn from "./LikeBtn";
 import axios from "axios";
@@ -178,20 +178,108 @@ const {user} = useContext(AppContext)
                  
                <View>
                <View  style={homestyles.insightbtn}  >
-            <Messages2 color="#333" size={23} variant="Linear"/>
+            <MessageText1 color="#333" size={23} variant="Linear"/>
             <Text style={homestyles.postinsights1text}>
-            {post.commentsno}
+   
                 </Text>
         </View> 
                </View>
+               <View  style={homestyles.insightbtn}  >
+            <Send2 color="#333" size={23} variant="Linear"/>
+            <Text style={homestyles.postinsights1text}>
+   
+                </Text>
+        </View> 
                  
             </View>
+           
             <View>
+                
             <View  style={homestyles.insightbtn}  >
-            <Link color="#333" size={23} variant="Outline"/>
+            <Entypo name="dots-three-horizontal" size={18} color="#333" />
+        
             </View>
             </View>
+            
             </View>
+            <View
+            style={{
+                flexDirection:'row',
+                alignItems:'center',
+                paddingHorizontal:20,
+                paddingBottom:10
+            }}
+            >
+            <View
+            style={{
+                flexDirection:'row',
+                alignItems:'center',
+                paddingRight:10
+            }}
+            >
+                <Text
+                style={{
+                    color:"#333",
+                    fontWeight:"400",
+                    fontSize:19,
+                    marginRight:5
+                    
+                }}
+                >
+                {post.likesno}
+                </Text>
+                <Text
+                   style={{
+                    color:"#999",
+                    fontWeight:"300",
+                    fontSize:15,
+                    marginRight:5
+                    
+                }}
+                >
+                    Likes
+                </Text>
+                
+                </View>
+                <Text
+                
+                style={{
+                    color:"#999",
+                    fontWeight:"600",
+                    fontSize:16,}}>
+                •
+                </Text>
+                <View
+            style={{
+                paddingLeft:10,
+                flexDirection:'row',
+                alignItems:'center',
+            }}
+            >
+                <Text
+                
+                style={{
+                    color:"#333",
+                    fontWeight:"400",
+                    fontSize:19,
+                    marginRight:5
+                    
+                }}>
+                {post.commentsno}
+                </Text>
+                <Text
+                   style={{
+                    color:"#999",
+                    fontWeight:"300",
+                    fontSize:15,
+                    marginRight:5
+                    
+                }}
+                >
+                    Comments
+                </Text>
+            </View>
+                </View>
             <View style={homestyles.postinsights}>
                 <View style={homestyles.postcommentbox}>
                     <TextInput

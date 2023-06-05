@@ -1,6 +1,6 @@
-import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,  RefreshControl,KeyboardAvoidingView, Button} from "react-native";
+import { View,Text,Animated, Image,TouchableOpacity,Keyboard, ScrollView, TextInput,  RefreshControl,KeyboardAvoidingView, Button, Pressable, Vibration} from "react-native";
 import { homestyles,discoverstyles } from "../../../../styles";
-import { Message, Messages1,Message2, Messages2, SearchNormal, Messages3, MessageSquare,More,Like, Like1,AddCircle, ElementPlus, UserCirlceAdd, Add} from 'iconsax-react-native';
+import { Message, Messages1,Message2, Messages2, SearchNormal, PictureFrame,Chart,Link21,VoiceCricle,Calendar,VolumeHigh,Briefcase,Send2, Messages3, MessageSquare,More,Like, Like1,AddCircle, ElementPlus, UserCirlceAdd, Add, DirectUp, ArrowUp, Microphone, Microphone2} from 'iconsax-react-native';
 import { FontAwesome5,Feather, Ionicons,AntDesign, MaterialIcons,Entypo} from '@expo/vector-icons';
 import { useContext, useEffect,useRef, useState,useCallback } from "react";
 import { AppContext } from "../../../../context/appContext";
@@ -10,8 +10,9 @@ import Spinner from '../../../../components/Spinner'
 import { makeeventstyles } from "../../Calendar/MakeEvent";
 import { wrapUIMG } from "../../../../utils/utils";
 import BottomSheet from "react-native-gesture-bottom-sheet";
+import { getTimeDifference } from "../../../../utils/utils";
 
-function AddUserAccessSheet({bottomSheet}){
+function AddUserAccessSheet({bottomSheet,org}){
     const {user} = useContext(AppContext)
     const [users,setUsers] = useState(null)
     const [selectedUsers,setSelectedUsers] = useState([])
@@ -39,11 +40,23 @@ function AddUserAccessSheet({bottomSheet}){
     }
         
         
+    async function addToOrg(){
+        var ids = [];
+        for (var i = 0; i < users.length; i++) {
+        ids.push(users[i]._id);
+        }
 
+        await axios.post(endpoints['add_member'],{
+            orgid:org.org._id,
+            userids:ids
+        }).then(res=>{
+
+        })
+    }
     return (
         <>
 
-        <BottomSheet  hasDraggableIcon={false} ref={bottomSheet} height={850}  >
+        <BottomSheet  hasDraggableIcon={false} ref={bottomSheet} height={850} >
         <KeyboardAvoidingView style={{backgroundColor:"white",flex:1,
     paddingTop:20}}>
 
@@ -94,6 +107,7 @@ function AddUserAccessSheet({bottomSheet}){
         style={{
             flexDirection:'row',
             justifyContent:'space-between',
+            alignItems:'center',
             paddingHorizontal:20
         }}
         >
@@ -105,7 +119,7 @@ function AddUserAccessSheet({bottomSheet}){
             >
             Selected Users ({selectedUsers.length}) 
             </Text>
-        <Button title="Add"/>
+        <Button title="Add" onPress={()=>addToOrg()}/>
         </View>
         {
             users.map((suser,index)=>{
@@ -170,7 +184,7 @@ function AddUserAccessSheet({bottomSheet}){
                     <View style={{}}>
                         {isSelected==true &&
                         <View>
-                            <Feather name="check" size={24} color="blue" />
+                            <Feather name="check" size={24} color="#047aff" />
                         </View>
                         }
                     </View>
@@ -218,6 +232,11 @@ function AddUserAccessSheet({bottomSheet}){
 
 function RenderMembers({members,memberSheet}){
     let margin;
+    function isAdmin(uid, memberDetails) {
+        const user = memberDetails.find((member) => member.userid === uid);
+        return user && user.role === 'admin';
+      }
+    const {user} = useContext(AppContext)
     return (
         <View
         style={{
@@ -256,7 +275,7 @@ style={{
        
             }}
             >
-                {[members[0],members[0],members[0],members[0],members[0]].map((member,index) => {
+                {members.map((member,index) => {
                     
                     return(
                         <>
@@ -290,6 +309,9 @@ style={{
                     marginLeft:margin
                 }}
                 >
+                    {
+isAdmin(user.userid,members)==true&&
+            
                     <TouchableOpacity
 
                     onPress={()=>memberSheet()}
@@ -312,7 +334,7 @@ style={{
                     color="#333"
                     variant="Broken"
                     />
-                          </TouchableOpacity>
+                          </TouchableOpacity>        }
 
                 </View>
             </View>
@@ -320,7 +342,336 @@ style={{
             </View>
     )
 }
+ 
+function RenderMessageBox({orgid}) {
+    const {user} = useContext(AppContext)
+    const [height] = useState(new Animated.Value(0));
+    const [optionView,setOptionView] = useState(false)
+    const [mediaOptionActive, setMediaOptionActive] = useState(false)
+  const [pollOptionActive, setPollOptionActive] = useState(false)
+    const [eventOptionActive, setEventOptionActive] = useState(false)
+    const [opportunityOptionActive, setOpportunityOptionActive] = useState(false)
+    const [announcementOptionActive, setAnnouncementOptionActive] = useState(false)
+    const [voiceOptionActive, setVoiceOptionActive] = useState(false)
+    const [linkOptionActive, setLinkOptionActive] = useState(false)
+    const [text,setText]=useState('')
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', onKeyboardShow);
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', onKeyboardHide);
 
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
+  function onBoxTap() {
+    Animated.timing(height, {
+      toValue: 1,
+      duration: 350,
+      useNativeDriver: false,
+    }).start();
+    console.log(height)
+    setOptionView(true)
+  }
+
+  function onKeyboardShow() {
+    // Call the onBoxTap function when the keyboard becomes active
+
+    onBoxTap();
+  }
+  async function fetchPosts(){
+    await axios.post(endpoints['get_org_posts'],{
+        orgid:orgid
+    }).then(res=>{
+        console.log(res.data)
+        setPosts(res.data)
+    })
+
+}
+  async function makePost(){
+    await axios.post(endpoints['make_org_post'],{
+        content:text,
+        orgid:orgid,
+        userid:user.userid
+
+    }).then(res=>{
+        setText('')
+        fetchPosts()
+        Vibration.vibrate()
+
+    })
+  }
+  function tapOptions(option){
+    switch (option) {
+        case 'media':
+          setMediaOptionActive(!mediaOptionActive);
+          addImage()
+          break;
+        case 'poll':
+          setPollOptionActive(!pollOptionActive);
+          break;
+        case 'event':
+          setEventOptionActive(!eventOptionActive);
+          break;
+        case 'opportunity':
+          setOpportunityOptionActive(!opportunityOptionActive);
+          break;
+        case 'announcement':
+          setAnnouncementOptionActive(!announcementOptionActive);
+          break;
+        case 'voice':
+          setVoiceOptionActive(!voiceOptionActive);
+          break;
+        case 'link':
+          setLinkOptionActive(!linkOptionActive);
+          break;
+        default:
+          break;
+      }
+       
+
+ } 
+  function onKeyboardHide() {
+    setOptionView(false)
+    Animated.timing(height, {
+      toValue: 0,
+      duration: 350,
+      useNativeDriver: false,
+    }).start();
+  }
+
+  const interpolatedHeight = height.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['15%', '55%'],
+  });
+  console.log(interpolatedHeight)
+  return (
+    <Animated.View
+      style={{
+        backgroundColor: 'white',
+        // borderTopWidth: 1,
+        // borderColor: '#ddd',
+        // borderStyle: 'solid',
+        width: '100%',
+        padding: 10,
+        height: interpolatedHeight,
+        flexDirection: 'column',
+      }}
+    >
+    
+      <Pressable
+     
+        style={{
+          paddingHorizontal: 10,
+        }}
+      >
+        <View
+        style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent:'space-between',
+            height:48,
+        }}
+        >
+
+        <View
+        style={{
+            flexDirection: 'row',
+            alignItems:'center',
+            justifyContent:'space-between',
+            borderRadius:30,
+            borderWidth:1,
+            borderStyle:'solid',
+            borderColor:'#ddd',
+            paddingHorizontal:20,
+            paddingVertical:12,
+            width:'88%',
+            
+          
+        }}
+        >
+          <TextInput
+            onBlur={()=>onKeyboardHide()}
+             onPressIn={()=>onBoxTap()}
+             value={text}
+             onChangeText={(t)=>setText(t)}
+            multiline
+            style={{
+            
+                flexDirection:'column',
+                alignItems:'flex-start',
+                justifyContent:'flex-start',
+                fontWeight:'200',
+                fontSize:15,
+                width:'90%'
+                
+                
+            }}
+            placeholder="Share your Announcement, Event, or Polls"
+          />
+          <TouchableOpacity
+          style={{
+            width:10
+          }}
+          >
+
+          
+          <Microphone2
+          color="#333"
+          size={20}
+          />
+          </TouchableOpacity>
+        </View>
+        <Pressable
+        onPress={()=>makePost()}
+
+
+        style={{
+            width:40,
+            height:40,
+            flexDirection:'row',
+            alignItems:'center',
+            justifyContent:'center',
+            borderRadius:100,
+            backgroundColor:'#333',
+
+        }}
+        >
+            <ArrowUp color="white" size={23}/>
+
+            </Pressable>
+        </View>
+      </Pressable>
+      <View>
+        {
+            optionView==true &&
+      
+      <View style={{paddingHorizontal:10,flexDirection:'row', justifyContent:'space-between', paddingTop:8}}>
+                <View style={{paddingHorizontal:10,flexDirection:'row',justifyContent:'flex-start',width:'100%'}}>
+
+          
+                <Pressable onPress={()=>tapOptions('media')}>
+                    <PictureFrame color="#333" variant={mediaOptionActive?"Bulk":'Broken'}/>
+                </Pressable>
+                <Pressable  onPress={()=>tapOptions('poll')} style={{marginLeft:18}} >
+                    <Chart color="#333" variant={pollOptionActive?"Bulk":'Broken'}/>
+                </Pressable>
+              
+     
+                </View>
+                
+            </View>  }
+      </View>
+    </Animated.View>
+
+  );
+}
+
+ 
+function RendorOrgPost({orgid}){
+    const {user}=useContext(AppContext)
+    const [posts,setPosts]= useState(null)
+    
+    async function fetchPosts(){
+        await axios.post(endpoints['get_org_posts'],{
+            orgid:orgid
+        }).then(res=>{
+            console.log(res.data)
+            setPosts(res.data)
+        })
+
+    }
+    useEffect(()=>{
+        fetchPosts()
+    },[])
+    return (
+        <View>
+            {
+                posts && posts.posts.map((post,index)=>{
+                     
+                    const postuser = posts.users[post.userid]
+                    return (
+                        <View
+                        key={index}
+                        style={{
+                            paddingHorizontal:10,
+                            paddingVertical:10,
+                            marginBottom:10,
+                            width:'100%',
+                            flexDirection:'row',
+                            alignItems:'center'
+                        }}
+                        >
+                            <View>
+                        <Image
+                        source={{uri:wrapUIMG(postuser.uimg)}}
+                        style={{
+                            width:40,
+                            height:40,
+                            borderRadius:100,
+                            borderWidth:1,
+                            borderColor:'#ddd'
+
+                        }}
+                        />
+
+                            </View>
+                            <View
+                            style={{
+                                paddingHorizontal:8
+                            }}
+                            >
+                                <View
+                                style={{
+                                    flexDirection:'row',
+                                    alignItems:'center'
+                                }}
+                                >
+
+                                <Text style={{
+                                    fontSize:14,
+                                    fontWeight:'500',
+                                    color:"#333"
+                                }}>
+                                    {postuser.firstname+' '+postuser.lastname}
+                                </Text>
+                                <Text
+                                style={{
+                                    fontSize:12,
+                                    fontWeight:'300',
+                                    color:"#999",
+                                    marginLeft:6
+                                }}
+                                >
+                                    {getTimeDifference(post.date)+' ago'}
+                                </Text>
+                                </View>
+                            <View
+                            style={{
+                                marginTop:6
+                            }}
+                            >
+                            <Text
+                            style={{
+                                fontSize:16,
+                                fontWeight:'300',
+                                color:"#333"
+
+                            }}
+                            >
+                                {post.content}
+                            </Text>
+                            </View>
+
+                            </View>
+                        </View>
+                    )
+                })
+            }
+        </View>
+    )
+}
 export default function OrgPage({navigation,route}){
     const {org} = route.params
     console.log(org._id)
@@ -347,9 +698,9 @@ export default function OrgPage({navigation,route}){
  
     <View
     style={{
-        height:'100%',
+        
         backgroundColor:'white',
-        flex:1,
+ 
         width:'100%',
         flexDirection:'column'
     }}
@@ -363,7 +714,7 @@ export default function OrgPage({navigation,route}){
             alignItems:'center',
             borderBottomWidth:1,
             borderStyle:'solid',
-            borderColor:'#eee'
+            borderColor:'#ddd'
 
         }}
         >
@@ -379,7 +730,7 @@ export default function OrgPage({navigation,route}){
         </View>
         <View
         style={{
-            flex:1,
+        
             width:'100%',
             height:'100%',
             backgroundColor:'white'
@@ -396,7 +747,14 @@ export default function OrgPage({navigation,route}){
             backgroundColor:'white'
         }}
         >
-        <View>
+        <View
+        style={{
+            borderWidth:1,
+            borderStyle:'solid',
+            borderColor:'#ddd',
+            paddingBottom:10
+        }}
+        >
             <View
             style={{
             flexDirection:'row',
@@ -421,7 +779,7 @@ export default function OrgPage({navigation,route}){
                           height:80,
                       width:80,
                           borderRadius:10,
-                          backgroundColor:'#eee', 
+                          backgroundColor:'#ddd', 
                           marginRight:10,
                           flexDirection:'row',
                           justifyContent:'center',
@@ -486,9 +844,10 @@ export default function OrgPage({navigation,route}){
             </View>
               }
         </View>
-
+        <RendorOrgPost orgid={org._id}/>
         </ScrollView>
-              <AddUserAccessSheet bottomSheet={AddUserAccessSheetref}/>
+        <RenderMessageBox orgid={org._id}/>
+              <AddUserAccessSheet bottomSheet={AddUserAccessSheetref} org={orgData} />
         </View>
     </View>
        )

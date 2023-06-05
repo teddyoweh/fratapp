@@ -33,13 +33,13 @@ function getTimeDifference(date) {
 
   if (years > 0) {
     const word = years==1?'year':'years'
-    return years + " years";
+    return years +word
   } else if (months > 0) {
     const word = months==1?'month':'months'
-    return months + " month" + months==1?'' : 's';
+    return months +word
   } else if (weeks > 0) {
     const word = weeks==1?'week':'weeks'
-    return weeks + " weeks";
+    return weeks +word
   } else if (days > 0) {
     const word = days==1?'day':'days'
     return days + word;

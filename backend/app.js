@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-
+const { socketStream} = require('./sockets/socket.socket')
 const config = require('./db');
 var cors = require('cors')
 const posts = require('./routes/posts');
@@ -40,7 +40,7 @@ app.use('/profileimg', express.static(__dirname + '/assets/profiles'));
 app.use('/postimg', express.static(__dirname + '/uploads/posts'));
 
 const ip = require('./ip');
-
+ 
 
 app.get('/', function(req, res) {
     res.send('hello');
@@ -50,4 +50,5 @@ const PORT = process.env.PORT || 9990;
 
 app.listen(PORT, () => {
     console.log(`Server is running on ${ip}:${PORT}`);
+    socketStream()
 });

@@ -50,7 +50,7 @@ const homestyles = StyleSheet.create({
     },
     msgiconnumb:{
         position:'relative',
-        left:-5,
+        left:-15,
         top:-5,
         width:20,
         height:20,
@@ -202,7 +202,7 @@ const homestyles = StyleSheet.create({
     postinsight:{
         flexDirection:'row',
         alignItems:'center',
-        marginRight:10
+        marginRight:5
      
     },
     postinsighttext:{
@@ -212,7 +212,7 @@ const homestyles = StyleSheet.create({
         fontWeight:'bold',
     },
     insightbtn:{
-      paddingHorizontal:4,
+      paddingHorizontal:5,
       paddingVertical:5,
       
         backgroundColor:'white',

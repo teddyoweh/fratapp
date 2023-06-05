@@ -45,7 +45,7 @@ function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
                             borderStyle:'solid',
                             borderColor:'#eee'
                         }}
-                        onPress={()=>navigation.navigate('OrgStack',{
+                        onPress={()=>navigation.navigate('OrgPageStacks',{
                             org:org
                         })}
                         >

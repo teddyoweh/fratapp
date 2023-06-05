@@ -1,6 +1,5 @@
 import React,{useContext,useEffect,useState,useRef} from "react";
-import { View, Image, Animated } from 'react-native';
-
+import { View, Image, Animated, useColorScheme, } from 'react-native';
 
 import { SafeAreaView } from "react-native";
 import AuthScreen from "./auth";
@@ -12,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { clearData, storeData,storeJSONData} from "../utils/storage";
 import axios from "axios";
 import { endpoints } from "../config/endpoints";
+
 function AuthScreens(){
     
     return (
@@ -99,7 +99,12 @@ export default function Screens(){
   
     
     }  
-
+    const getDeviceColorScheme = () => {
+      const colorScheme = useColorScheme();
+      return colorScheme === 'dark' ? 'dark' : 'light';
+    };
+    const [colorMode,setColorMode]=useState(getDeviceColorScheme())
+   
       useEffect(() => {
         VerifyAuth()
       console.log(user)
@@ -113,7 +118,7 @@ export default function Screens(){
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             <AuthContext.Provider value={{isAuth,setIsAuth}}>
-<AppContext.Provider value={{user,setUser}}>
+<AppContext.Provider value={{user,setUser,colorMode,setColorMode}}>
     {
         isAuth ==null?<LandingScreen/> : isAuth ==false?  <AuthScreens/> : <AppScreens/>
     }
