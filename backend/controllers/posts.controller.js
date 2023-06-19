@@ -25,7 +25,7 @@ function postscontroller(req, res) {
 
     })
      
-    console.log(images)
+ 
     const newPost = new Posts({
  
   

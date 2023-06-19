@@ -57,7 +57,9 @@ const PostSchema = new Schema({
     eventgoinglist:{
         type: Array,
     },
-    likesuserlist: {},
+    likesuserlist: {
+        type:Array
+    },
     commentuserlist: {},
     commentsno: {
         type: Number,

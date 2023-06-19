@@ -1,31 +1,39 @@
 const Posts = require('../models/Posts');
+ 
 
-function likepostscontroller(req, res) {
-    console.log(req.body)
-        // Views.findOne({ ip: req.body.userdata['ip'] }).then(user => {
+async function likepostscontroller(req, res) {
+  
+    const { postid, userid } = req.body;
+  
+    try {
+      const post = await Posts.findById(postid);
+  
+      if (post.likesuserlist.includes(userid)) {
+ 
+        await Posts.findOneAndUpdate(
+          { _id: postid },
+          { $pull: { likesuserlist: userid } },
+          { new: true }
+        ).then(post1=>{
+            res.json(post1);
+        });
+      } else {
+ 
+        await Posts.findOneAndUpdate(
+          { _id: postid },
+          { $push: { likesuserlist: userid } },
+          { new: true }
+        ).then(post1=>{
+            res.json(post1);
+        });
+      }
+  
 
-    // })
-    // update the likesno and likesuserlist of post
-    if (req.body.stat == 'like') {
-        Posts.findByIdAndUpdate(req.body.postid, { $inc: { likesno: 1 }, $push: { likesuserlist: req.body.userid } }, { new: true }).then(post => {
-            // Posts.findByIdAndUpdate({ _id: req.postid }, { $inc: { likesno: 1 }, $push: { likesuserlist: req.userid } }).then(post => {
-            console.log('daae')
-            res.json(post)
-        }).catch(err => {
-            console.log(err)
-            res.json({ status: false, data: err })
-        })
-    } else {
-        Posts.findByIdAndUpdate(req.body.postid, { $inc: { likesno: -1 }, $pull: { likesuserlist: req.body.userid } }, { new: true }).then(post => {
-            // Posts.findByIdAndUpdate({ _id: req.postid }, { $inc: { likesno: 1 }, $push: { likesuserlist: req.userid } }).then(post => {
-            console.log('daae')
-            res.json(post)
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } 
 
-        }).catch(err => {
-            console.log(err)
-            res.json({ status: false, data: err })
-        })
-    }
-}
+  }
 
 module.exports = likepostscontroller;

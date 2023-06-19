@@ -1,15 +1,30 @@
-import React,{useState}from "react";
+import React,{useContext, useState}from "react";
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput} from "react-native";
 import { homestyles } from "../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1, Heart} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign } from '@expo/vector-icons';
+import axios from "axios";
+import { endpoints } from "../config/endpoints";
+import { AppContext } from "../context/appContext";
 
 
-export default function LikeBtn({likesno}){
-    const [isLike, setIsLike] = useState(false);
+export default function LikeBtn({likesno,postid,likestat,setPost}){
+    const {user} = useContext(AppContext);
+    const [isLike, setIsLike] = useState(likestat);
     const [likeno,setLikeNo] = useState(likesno)
-    function onClick(){
+    async function LikeFunction(){
+     await   axios.post(endpoints['likepost'],{
+            postid:postid,
+            userid:user.userid
+        }).then(res=>{
+          setPost(res.data)
+        })
+    }
+    console.log(postid,user.userid)
+   async function onClick(){
         setIsLike(!isLike);
+await LikeFunction()
+
 
     }
     return(

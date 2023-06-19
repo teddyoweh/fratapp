@@ -2,7 +2,7 @@ import { View,Text,Animated, Image,TouchableOpacity,Keyboard, ScrollView, TextIn
 import { homestyles,discoverstyles } from "../../../../styles";
 import { Message, Messages1,Message2, Messages2, SearchNormal, PictureFrame,Chart,Link21,VoiceCricle,Calendar,VolumeHigh,Briefcase,Send2, Messages3, MessageSquare,More,Like, Like1,AddCircle, ElementPlus, UserCirlceAdd, Add, DirectUp, ArrowUp, Microphone, Microphone2} from 'iconsax-react-native';
 import { FontAwesome5,Feather, Ionicons,AntDesign, MaterialIcons,Entypo} from '@expo/vector-icons';
-import { useContext, useEffect,useRef, useState,useCallback } from "react";
+import { useContext, useEffect,useRef, useState,useCallback, useLayoutEffect } from "react";
 import { AppContext } from "../../../../context/appContext";
 import axios from "axios";
 import { endpoints } from "../../../../config/endpoints";
@@ -253,7 +253,7 @@ style={{
 }}
 >
 
-    Members (2)
+    Members ({members.length})
 </Text>
 
 <View 
@@ -397,8 +397,9 @@ function RenderMessageBox({orgid}) {
 
     }).then(res=>{
         setText('')
-        fetchPosts()
         Vibration.vibrate()
+        fetchPosts()
+       
 
     })
   }
@@ -582,11 +583,17 @@ function RendorOrgPost({orgid}){
         })
 
     }
-    useEffect(()=>{
+    useLayoutEffect(()=>{
         fetchPosts()
     },[])
+   
     return (
-        <View>
+        <View
+        style={{
+    
+ 
+        }}
+        >
             {
                 posts && posts.posts.map((post,index)=>{
                      
@@ -619,13 +626,18 @@ function RendorOrgPost({orgid}){
                             </View>
                             <View
                             style={{
-                                paddingHorizontal:8
+                                paddingHorizontal:8,
+                                width:'90%'
+                                
                             }}
                             >
                                 <View
                                 style={{
                                     flexDirection:'row',
-                                    alignItems:'center'
+                                    alignItems:'center',
+                                    justifyContent:'space-between',
+                                    width:'100%'
+                                    
                                 }}
                                 >
 
@@ -673,6 +685,7 @@ function RendorOrgPost({orgid}){
     )
 }
 export default function OrgPage({navigation,route}){
+    const scrollViewRef = useRef()
     const {org} = route.params
     console.log(org._id)
     const [orgData,setOrgData] = useState(null)
@@ -730,9 +743,9 @@ export default function OrgPage({navigation,route}){
         </View>
         <View
         style={{
-        
+
             width:'100%',
-            height:'100%',
+        height:'100%',
             backgroundColor:'white'
         }}
         >
@@ -740,12 +753,15 @@ export default function OrgPage({navigation,route}){
 
 
         <ScrollView
+        ref={scrollViewRef}
         contentContainerStyle={{
-            flex:1,
+           
             width:'100%',
             height:'100%',
             backgroundColor:'white'
         }}
+        //onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
+
         >
         <View
         style={{
@@ -844,7 +860,17 @@ export default function OrgPage({navigation,route}){
             </View>
               }
         </View>
+        <View
+        style={{
+        flex:1,
+        height:'100%'
+        }}
+        >
+
+
+
         <RendorOrgPost orgid={org._id}/>
+        </View>
         </ScrollView>
         <RenderMessageBox orgid={org._id}/>
               <AddUserAccessSheet bottomSheet={AddUserAccessSheetref} org={orgData} />

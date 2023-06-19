@@ -22,7 +22,7 @@ export default function PostPage({navigation,route}){
             </TouchableOpacity>
             </View>
             <View style={poststyles.content}>
-                <PostsList navigation={navigation} index={1} move={false} route={route} post={post} userdetails={userdetails}/>
+                <PostsList navigation={navigation} index={1} move={false} route={route} posti={post} userdetails={userdetails}/>
                 <View style={poststyles.commentssec}>
                     <View style={poststyles.commenthead}>
                     <Messages2 variant="Bulk" color="#a330d0" />

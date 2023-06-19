@@ -5,8 +5,7 @@ const Posts = require('../models/Posts');
   async function fetchpostscontroller(req, res) {
     const { cursor,userid} = req.body;
     const limit = 40;
-    console.log(req.body)
- 
+  
   
     let query = {};
   
@@ -44,7 +43,7 @@ const Posts = require('../models/Posts');
       res.json({ posts: posts, users: usersDict });
   
     } catch (err) {
-      console.log(err);
+ 
       res.json({ status: false, data: err });
     }
   }

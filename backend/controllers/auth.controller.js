@@ -123,7 +123,7 @@ function checkUsername(req, res) {
 
 function verifyEmailController(req, res) {
   const { code, email } = req.body;
-  console.log(req.body)
+ 
   Codes.findOne({ code, email }).then(codeResult => {
     if (codeResult) {
       User.findOneAndUpdate(
@@ -147,14 +147,14 @@ function verifyEmailController(req, res) {
         res.status(200).json({ token:token, payload:payload, status: true });
       });
     } else {
-      console.log('eeef')
+ 
       res.status(400).json({ status: false, message: 'Invalid Code' });
     }
   });
 }
 
 function findUser(req, res) {
-    console.log(req.body,'finduser')
+ 
     User.findById(req.body.id).then(user=>{
       if(user){
 

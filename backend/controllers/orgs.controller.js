@@ -60,7 +60,7 @@ async function createOrg(req, res) {
           };
         })
       );
-        console.log(user_id)
+  
         
       res.status(200).json({
         status: true,

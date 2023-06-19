@@ -33,7 +33,7 @@ height:'100%'
 
 
         posts.map((post, index) => (
-            Object.keys(users).includes(post.userid) && <PostsList key={index} route={route} move={true} index={index} navigation={navigation} post={post} userdetails={users[post.userid]} />
+            Object.keys(users).includes(post.userid) && <PostsList key={index} route={route} move={true} index={index} navigation={navigation} posti={post} userdetails={users[post.userid]} />
         ))
     
 } 

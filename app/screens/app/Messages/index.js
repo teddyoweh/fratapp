@@ -8,32 +8,35 @@ import { discoverstyles } from "../../../styles";
 import { useRoute } from '@react-navigation/native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons,FontAwesome} from '@expo/vector-icons';
 import { MessageAdd, MessageAdd1, PenAdd,SearchNormal } from "iconsax-react-native";
-export default function MessagesScreen({navigation,route}){
-   
+import MessagesScreen from "./Messages";
+import { HomeStack } from '../Home';
+
  
-    return (
-        <View style={messagestyles.container}>
-            <View style={messagestyles.top}>
-                <View style={{flexDirection:'row',alignItems:'center'}}>
-                    <TouchableOpacity onPress={()=>navigation.goBack()}>
-                        <Ionicons name="chevron-back" size={24} color="black" />
-                    </TouchableOpacity>
-                    <Text style={{marginHorizontal:5,fontSize:20,fontWeight:800}}>
-                        Messages
-                    </Text>
-                </View>
-                <View style={{flexDirection:'row',alignItems:'center'}}>
-                    <Pressable>
-                    <FontAwesome name="pencil-square-o" size={24} color="black" />
-                    </Pressable>
-                </View>
-            </View>
-            <View style={{marginVertical:10,paddingHorizontal:10}}>
-            <View style={discoverstyles.searchbox}>
-                    <SearchNormal variant="Broken" color="grey" />
-                    <TextInput style={discoverstyles.search}placeholder="Search Messages, Groups, People"/>
-            </View>
-            </View>
-        </View>
-    )
+const MessageStack = HomeStack
+
+export default function MessageStacks({navigation,route}) {
+ 
+
+  return (
+    <MessageStack.Navigator
+    screenOptions={
+        { 
+            headerShown:false,
+        }
+    }
+    
+    >
+        <MessageStack.Screen name='OrgPage' component={MessagesScreen}
+     
+        />
+      
+
+       
+
+    
+    </MessageStack.Navigator>
+ 
+ 
+  );
 }
+ 

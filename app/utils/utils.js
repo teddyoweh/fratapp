@@ -50,7 +50,8 @@ function getTimeDifference(date) {
     const word = minutes==1?'min':'mins'
     return minutes +word
   } else {
-    return seconds + " sec"+ seconds==1?'' : 's';
+    const word = seconds<2?"sec":'secs'
+    return seconds+ word
   }
 }
 

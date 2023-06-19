@@ -9,9 +9,9 @@ import axios from "axios";
 import { endpoints } from "../config/endpoints";
 import { getTimeDifference, wrapPostImg, wrapUIMG } from "../utils/utils";
 import { AppContext } from "../context/appContext";
-export default function PostsList({index,navigation,post,userdetails,move}){
+export default function PostsList({index,navigation,posti,userdetails,move}){
     const windowWidth = Dimensions.get('window').width;
- 
+ const [post,setPosti] =useState(posti)
 const {user} = useContext(AppContext)
  
   function navigateToUser(){
@@ -31,9 +31,10 @@ const {user} = useContext(AppContext)
         navigation.navigate('PostPage',{post:post,userdetails:userdetails})
     }
   }
+
  
     return (
-        userdetails &&
+        userdetails && 
         <Pressable style={homestyles.post} key={index} onPress={()=>moveToPost()}>
             <View style={homestyles.posttop}>
                 <View style={homestyles.posttopleft}>
@@ -172,7 +173,7 @@ const {user} = useContext(AppContext)
 
             <View style={homestyles.postinsights1}>
             <View style={homestyles.postinsight}>
-                 <LikeBtn likesno={post.likesno}/>
+                 <LikeBtn setPost={setPosti} likesno={post.likesuserlist.length} postid={post._id} likestat={post.likesuserlist.includes(user.userid)}/>
                 
                 </View>
                  
@@ -226,7 +227,7 @@ const {user} = useContext(AppContext)
                     
                 }}
                 >
-                {post.likesno}
+                {post.likesuserlist.length}
                 </Text>
                 <Text
                    style={{

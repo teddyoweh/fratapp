@@ -11,7 +11,7 @@ import HomeStacks from "./Home";
 import DiscoverStacks from "./Discover";
 import CalendarStacks from "./Calendar";
 import ProfileStacks from "./Profile";
-import MessagesScreen from "./Messages";
+import MessageStacks from "./Messages";
 import OrgStacks from "./Orgs";
 import OrgPageStacks from "./Orgs/OrgPage";
 const AppTab = createBottomTabNavigator()  
@@ -142,7 +142,7 @@ export default function AppScreens(){
 
 
     <AppStack.Screen name='AppScreen' component={AppScreen}/>
-    <AppStack.Screen name='MessagesScreen' component={MessagesScreen}/>
+    <AppStack.Screen name='MessagesScreen' component={MessageStacks}/>
     <AppStack.Screen name='OrgPageStacks' component={OrgPageStacks}/>
 
     </AppStack.Navigator>
