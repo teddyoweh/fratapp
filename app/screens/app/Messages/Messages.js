@@ -1,5 +1,5 @@
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,  RefreshControl, Pressable} from "react-native";
-import React,{ useState,useEffect,useLayoutEffect } from 'react';
+import React,{ useState,useEffect,useLayoutEffect, useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { messagestyles } from '../../../styles/messagestyles';
@@ -7,6 +7,9 @@ import { discoverstyles } from "../../../styles";
 import { useRoute } from '@react-navigation/native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons,FontAwesome} from '@expo/vector-icons';
 import { ChartCircle, MessageAdd, MessageAdd1, PenAdd,SearchNormal } from "iconsax-react-native";
+import axios from "axios";
+import { endpoints } from "../../../config/endpoints";
+import { AppContext } from "../../../context/appContext";
 function RenderCheckMark({stat}){
     //<MaterialCommunityIcons name="account-multiple-check-outline" size={24} color="black" />
     return (
@@ -16,11 +19,23 @@ function RenderCheckMark({stat}){
     )
 }
 export default function MessagesScreen({navigation,route}){
+    const {user} = useContext(AppContext)
+    async function getMsgList(){
+        await axios.post(endpoints['fetchmsglist'],{user_id:user.userid}).then(res=>{
+            console.log(res.data)
+            alert(JSON.stringify(res.data))
+        })
+
+
+    }
     const msgfilters = ['All','Unread','Groups']
     const [msgfilter,setMessageFilter] = useState(msgfilters[0])
     function swapFil(msgfil){
         setMessageFilter(msgfil)
     }
+    useEffect(()=>{
+        getMsgList()
+    },[])
     return (
 
         <View style={messagestyles.container}>

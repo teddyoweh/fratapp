@@ -26,7 +26,7 @@ export default function MessageStacks({navigation,route}) {
     }
     
     >
-        <MessageStack.Screen name='OrgPage' component={MessagesScreen}
+        <MessageStack.Screen name='MessagePage' component={MessagesScreen}
      
         />
       

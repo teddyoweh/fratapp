@@ -1,7 +1,7 @@
 import React,{useState,useEffect,useContext}from "react";
 import { View,Text,Dimensions, Image,TouchableOpacity, ScrollView, TextInput, Pressable} from "react-native";
 import { homestyles } from "../styles";
-import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, MessageText, Link2, Link, MessageText1, Send2} from 'iconsax-react-native';
+import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, MessageText, Link2, Link, MessageText1, Send2, ArrowUp} from 'iconsax-react-native';
 import { FontAwesome5,Entypo,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
 
 import LikeBtn from "./LikeBtn";
@@ -274,6 +274,7 @@ const {user} = useContext(AppContext)
                     fontWeight:"300",
                     fontSize:15,
                     marginRight:5
+
                     
                 }}
                 >
@@ -282,10 +283,37 @@ const {user} = useContext(AppContext)
             </View>
                 </View>
             <View style={homestyles.postinsights}>
-                <View style={homestyles.postcommentbox}>
+                <View style={[homestyles.postcommentbox,{
+                    justifyContent:'space-between',
+                    alignItems:'center',
+                    width:'100%'
+                }]}>
                     <TextInput
+                    style={{
+                        width:'80%',
+                        height:'100%',
+                    }}
                     placeholder="Add Comment"
+                    multiline={true}
                     />
+                   <Pressable
+
+
+
+        style={{
+            width:30,
+            height:30,
+            flexDirection:'row',
+            alignItems:'center',
+            justifyContent:'center',
+            borderRadius:100,
+            backgroundColor:'#333',
+
+        }}
+        >
+            <ArrowUp color="white" size={16}/>
+
+            </Pressable>
                 </View>
                 
 

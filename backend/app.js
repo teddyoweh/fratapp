@@ -9,6 +9,7 @@ var cors = require('cors')
 const posts = require('./routes/posts');
 const auth = require('./routes/auth');
 const link = require('./routes/link')
+const messages = require('./routes/messages')
 const calendar = require('./routes/calendar')
 const orgs = require('./routes/orgs')
 //const discover = require('./routes/discover')
@@ -33,6 +34,7 @@ app.use('/api/auth', auth);
 app.use('/api/link',link);
 app.use('/api/calendar',calendar);
 app.use('/api/orgs',orgs);
+app.use('/api/messages',messages)
  
 app.use('/images', express.static(__dirname + '/uploads'));
 app.use('/images/assets', express.static(__dirname + '/assets/imgs'));

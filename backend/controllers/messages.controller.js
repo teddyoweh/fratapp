@@ -1,4 +1,4 @@
-const Course = require('../models/Courses');
+
 const User = require('../models/User')
 const Membership = require('../models/Memberships')
 const Message = require('../models/Message')
@@ -50,7 +50,23 @@ function sendmessagescontroller(req,res){
     })
 }
 
+async function getSuggested(userid){
+  const links = await Links.find({ userid })
+      .sort({ date: -1 })  
+      .limit(10); 
 
+    return links;
+
+}
+
+async function messageListController(req,res){
+  const {user_id} = req.body
+  const suggested = await getSuggested(user_id)
+  console.log(suggested)
+  return {
+    suggested:suggested
+  }
+}
 function messagesViewedByController(req, res) {
     const { message_id, user_id } = req.body;
   
@@ -67,10 +83,10 @@ function messagesViewedByController(req, res) {
       });
   }
   
-function getSuggested(req,res){
-  const {userid} = req.body;
-  Links.find(
-    { $or: [{ partyid: userid }, { userid: userid }] },
-  )
-}
-module.exports ={fetchmessagescontroller,sendmessagescontroller,messagesViewedByController}
+// function getSuggested(req,res){
+//   const {userid} = req.body;
+//   Links.find(
+//     { $or: [{ partyid: userid }, { userid: userid }] },
+//   )
+// }
+module.exports ={fetchmessagescontroller,messageListController,sendmessagescontroller,messagesViewedByController}

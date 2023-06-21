@@ -32,7 +32,7 @@ const endpoints = {
     'courselist':`${serverip}/api/discover/fetchcourses`,
     'joincourse':`${serverip}/api/discover/joincourse`,
 
-    'fetchmsglist':`${serverip}/api/messages/fetchmsglist`,
+    'fetchmsglist':`${serverip}/api/messages/msglist`,
     'fetchmsgs':`${serverip}/api/messages/fetchmsgs`,
     'sendmsg':`${serverip}/api/messages/sendmsg`,
     'viewedby':`${serverip}/api/messages/viewedby`,
