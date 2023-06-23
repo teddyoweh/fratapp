@@ -20,10 +20,11 @@ function RenderCheckMark({stat}){
 }
 export default function MessagesScreen({navigation,route}){
     const {user} = useContext(AppContext)
+    const [data,setData] = useState(null)
     async function getMsgList(){
         await axios.post(endpoints['fetchmsglist'],{user_id:user.userid}).then(res=>{
-            console.log(res.data)
-            alert(JSON.stringify(res.data))
+          setData(res.data)
+          console.log(res.data)
         })
 
 

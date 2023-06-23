@@ -42,7 +42,7 @@ export default function ProfilePosts({navigation,userid}){
  
             return(
                 
-                <PostsList key={index }index={index} post={post} navigation={navigation} move={false} userdetails ={postData.users[post.userid]}/>
+                <PostsList key={index }index={index} posti={post} navigation={navigation} move={false} userdetails ={postData.users[post.userid]}/>
             )
         }):
         

@@ -62,10 +62,16 @@ async function getSuggested(userid){
 async function messageListController(req,res){
   const {user_id} = req.body
   const suggested = await getSuggested(user_id)
-  console.log(suggested)
-  return {
-    suggested:suggested
-  }
+  const suggestedUsers = await Promise.all(suggested.map(async (sug) => {
+    const user = await User.findById(sug.partyid).select('firstname lastname uimg username isofficial _id');
+    return user;
+  }));
+  
+  
+ 
+  res.json(
+    {suggested:suggestedUsers})
+  
 }
 function messagesViewedByController(req, res) {
     const { message_id, user_id } = req.body;

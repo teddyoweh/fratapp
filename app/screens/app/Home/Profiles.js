@@ -106,7 +106,7 @@ export default function ProfilesScreen({navigation,route}){
         
                     </View> */}
                     <View style={profilestyles.profilebtns}>
-                        <ProfileActionbtn userid={user.id} partyid={userdetails.userid }/>
+                        <ProfileActionbtn userid={user.userid} partyid={userdetails.userid }/>
 
                  
                             <TouchableOpacity style={profilestyles.profilemsgbtn}>

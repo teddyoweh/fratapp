@@ -57,12 +57,7 @@ export default function HomeScreen({navigation}){
                         <Image source={{uri:wrapUIMG(user.uimg)}} style={homestyles.topuserimg}/>
                         <View style={homestyles.topuser}>
                             <Text style={homestyles.topusername}>{`${user.firstname} ${user.lastname}`}</Text>
-                            <View style={homestyles.topusergroup}>
-                           
-                                <Image source={require('../../../assets/farmhouse.png')} style={homestyles.topuserlogo}/>
-                                <Text style={homestyles.topusergroupname}>FarmHouse (FH)</Text>
-                                <MaterialIcons name="verified" size={14} color="#0084b4" />
-                            </View>
+                            
                            
                         </View>
 
