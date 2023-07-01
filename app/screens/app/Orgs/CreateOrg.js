@@ -149,11 +149,11 @@ export default function CreateOrgs({navigation}){
           quality: 1,
           allowsMultipleSelection:false
         });
-        console.log(JSON.stringify(_image));
-        if (!_image.canceled) {
-            console.log(_image)
-            setOrgImage(_image.assets[0]);
-        }
+   
+ 
+       
+        setOrgImage(_image.assets[0]);
+
       };
       function randomNumberString() {
         var min = 10000; // Minimum 5-digit number (10,000)
@@ -195,11 +195,12 @@ export default function CreateOrgs({navigation}){
             uri:orgImage.uri,
        
             name:'profile.jpg'
-        })
+        },)
         console.log(data)
-        await axios.post(endpoints['uploadprofile'],data).then(res=>{
-            navigation.goBack()
-        })
+        await axios.post(endpoints['uploadprofile'],data)
+        // .then(res=>{
+        //     navigation.goBack()
+        // })
     }
     async function createOrgMethod(){
         const random = `${randomNumberString()}`
@@ -228,20 +229,29 @@ export default function CreateOrgs({navigation}){
             primg:primg
 
         }
+        console.log(body,'trying to upload')
 
         showModal()
-   
-        await axios.post(endpoints['createorg'],body) 
-        if(orgImage){
-            await uploadImages(random)
-        }
-        resetState()
-        setSuccess(true)
-        setTimeout(()=>{
-            hideModal()
-            navigation.goBack()
-        }
-        ,1880)
+ 
+            await axios.post(endpoints['createorg'],body).then(async(res)=>{
+                if(orgImage){
+                    const uploadedimg = await uploadImages(random)
+         
+                
+                }
+                
+                resetState()
+                setSuccess(true)
+                setTimeout(()=>{
+                    hideModal()
+                    navigation.goBack()
+                }
+                ,1880)
+            })
+        
+      
+      
+    
          
 
  

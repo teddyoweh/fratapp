@@ -2,6 +2,23 @@ const Organizations = require('../models/Organizations')
 const OrgMembership = require('../models/OrgMemberships');
 const OrgPosts = require('../models/OrgPosts');
 const User = require('../models/User')
+const crypto = require('crypto');
+
+var fs = require('fs');
+function hashcode(data){
+    
+    const hash = crypto.createHash('sha256');
+    
+    hash.update(data);
+    const hashedData = hash.digest('hex');
+    
+    return hashedData
+     } 
+     function hashfilename(filename,email,randomNumberString1){
+       
+        return hashcode(hashcode(filename)+hashcode(hashcode(email)+hashcode(randomNumberString1)));
+    
+     }
 function hashfilename(filename,email,randomNumberString1){
      
   return hashcode(hashcode(filename)+hashcode(hashcode(email)+hashcode(randomNumberString1)))+'.jpeg';
@@ -40,12 +57,13 @@ async function createOrg(req, res) {
   
       const membership = await newOrgMembership.save();
   
-      res.status(201).json({
+      res.status(200).json({
         status: true,
         org: org,
         membership: membership,
       });
     } catch (error) {
+      console.log(error,'funkcing error')
       res.status(500).json({ status: false, error: error.message });
     }
   }

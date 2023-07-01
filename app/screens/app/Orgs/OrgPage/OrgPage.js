@@ -50,7 +50,7 @@ function AddUserAccessSheet({bottomSheet,org}){
             orgid:org.org._id,
             userids:ids
         }).then(res=>{
-
+            bottomSheet.current.close()
         })
     }
     return (
@@ -778,46 +778,50 @@ export default function OrgPage({navigation,route}){
             paddingVertical:20
             }}
             >
-                <View
-                style={{
- 
-                    flexDirection:'row',
-                    alignItems:'flex-start',
-            
-                }}
-                >
-                    {
-                        org.org_logo!=null?<Image>
+                 <View>
+                                {
+                                    org.org_logo!=null?<Image
+                                    source={{uri:wrapUIMG(org.org_logo)}}
+                                    style={{
+                                        width:100,
+                                        height:100,
+                                        marginRight:10,
+                                        borderRadius:org.org_logo=='/profileimg/defaultorgimg.png'?0: 100,
+                                        
+                                    }}
+                                    >
 
-                        </Image>:
-                      <View
-                      style={{
-                          height:80,
-                      width:80,
-                          borderRadius:10,
-                          backgroundColor:'#ddd', 
-                          marginRight:10,
-                          flexDirection:'row',
-                          justifyContent:'center',
-                          alignItems:'center',
-                          borderStyle:'solid',
-                          borderWidth:1,
-                          borderColor:'#ccc',
-                          paddingHorizontal:5
-                      }}
-                      >
-                          <Text
-                          style={{
-                              color:'#333',
-                              fontSize:20,
-                              fontWeight:500
-                          }}
-                          >
-                              {org.org_shortname}
-                          </Text>
-                      </View>
-                                                                                                                                                                                   }
-                </View>
+                                    </Image>:
+                                    <View
+                                    style={{
+                                        height:50,
+                                    width:50,
+                                        borderRadius:10,
+                                        backgroundColor:'#eee', 
+                                        marginRight:10,
+                                        flexDirection:'row',
+                                        justifyContent:'center',
+                                        alignItems:'center',
+                                        borderStyle:'solid',
+                                        borderWidth:1,
+                                        borderColor:'#ccc',
+                                        paddingHorizontal:5
+                                    }}
+                                    >
+                                        <Text
+                                        style={{
+                                            color:'#333',
+                                            fontSize:16,
+                                            fontWeight:500
+                                        }}
+                                        >
+                                            {org.org_shortname}
+                                        </Text>
+                                    </View>
+                                }
+
+                            </View>
+               
                 <View
                 style={{
                     flexDirection:'column',

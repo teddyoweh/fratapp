@@ -20,14 +20,15 @@ function hashcode(data){
 function uploadPostImg(req,res){
    
 
-        console.log(req.file);//this will be automatically set by multer
-        console.log(req.body);
+       
          
         fs.readFile(req.file.path,(err, contents)=> {
+         
          if (err) {
          console.log('Error: ', err);
         }else{
          console.log('File contents ',contents);
+         res.json({stat:'done'})
         }
        });
       

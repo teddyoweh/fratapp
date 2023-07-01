@@ -18,6 +18,7 @@ function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
         }
 
     ,[])
+ 
     return (
        
         <View
@@ -80,7 +81,7 @@ function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
                             <View>
                                 {
                                     org.org_logo!=null?<Image
-                                    source={{uri:wrapUIMG('/'+org.org_logo)}}
+                                    source={{uri:wrapUIMG(org.org_logo)}}
                                     style={{
                                         width:55,
                                         height:55,
