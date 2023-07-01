@@ -88,12 +88,12 @@ const homestyles = StyleSheet.create({
      
     },
     post:{
-        paddingHorizontal:6,
+        // paddingHorizontal:6,
 
         marginBottom:10,
         borderStyle:'solid',
         borderBottomWidth:0.4,
-        borderColor:'#aaa',
+        borderColor:'#ddd',
         paddingBottom:15,
 
     },
@@ -146,12 +146,14 @@ const homestyles = StyleSheet.create({
 
     },
     postcontent:{
-       paddingHorizontal:10,
+       paddingHorizontal:18,
        paddingVertical:10
     },
     postcontenttext:{
         fontSize:16,
-        fontWeight:'300'
+        fontWeight:'300',
+        color:'#333',
+        fontWeight:'400'
     },
     filters:{
         paddingHorizontal:10,
@@ -161,10 +163,10 @@ const homestyles = StyleSheet.create({
     filter:{
         marginRight:10,
         borderStyle:'solid',
-        borderColor:"grey",
-        borderWidth:0.4,
-        paddingHorizontal:15,
-        paddingVertical:15,
+        borderColor:"#ccc",
+        borderWidth:0.5,
+        paddingHorizontal:16,
+        paddingVertical:8,
         borderRadius:30,
         flexDirection:'row',
         alignItems:'center',
@@ -173,9 +175,10 @@ const homestyles = StyleSheet.create({
     filtera:{
         marginRight:10,
         borderStyle:'solid',
-        borderWidth:0.4,
-        paddingHorizontal:15,
-        paddingVertical:15,
+        borderWidth:0,
+         
+        paddingHorizontal:8,
+        paddingVertical:9,
         borderRadius:30,
         backgroundColor:'#a330d0',
         color:'white',
@@ -186,12 +189,12 @@ const homestyles = StyleSheet.create({
     },
     filtertext:{
         fontSize:15,
-        fontWeight:'600',
-        color:'#333',
+        fontWeight:'400',
+        color:'#bbb',
     },
     filtertexta:{
         fontSize:15,
-        fontWeight:'600',
+        fontWeight:'400',
         color:'#fff',
     },
     postinsights:{
@@ -241,11 +244,11 @@ const homestyles = StyleSheet.create({
     },
     postcommentbox:{
         flexDirection:'row',
-        borderRadius:30,
+        borderRadius:10,
         paddingHorizontal:15,
-        paddingVertical:13,
+        paddingVertical:8,
         borderStyle:'solid',
-        borderColor:'#aaa',
+        borderColor:'#ccc',
 
         borderWidth:0.4,
         width:'100%'

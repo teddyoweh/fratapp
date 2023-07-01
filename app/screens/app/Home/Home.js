@@ -1,4 +1,4 @@
-import React,{useState,useContext,useRef}from "react";
+import React,{useState,useContext,useRef, useEffect}from "react";
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,  RefreshControl} from "react-native";
 import { homestyles } from "../../../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Add, Send2, Messenger} from 'iconsax-react-native';
@@ -9,6 +9,9 @@ import PostsList from "../../../components/PostsList";
 import MakePost from "./MakePost";
 import Feed from "./Feed";
 import { wrapUIMG } from "../../../utils/utils";
+import Spinner from "../../../components/Spinner";
+import { setupNotifications } from "../../../config/setup";
+
 export default function HomeScreen({navigation}){
     const filters = ['All','Announments','Events','Posts','Polls','Opportunities']
     const [activeFilter,setActiveFilter]=useState('All')
@@ -46,10 +49,18 @@ export default function HomeScreen({navigation}){
       }
  
       
-      
-      
+     
+    
  
     return (
+        <>
+       {
+
+        user==null ?<View style={{flex:1}}>
+            <Spinner/>
+
+        </View>:
+    
         <View style={homestyles.container}>
             <View style={homestyles.top}>
                 <View style={homestyles.toptop}>
@@ -101,7 +112,7 @@ export default function HomeScreen({navigation}){
       
 
   
-        <Feed navigation={navigation}/>
+        <Feed navigation={navigation} postBottomSheet={postBottomSheet} />
    
             <View style={homestyles.postbtndiv}>
                 <TouchableOpacity style={homestyles.postbtn} onPress={()=>postBottomSheet.current.show()}> 
@@ -111,7 +122,9 @@ export default function HomeScreen({navigation}){
 
             </View>
 
-            <MakePost navigation={navigation}  postBottomSheet={ postBottomSheet}/>
+          
         </View>
+            }
+        </>
     )
 }

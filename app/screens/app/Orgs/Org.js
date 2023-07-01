@@ -8,9 +8,10 @@ import axios from "axios";
 import { endpoints } from "../../../config/endpoints";
 import Spinner from '../../../components/Spinner'
 import Loading from "../../../components/Loading";
+import { wrapUIMG } from "../../../utils/utils";
 function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
     const {user} = useContext(AppContext);
-  
+    console.log(Orgs)
     useEffect(
         ()=>{
             FetchOrgs()
@@ -25,7 +26,27 @@ function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
         }}
         >
             
-            {Orgs? Orgs.map((deorg,index)=>{
+            {Orgs?
+            Orgs.length==0?
+            <View
+            style={{
+                flex:1,
+                alignItems:'center',
+                justifyContent:'center'
+            }}
+            >
+                <Text
+                style={{
+                    color:'#aaa',
+                    fontSize:18,
+                    fontWeight:'700'
+                }}
+                >
+                    No Organizations
+                </Text>
+            </View>
+            :
+            Orgs.map((deorg,index)=>{
                 const org = deorg.org
                 console.log(org)
                 return (
@@ -58,7 +79,16 @@ function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
                         >
                             <View>
                                 {
-                                    org.org_logo!=null?<Image>
+                                    org.org_logo!=null?<Image
+                                    source={{uri:wrapUIMG('/'+org.org_logo)}}
+                                    style={{
+                                        width:55,
+                                        height:55,
+                                        marginRight:10,
+                                        borderRadius:org.org_logo=='/profileimg/defaultorgimg.png'?0: 100,
+                                        
+                                    }}
+                                    >
 
                                     </Image>:
                                     <View
@@ -143,9 +173,8 @@ export default function OrgHome({navigation}){
                 flexDirection:'row',
                 alignItems:'center',
                 paddingHorizontal:10,
-                borderBottomWidth:1,
-                borderColor:'#ddd',
-                borderStyle:"solid",
+               
+    
                 paddingBottom:10,
                 justifyContent:'space-between'
             }}>

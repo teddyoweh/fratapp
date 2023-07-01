@@ -18,7 +18,7 @@ for (const name of Object.keys(nets)) {
         }
     }
 }
-
+const dd = results
 const ans = results['en0'][0];
 module.exports = ans
 

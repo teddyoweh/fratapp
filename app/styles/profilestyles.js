@@ -74,6 +74,7 @@ const profilestyles = StyleSheet.create({
         paddingHorizontal:10,
         borderRadius:30,
         width:'84%',
+        //backgroundColor:'#f9e9ff',
         backgroundColor:'#f9e9ff',
         borderColor:'#a330d0',
         borderStyle:'solid',
@@ -95,6 +96,8 @@ const profilestyles = StyleSheet.create({
     profilemsgbtn:{
         paddingVertical:15,
         paddingHorizontal:15,
+        // borderColor:'#a330d0',
+        backgroundColor:'#f9e9ff',
         borderColor:'#a330d0',
         borderStyle:'solid',
         borderWidth:1,

@@ -16,16 +16,15 @@ sender_id:{
  msg_type:{
 
  },
- sender_username:{
-
-
+ msg_urls:{
+    type:Array
  },
  viewedby:{
 type:Array
  },
- sender_uimg:{},
+ 
  receiver_type:{},
- title:{},
+  
  date: {
     type: Date,
     default: Date.now

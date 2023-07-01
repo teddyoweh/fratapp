@@ -41,7 +41,7 @@ height:'100%'
 )}
 
 
-export default function Feed({navigation}){
+export default function Feed({navigation,postBottomSheet}){
     const FeedStacks = createStackNavigator()
     return (
             <FeedStacks.Navigator
@@ -52,38 +52,41 @@ export default function Feed({navigation}){
                 }
             }>
 
-                <FeedStacks.Screen name="AllFeed" component={AllFeed} />
-                <FeedStacks.Screen name="AnnouncementFeed" component={AnnounmentFeed} />
-                <FeedStacks.Screen name="EventFeed" component={EventFeed} />
-                <FeedStacks.Screen name="PostFeed" component={PostFeed} />
-                <FeedStacks.Screen name="PollsFeed" component={PollsFeed} />
-                <FeedStacks.Screen name="OpportunitiesFeed" component={OpportunitiesFeed} />
+                <FeedStacks.Screen name="AllFeed" initialParams={{postBottomSheet:postBottomSheet}} component={AllFeed} />
+                <FeedStacks.Screen name="AnnouncementFeed" initialParams={{postBottomSheet:postBottomSheet}} component={AnnounmentFeed} />
+                <FeedStacks.Screen name="EventFeed" initialParams={{postBottomSheet:postBottomSheet}} component={EventFeed} />
+                <FeedStacks.Screen name="PostFeed" initialParams={{postBottomSheet:postBottomSheet}}component={PostFeed} />
+                <FeedStacks.Screen name="PollsFeed" initialParams={{postBottomSheet:postBottomSheet}} component={PollsFeed} />
+                <FeedStacks.Screen name="OpportunitiesFeed" initialParams={{postBottomSheet:postBottomSheet}} component={OpportunitiesFeed} />
 
             </FeedStacks.Navigator>
     )
 }
 
-function AnnounmentFeed({navigation}){
-    return <AllFeed type='announcement' navigation={navigation}/>
+function AnnounmentFeed({navigation,postBottomSheet}){
+    return <AllFeed type='announcement'  postBottomSheet={postBottomSheet}  navigation={navigation}/>
 }
-function EventFeed({navigation}){
-    return <AllFeed type='event' navigation={navigation}/>
+function EventFeed({navigation,postBottomSheet}){
+    return <AllFeed type='event' postBottomSheet={postBottomSheet}  navigation={navigation}/>
 }
-function PostFeed({navigation}){
-    return <AllFeed type='post'  navigation={navigation}/>
+function PostFeed({navigation,postBottomSheet}){
+    return <AllFeed type='post'  postBottomSheet={postBottomSheet}  navigation={navigation}/>
 }
-function PollsFeed({navigation}){
-    return <AllFeed type='poll' navigation={navigation}/>
+function PollsFeed({navigation,postBottomSheet}){
+    return <AllFeed type='poll'  postBottomSheet={postBottomSheet}  navigation={navigation}/>
 }
-function OpportunitiesFeed({navigation}){
-    return <AllFeed type='opportunity' navigation={navigation}/>
+function OpportunitiesFeed({navigation,postBottomSheet}){
+    return <AllFeed type='opportunity'  postBottomSheet={postBottomSheet}  navigation={navigation}/>
 }
 
 function AllFeed({navigation,route,type}){
+    const {postBottomSheet} = route.params
+    
     const [refreshing, setRefreshing] = React.useState(false);
     const [posts,setPost]  = useState(null)
     const [postData, setPostData] = useState(null)
     const [users,setUsers] = useState(null)
+ 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
@@ -110,13 +113,13 @@ const MemoizedMapOutPosts = React.memo(MapOutPosts);
 
 const memoizedLoadPosts = useCallback(async () => {
     const res = await axios.post(endpoints['getposts'], { cursor: null });
-    console.log(res.data)
+ 
     setPostData(res.data);
 }, []);
   
   useEffect(() => {
     memoizedLoadPosts()
-  }, [memoizedLoadPosts]);
+  }, []);
 
 return (
   
@@ -145,6 +148,7 @@ postData ?
   
 
     </ScrollView>
+    <MakePost navigation={navigation} setPost={setPostData} postd = {postData} postBottomSheet={ postBottomSheet}/>
     </View>
  
 )

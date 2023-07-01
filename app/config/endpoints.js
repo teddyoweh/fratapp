@@ -24,6 +24,7 @@ const endpoints = {
     'getpost':`${serverip}/api/posts/getonepost`,
     'likepost':`${serverip}/api/posts/like`,
     'addcomment':`${serverip}/api/posts/addcomment`,
+    'getcommentuser': `${serverip}/api/posts/getcommentuser`,
     'findpost':`${serverip}/api/posts/find`,
     'uploadpost':`${serverip}/api/posts/uploadpost`,
     //
@@ -33,14 +34,16 @@ const endpoints = {
     'joincourse':`${serverip}/api/discover/joincourse`,
 
     'fetchmsglist':`${serverip}/api/messages/msglist`,
-    'fetchmsgs':`${serverip}/api/messages/fetchmsgs`,
-    'sendmsg':`${serverip}/api/messages/sendmsg`,
+    'fetchmsgs':`${serverip}/api/messages/fetch`,
+    'sendmsg':`${serverip}/api/messages/send`,
     'viewedby':`${serverip}/api/messages/viewedby`,
 
     'addcalendar':`${serverip}/api/calendar/add`,
     'getcalendar':`${serverip}/api/calendar/getcalendar`,
     'getcalendarevents':`${serverip}/api/calendar/getcalendarevents`,
 
+    'discoverpeople':`${serverip}/api/discover/people`,
+    'discoverorgs':`${serverip}/api/discover/orgs`,
     'createorg':`${serverip}/api/orgs/create`,
     'getorg':`${serverip}/api/orgs/getorg`,
     'getorgs':`${serverip}/api/orgs/getorgs`,

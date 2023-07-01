@@ -356,7 +356,7 @@ const monthsvar = {
                   const endDateFormatted = `${endDate.getMonth()}/${endDate.getDate()}/${endDate.getFullYear()}`;
                 
                   if (currentDateFormatted === startDateFormatted && currentDateFormatted === endDateFormatted) {
-                    console.log('both')
+              
                     return '#b0f3ab';  
                   } 
                  
@@ -368,7 +368,7 @@ const monthsvar = {
                  
                   }
                   if (currentDateFormatted === endDateFormatted) {
-                    console.log('tes')
+                  
                     return '#fededed4'; 
                   }
                 }

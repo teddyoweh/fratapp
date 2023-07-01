@@ -11,6 +11,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { clearData, storeData,storeJSONData} from "../utils/storage";
 import axios from "axios";
 import { endpoints } from "../config/endpoints";
+import { NotificationContext } from "../context/notificationContext";
+import { registerForPushNotificationsAsync, setupNotifications } from "../config/setup";
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
 
 function AuthScreens(){
     
@@ -44,12 +48,33 @@ function LandingScreen() {
       </View>
     );
   }
+  
 export default function Screens(){
-    //clearData()
+ 
     const [user,setUser] = useState(null)
     const [isAuth,setIsAuth] = useState(null)
     const [token,setToken] = useState(null)
-
+    const [notification, setNotification] = useState(false);
+    const notificationListener = useRef();
+ 
+    const responseListener = useRef();
+    useEffect(() => {
+    
+      registerForPushNotificationsAsync().then(token);
+  
+      notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+        setNotification(notification);
+      });
+  
+      responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+        console.log(response);
+      });
+  
+      return () => {
+        Notifications.removeNotificationSubscription(notificationListener.current);
+        Notifications.removeNotificationSubscription(responseListener.current);
+      };
+    }, []);
     async function VerifyAuth(){
  
         const token1 = await AsyncStorage.getItem('token')
@@ -88,14 +113,7 @@ export default function Screens(){
     
        
         const value = await AsyncStorage.getItem('user')
- 
-        console.log(value)
-        if(value !== null) {
-          console.log(value)
-    
-
-
-        }
+  
   
     
     }  
@@ -106,8 +124,9 @@ export default function Screens(){
     const [colorMode,setColorMode]=useState(getDeviceColorScheme())
    
       useEffect(() => {
+        setupNotifications()
         VerifyAuth()
-      console.log(user)
+ 
  
         
       }, [])
@@ -119,10 +138,13 @@ export default function Screens(){
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             <AuthContext.Provider value={{isAuth,setIsAuth}}>
 <AppContext.Provider value={{user,setUser,colorMode,setColorMode}}>
+  <NotificationContext.Provider value={{notificationListener,responseListener,notification}}>
+
+
     {
         isAuth ==null?<LandingScreen/> : isAuth ==false?  <AuthScreens/> : <AppScreens/>
     }
-    
+      </NotificationContext.Provider>
           </AppContext.Provider>
             </AuthContext.Provider>
         </SafeAreaView>

@@ -8,9 +8,9 @@ import { endpoints } from "../config/endpoints";
 import { AppContext } from "../context/appContext";
 
 
-export default function LikeBtn({likesno,postid,likestat,setPost}){
+export default function LikeBtn({likesno,postid,isLike,setIsLike,setPost}){
     const {user} = useContext(AppContext);
-    const [isLike, setIsLike] = useState(likestat);
+   
     const [likeno,setLikeNo] = useState(likesno)
     async function LikeFunction(){
      await   axios.post(endpoints['likepost'],{
@@ -20,12 +20,10 @@ export default function LikeBtn({likesno,postid,likestat,setPost}){
           setPost(res.data)
         })
     }
-    console.log(postid,user.userid)
+ 
    async function onClick(){
         setIsLike(!isLike);
 await LikeFunction()
-
-
     }
     return(
         <TouchableOpacity  style={homestyles.insightbtn} onPress={()=>onClick()}>

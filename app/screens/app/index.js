@@ -14,10 +14,15 @@ import ProfileStacks from "./Profile";
 import MessageStacks from "./Messages";
 import OrgStacks from "./Orgs";
 import OrgPageStacks from "./Orgs/OrgPage";
+import { setupNotifications } from "../../config/setup";
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+
 const AppTab = createBottomTabNavigator()  
 const AppStack = createStackNavigator()
 
  function AppScreen(){
+ 
     return (
        
         <AppTab.Navigator

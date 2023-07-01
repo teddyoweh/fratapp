@@ -24,7 +24,7 @@ function editprofilecontroller(req,res){
     if(primg){
          uimg = '/profileimg/'+ hashfilename(primg.uri,primg.email,primg.random)
     }
-    console.log(uimg)
+ 
     User.findByIdAndUpdate(
         uid,
         {

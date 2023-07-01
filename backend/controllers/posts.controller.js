@@ -21,7 +21,7 @@ function postscontroller(req, res) {
      
 
     req.body.images.map((image,index)=>{
-        images.push(hashfilename(image.assets[0].uri,req.body.email,req.body.random))
+        images.push({uri:hashfilename(image.assets[0].uri,req.body.email,req.body.random),width:image.assets[0].width,height:image.assets[0].height})
 
     })
      

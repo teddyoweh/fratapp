@@ -10,8 +10,8 @@ import { FontAwesome5,Ionicons,AntDesign, MaterialIcons,FontAwesome} from '@expo
 import { MessageAdd, MessageAdd1, PenAdd,SearchNormal } from "iconsax-react-native";
 import MessagesScreen from "./Messages";
 import { HomeStack } from '../Home';
+import ChatStacks from "./Chat";
 
- 
 const MessageStack = HomeStack
 
 export default function MessageStacks({navigation,route}) {
@@ -26,9 +26,8 @@ export default function MessageStacks({navigation,route}) {
     }
     
     >
-        <MessageStack.Screen name='MessagePage' component={MessagesScreen}
-     
-        />
+        <MessageStack.Screen name='MessagePage' component={MessagesScreen}/>
+        <MessageStack.Screen name="ChatStacks" component={ChatStacks}/>
       
 
        

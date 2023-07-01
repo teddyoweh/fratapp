@@ -16,7 +16,7 @@ export default function ProfileActionbtn({userid,partyid}){
     async function getLinkStat(){
         await axios.post(endpoints['getlinkstat'],{userid:userid,partyid:partyid})
         .then(function(res){
-            console.log(res.data)
+ 
             setFollowState(res.data.link)
             
         })
@@ -25,7 +25,7 @@ export default function ProfileActionbtn({userid,partyid}){
     async function updateLink(){
         await axios.post(endpoints['updatelink'],{userid:userid,partyid:partyid,stat:followState})
         .then(function(res){
-            console.log(res.data)
+ 
             setFollowState(!followState)
             
         })

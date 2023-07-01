@@ -23,8 +23,9 @@ function HomeStacks({navigation,route}) {
 
       <HomeStack.Screen name="HomeScreen" component={HomeScreen} />
       <HomeStack.Screen name="PostPage" component={PostPage}/>
-      <HomeStack.Screen  name="ProfilesScreen" component={ProfilesScreen}/>
+    
       <HomeStack.Screen name='ProfileStacks' component={ProfileStacks}/>
+      <HomeStack.Screen  name="ProfilesScreen" component={ProfilesScreen}/>
     </HomeStack.Navigator>
  
  

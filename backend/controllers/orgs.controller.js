@@ -2,17 +2,24 @@ const Organizations = require('../models/Organizations')
 const OrgMembership = require('../models/OrgMemberships');
 const OrgPosts = require('../models/OrgPosts');
 const User = require('../models/User')
+function hashfilename(filename,email,randomNumberString1){
+     
+  return hashcode(hashcode(filename)+hashcode(hashcode(email)+hashcode(randomNumberString1)))+'.jpeg';
 
+}
 async function createOrg(req, res) {
     try {
-      const { name, description, uid, type, org_school, logo, shortname, positions, teams } = req.body;
-      console.log('create org', req.body);
-  
+      const { name, description, uid, type, org_school, logo, shortname, positions, teams,primg } = req.body;
+      let uimg = '/profileimg/defaultorgimg.png'
+      if(primg){
+        uimg = '/profileimg/'+ hashfilename(primg.uri,primg.email,primg.random)
+   }
+
       const newOrg = new Organizations({
         org_name: name,
         org_description: description,
         org_type: type,
-        org_logo: logo,
+        org_logo: uimg,
         org_school: org_school,
         org_shortname: shortname,
         org_positions: positions,

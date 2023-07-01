@@ -8,7 +8,7 @@ const  {fetchpostscontroller,getOnePost,fetchmypostscontroller} = require('../co
 const fetchhotposts = require('../controllers/fetchhotposts.controller');
 const searchpostscontroller = require('../controllers/searchposts.controller');
 const likespostscontoller = require('../controllers/likesposts.controller')
-const addcommentscontroller = require('../controllers/addcomment.controller')
+const {addcommentscontroller, getCommentUser} = require('../controllers/comment.controller')
 const fetchcommentscontroller = require('../controllers/fetchcomments.controller')
 const {uploadcontroller, uploadPostImg} = require('../controllers/upload.controller')
 
@@ -56,6 +56,7 @@ router.post('/newsfeed', (req, res) => { newsfeed(req, res) })
 router.post('/fetchpinned', (req, res) => { fetchpinnedposts(req, res) })
 router.post('/search', (req, res) => { searchpostscontroller(req,res)})
 router.post('/addcomment', (req, res) => { addcommentscontroller(req, res) })
+router.post('/getcommentuser',(req,res)=>{getCommentUser(req,res)})
 router.post('/fetchcomments', (req, res) => { fetchcommentscontroller(req, res) })
 router.post('/uploadpost',upload.single('fileData'),uploadPostImg)
 

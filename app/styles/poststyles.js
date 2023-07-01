@@ -20,15 +20,15 @@ const poststyles = StyleSheet.create({
         paddingHorizontal:10,
         paddingBottom:10,
         borderStyle:'solid',
-        borderBottomWidth:0.4,
-        borderColor:'#777777',
+        borderBottomWidth:1,
+        borderColor:'#eee',
 
     },
     commentheadtext:{
         marginLeft:4,
         fontSize:15,
         fontWeight:'600',
-        color:'#a330d0'
+        color:'#333'
     }
 
 })

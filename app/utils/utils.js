@@ -18,6 +18,29 @@ const wrapUIMG= (img)=>{
  
   return `${serverip}${img}`
 }
+function formatMsgDate(dateParam) {
+  const currentDate = new Date();
+  const inputDate = new Date(dateParam);
+
+  const differenceInMs = currentDate.getTime() - inputDate.getTime();
+  const differenceInDays = Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
+
+  if (differenceInDays === 0) {
+    const timeOptions = {hour: "2-digit", minute: "2-digit"};
+    return inputDate.toLocaleTimeString("en-US", timeOptions);
+  } else if (differenceInDays === 1) {
+    return "Yesterday";
+  } else if (differenceInDays > 1 && differenceInDays < 365) {
+    const day = inputDate.getDate();
+    const month = inputDate.getMonth() + 1;
+    const year = inputDate.getFullYear();
+    return `${day}/${month}/${year}`;
+  } else if (differenceInDays >= 365) {
+    const month = inputDate.getMonth() + 1;
+    const year = inputDate.getFullYear();
+    return `${month}/${year}`;
+  }
+}
 function getTimeDifference(date) {
   let date1 =  new Date(date);
   let date2 =  new Date();
@@ -59,10 +82,41 @@ const wrapPostImg =(image)=>{
   return `${serverip}/postimg/${image}`
   
 }
+function removeExcessWhitespace(text) {
+ 
+  let trimmedText = text.trim();
+
+ 
+  let formattedText = trimmedText.replace(/([^\s])\s{2,}([^\s])/g, "$1 $2");
+
+  return formattedText;
+}
+function formatTime(date1) {
+  const date = new Date(date1)
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  let formattedHours = hours.toString().padStart(2, '0');
+  const formattedMinutes = minutes.toString().padStart(2, '0');
+
+  let meridiem = 'AM';
+  if (hours >= 12) {
+    meridiem = 'PM';
+    if (hours > 12) {
+      formattedHours = (hours - 12).toString().padStart(2, '0');
+    }
+  }
+
+  return `${formattedHours}:${formattedMinutes} ${meridiem}`;
+}
+
   export {
     getTimeDifference,
     isLink,
     wrapUIMG,
-    wrapPostImg
+    wrapPostImg,
+    formatMsgDate,
+    removeExcessWhitespace,
+    formatTime
 
   }

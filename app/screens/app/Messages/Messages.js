@@ -6,10 +6,12 @@ import { messagestyles } from '../../../styles/messagestyles';
 import { discoverstyles } from "../../../styles";
 import { useRoute } from '@react-navigation/native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons,FontAwesome} from '@expo/vector-icons';
-import { ChartCircle, MessageAdd, MessageAdd1, PenAdd,SearchNormal } from "iconsax-react-native";
+import { ChartCircle, Edit, MessageAdd, MessageAdd1, PenAdd,Profile2User,SearchNormal, UserAdd } from "iconsax-react-native";
 import axios from "axios";
 import { endpoints } from "../../../config/endpoints";
 import { AppContext } from "../../../context/appContext";
+import Spinner from "../../../components/Spinner";
+import { formatMsgDate, removeExcessWhitespace, wrapUIMG } from "../../../utils/utils";
 function RenderCheckMark({stat}){
     //<MaterialCommunityIcons name="account-multiple-check-outline" size={24} color="black" />
     return (
@@ -33,6 +35,13 @@ export default function MessagesScreen({navigation,route}){
     const [msgfilter,setMessageFilter] = useState(msgfilters[0])
     function swapFil(msgfil){
         setMessageFilter(msgfil)
+    }
+
+    function goToChat(data){
+     
+        navigation.navigate('ChatStacks',{
+            party_data:data
+        })
     }
     useEffect(()=>{
         getMsgList()
@@ -58,8 +67,12 @@ export default function MessagesScreen({navigation,route}){
                     </Text>
                 </View>
                 <View style={{flexDirection:'row',alignItems:'center'}}>
-                    <Pressable>
-                    <FontAwesome name="pencil-square-o" size={24} color="black" />
+                    <Pressable
+                    style={{
+                        marginRight:10
+                    }}
+                    >
+                    <Edit size="23" color="#333" variant="Broken"/>
                     </Pressable>
                 </View>
             </View>
@@ -68,6 +81,7 @@ export default function MessagesScreen({navigation,route}){
                     <SearchNormal variant="Broken" color="grey" />
                     <TextInput style={discoverstyles.search}placeholder="Search Messages, Groups, People"/>
             </View>
+           
             <ScrollView
                 horizontal
                 contentContainerStyle={{
@@ -85,7 +99,7 @@ return (
 
 <TouchableOpacity
 onPress={()=>swapFil(msgfil)}
- 
+key={index}
 style={{
     flexDirection:'row',
     alignItems:'center',
@@ -137,23 +151,183 @@ style={{
                 </ScrollView>
             </View>
             </View>
+            {
+                data==null?<View
+                style={{
+                    flex:1
+                }}
+                >
+                    <Spinner/>
+                </View>
+           :
             <View
             style={{
                 flexDirection:'column',
             
             }}
             >
+ <ScrollView
+                contentContainerStyle={{
+                    paddingTop:10,
+                    marginBottom:50
+                }}
+                >
+                    <View>
 
+             
+                    <Text
+                    style={{
+                        paddingHorizontal:13,
+                        fontSize:20,
+                        marginBottom:10,
+                        color:'#333',
+                        fontWeight:'600'
+                    }}
+                    >
+                        Recent
+                    </Text>
+                    </View>
+                    {
+                        data.contacts.map((item,index)=>{
+                            return (
+                                    <TouchableOpacity
+                                
+                                    onPress={()=>goToChat(item.user_info)}
+                                    key={index}
+                                    style={{
+                                        flexDirection:'row',                    
+                                        alignItems:'center',
+                                        justifyContent:'space-between',
+                                        width:'100%',
+                                        borderBottomWidth:1,
+                                        borderStyle:'solid',
+                                        borderColor:'#eee',
+                                        paddingVertical:11,
+                                        paddingHorizontal:13
+                                    
+                                    
+                                    }}
+                                    >
+                                  
+                                    <View
+                                    style={{
+                                        flexDirection:'row',
+                                        width:'70%'
+
+                                    }}
+                                    >
+                                     <View
+                                     style={{
+                                        flexDirection:"column",
+                        
+                                     }}
+                                     >
+                                    <Image
+                                    style={{
+                                        height:55,
+                                        width:55,
+                                        borderRadius:100
+
+                                    }}
+                                    source={{uri:wrapUIMG(item.user_info.uimg)}}
+                                    />
+                                    </View>   
+                                    <View
+                                    style={{
+                                        flexDirection:'column',
+                                        paddingHorizontal:10,
+                                        justifyContent:'center'
+                                        
+                                    }}
+                                    >
+                                        <Text
+                                        style={{
+                                            color:"#333",
+                                            fontWeight:'400',
+                                            fontSize:17,
+                                     
+                                        }}
+                                        >
+                                        {item.user_info.firstname+' '+item.user_info.lastname}
+                                        </Text>
+                                        <Text
+                                        style={{
+                                            color:'#999',
+                                            marginTop:5,
+                                            fontWeight:'3400',
+                                            paddingLeft:4,
+                                            fontSize:16
+                                        }}
+                                        >
+                                     {removeExcessWhitespace(item.content)}
+                                        </Text>
+                                    </View>
+                                    </View>
+                                    <View
+                                    style={{
+                                        flexDirection:'column',
+                                        paddingHorizontal:10,
+                                        width:'20%',
+                                        alignItems:'center',
+                                        justifyContent:"space-between"
+                                    }}
+                                    >
+                                        <Text
+                                        style={{
+                                            fontSize:15,
+                                            color:'#aaa'
+                                        }}
+                                        >
+                                            {formatMsgDate(item.date)}
+                                        </Text>
+                                        <View
+                                            style={{
+                                                marginTop:10,
+                                                height:7,
+                                                backgroundColor:'#333',
+                                                width:7,
+                                                borderRadius:100
+                                            }}
+                                        >
+
+                                        </View>
+                                        
+                                    </View>
+                                    </TouchableOpacity>
+                            )
+                        })
+                    }
+
+                </ScrollView>
             
                 <ScrollView
                 contentContainerStyle={{
                     paddingTop:10
                 }}
                 >
-                    {
-                        [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map((item,index)=>{
+                    <View>
+
+             
+                    <Text
+                    style={{
+                        paddingHorizontal:13,
+                        fontSize:20,
+                        marginBottom:10,
+                        color:'#333',
+                        fontWeight:'600'
+                    }}
+                    >
+                        Suggested
+                    </Text>
+                    </View>
+                    {/* {
+                     data.suggested &&   
+                        data.suggested.map((item,index)=>{
+                            console.log(item,'checking for sumn')
                             return (
-                                    <View
+                                    <TouchableOpacity
+                                
+                                    onPress={()=>goToChat(item)}
                                     key={index}
                                     style={{
                                         flexDirection:'row',                    
@@ -189,7 +363,7 @@ style={{
                                         borderRadius:100
 
                                     }}
-                                    source={{uri:'https://www.teddyoweh.net/_next/static/media/oweh.683faa7f.jpg'}}
+                                    source={{uri:wrapUIMG(item.uimg)}}
                                     />
                                     </View>   
                                     <View
@@ -207,7 +381,7 @@ style={{
                                      
                                         }}
                                         >
-                                        Teddy Oweh
+                                        {item.firstname+' '+item.lastname}
                                         </Text>
                                         <Text
                                         style={{
@@ -218,7 +392,7 @@ style={{
                                             fontSize:13
                                         }}
                                         >
-                                        how have you been?
+                                        Tap to Chat
                                         </Text>
                                     </View>
                                     </View>
@@ -231,25 +405,18 @@ style={{
                                         justifyContent:"space-between"
                                     }}
                                     >
-                                        <Text
-                                        style={{
-                                            color:"#333",
-                                            fontWeight:'300',
-                                            fontSize:12
-                                        }}
-                                        >
-                                        12:00PM
-                                        </Text>
+                                        <Ionicons name="chevron-forward" size={2} color="black" />
 
                                         
                                     </View>
-                                    </View>
+                                    </TouchableOpacity>
                             )
                         })
-                    }
+                    } */}
 
                 </ScrollView>
             </View>
+             }
         </View>
     )
 }

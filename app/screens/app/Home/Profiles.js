@@ -1,7 +1,7 @@
 import React,{useState,useContext}from "react";
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput} from "react-native";
 import { homestyles,profilestyles } from "../../../styles";
-import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Profile, MessageText1, CloudLightning, MessageAdd, MessageQuestion} from 'iconsax-react-native';
+import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Profile, MessageText1, CloudLightning, MessageAdd, MessageQuestion, MessageText} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons,EvilIcons,Entypo} from '@expo/vector-icons';
 
 import PostsList from "../../../components/PostsList";
@@ -109,8 +109,19 @@ export default function ProfilesScreen({navigation,route}){
                         <ProfileActionbtn userid={user.userid} partyid={userdetails.userid }/>
 
                  
-                            <TouchableOpacity style={profilestyles.profilemsgbtn}>
-                                <MessageText1 variant="Broken" color="#a330d0"/>
+                            <TouchableOpacity style={profilestyles.profilemsgbtn}
+                            
+                            onPress={()=>{
+                                navigation.navigate('MessagesScreen',{
+                        
+                                    screen:'ChatStacks',
+                                    params:{
+                                        party_data:userdetails,
+                                    }
+                                })
+                            }}
+                            >
+                                <MessageText1 variant="Bulk" color="#a330d0"/>
                             </TouchableOpacity>
                         </View>
                 </View>

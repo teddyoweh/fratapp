@@ -1,11 +1,9 @@
 const express = require('express');
+const { DiscoverPeople, DiscoverOrgs } = require('../controllers/discover.controller');
 const router = express.Router();
 
- 
-// router.post('/fetchcourses', (req, res) => { fetchcoursescontroller(req, res) })
-// router.post('/fetchmajors', (req, res) => { fetchmajorcontroller(req, res) })
-// router.post('/joincourse', (req, res) => { joincoursecontroller(req, res) })
- 
+router.post('/people',DiscoverPeople)
+router.post('/orgs',DiscoverOrgs)
 
 
 module.exports = router

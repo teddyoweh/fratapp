@@ -77,18 +77,50 @@ function LinkBox({links,removeLinks}){
 }
 
 function RenderImages({images,setImages}){
+    const windowWidth = Dimensions.get('window').width;
+    const windowHeight = Dimensions.get('window').height;
+    const windowScale = Dimensions.get('window').scale;
+ 
+    function scaleImageToScreen(imageWidth, imageHeight) {
+
+    const maxWidth = windowWidth  
+    const maxHeight = windowHeight  
+
+    // Calculate the aspect ratio of the image
+    const imageAspectRatio = imageWidth / imageHeight;
+
+    // Calculate the scaled dimensions
+    let scaledWidth = maxWidth;
+    let scaledHeight = maxWidth / imageAspectRatio;
+
+    // Check if the scaled height exceeds the maximum height
+    if (scaledHeight > maxHeight) {
+    scaledHeight = maxHeight;
+    scaledWidth = maxHeight * imageAspectRatio;
+    }
+
+    // Return the scaled dimensions as an object
+    return { width: scaledWidth, height: scaledHeight };
+    }
     return (
         <View
         style={{
         width:'100%'
         }}
         >
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            <ScrollView showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+                flexDirection:'row',
+                flexWrap:'wrap',
+                flex:0
+            }}
+            >
                 {images.length>0 &&
                     images.map((image,index)=>{
+                        const {width,height} = scaleImageToScreen(image.width,image.height)
                         return(
-                            <View key={index} style={{marginHorizontal:5,flexDirection:'row'}}>
-                                <Image source={{uri:image.uri}} style={{width:300,height:300,borderRadius:6,borderWidth:0.6,borderColor:'#aaa'}}/>
+                            <View key={index} style={{marginHorizontal:5, marginBottom:5, flexDirection:'row'}}>
+                                <Image source={{uri:image.uri}} style={{width:width/2,height:height/2,borderRadius:6}}/>
                                 <TouchableOpacity onPress={()=>setImages((prevImages)=>prevImages.filter((img)=>img!==image))}
                                 style={{
                                     position:'absolute',
@@ -107,7 +139,7 @@ function RenderImages({images,setImages}){
         </View>
     )
 }
-export default function MakePost({navigation, postBottomSheet}){
+export default function MakePost({navigation, postBottomSheet,setPost,postd}){
  const [postinput,setPostInput] = useState('')
     const [images,setImages] = useState([])
  
@@ -116,7 +148,7 @@ export default function MakePost({navigation, postBottomSheet}){
 const [linkStore, setLinkStore] = useState([])
 const snapPoints = useMemo(() => ['25%', '50%'], []);
 const {user} = useContext(AppContext)
-const windowHeight = Dimensions.get('window').height;
+ 
 function randomNumberString() {
     var min = 10000; // Minimum 5-digit number (10,000)
     var max = 99999; // Maximum 5-digit number (99,999)
@@ -136,6 +168,7 @@ const uploadImages = async (random) =>{
      uri : image.uri,
      type: image.type,
         name: 'jacked',
+        
   
 
     });
@@ -153,7 +186,7 @@ const uploadImages = async (random) =>{
     };
    
    await axios.post(endpoints['uploadpost'],data).then(res=>{
-    
+    setImages([])
    })
    })
   
@@ -231,9 +264,12 @@ async function axiosMakePost(){
    await axios.post(endpoints['makepost'],{links:linkStore, random:random, email:user.username,content:postinput,isjob:opportunityOptionActive,isevent:eventOptionActive,isanouncement:announcementOptionActive,userid:user.userid,repostid:null,isrepost:false,images:images})
     .then(async (res)=>{
         console.log(res.data);
+  
         await uploadImages(random).then(res=>{
             postBottomSheet.current.close()
+            setImages([])
         })
+        // setPost([...postd,res.data])
    
     })
     
@@ -247,9 +283,11 @@ function onSubmit(){
 const addImage = async () => {
     let _image = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4,3],
-      quality: 1,
+    //   allowsEditing: true,
+      aspect: [1,1],
+      selectionLimit:1,
+    
+    //   quality: 1,
       allowsMultipleSelection:true
     });
     console.log(JSON.stringify(_image));
@@ -269,6 +307,7 @@ const addImage = async () => {
 // useEffect(() => {
 //     checkForCameraRollPermission()
 //   }, []);
+
 return (
     <BottomSheet hasDraggableIcon ref={postBottomSheet} height={850} >
         <KeyboardAvoidingView

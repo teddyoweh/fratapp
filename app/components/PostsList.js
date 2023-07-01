@@ -1,4 +1,4 @@
-import React,{useState,useEffect,useContext}from "react";
+import React,{useState,useEffect,useContext, useRef}from "react";
 import { View,Text,Dimensions, Image,TouchableOpacity, ScrollView, TextInput, Pressable} from "react-native";
 import { homestyles } from "../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, MessageText, Link2, Link, MessageText1, Send2, ArrowUp} from 'iconsax-react-native';
@@ -9,11 +9,94 @@ import axios from "axios";
 import { endpoints } from "../config/endpoints";
 import { getTimeDifference, wrapPostImg, wrapUIMG } from "../utils/utils";
 import { AppContext } from "../context/appContext";
+
+
+
+
+function CommentInput({postid,setPost}){
+    const {user} = useContext(AppContext)
+    const [comment,setComment] = useState('')
+    async function addComment(){
+        await axios.post(endpoints['addcomment'],{userid:user.userid,comment:comment,postid:postid}).then(
+            res=>{
+                console.log(res.data)
+                setPost(res.data)
+                setComment('')
+            }
+        )
+    }
+
+    return (
+
+
+    <View style={[homestyles.postcommentbox,{
+        justifyContent:'space-between',
+        alignItems:'center',
+        width:'100%'
+    }]}>
+        <TextInput
+        style={{
+            width:'80%',
+            height:'100%',
+        }}
+        value={comment}
+        onChangeText={(text)=>setComment(text)}
+        placeholder="Add Comment"
+        multiline={true}
+        />
+       <Pressable
+onPress={()=>addComment()}
+
+
+style={{
+width:30,
+height:30,
+flexDirection:'row',
+alignItems:'center',
+justifyContent:'center',
+borderRadius:100,
+backgroundColor:'#333',
+
+}}
+>
+<ArrowUp color="white" size={16}/>
+
+</Pressable>
+    </View>
+    )
+}
 export default function PostsList({index,navigation,posti,userdetails,move}){
+    
     const windowWidth = Dimensions.get('window').width;
+    const windowHeight = Dimensions.get('window').height;
+    const windowScale = Dimensions.get('window').scale;
+    
  const [post,setPosti] =useState(posti)
-const {user} = useContext(AppContext)
  
+const {user} = useContext(AppContext)
+const [isLike, setIsLike] = useState(post.likesuserlist.includes(user.userid));
+function scaleImageToScreen(imageWidth, imageHeight) {
+ 
+    const maxWidth = windowWidth  
+    const maxHeight = windowHeight  
+  
+    // Calculate the aspect ratio of the image
+    const imageAspectRatio = imageWidth / imageHeight;
+  
+    // Calculate the scaled dimensions
+    let scaledWidth = maxWidth;
+    let scaledHeight = maxWidth / imageAspectRatio;
+  
+    // Check if the scaled height exceeds the maximum height
+    if (scaledHeight > maxHeight) {
+      scaledHeight = maxHeight;
+      scaledWidth = maxHeight * imageAspectRatio;
+    }
+  
+    // Return the scaled dimensions as an object
+    return { width: scaledWidth, height: scaledHeight };
+  }
+  
   function navigateToUser(){
  
     if(userdetails.userid==user.userid){
@@ -31,11 +114,26 @@ const {user} = useContext(AppContext)
         navigation.navigate('PostPage',{post:post,userdetails:userdetails})
     }
   }
+  const scrollViewRef = useRef(null);
 
  
+
+  const handleScrollToImg = (index) => {
+    if (scrollViewRef.current) {
+      const offsetX = index * windowWidth;
+      alert('shiot')
+      scrollViewRef.current.scrollTo({ x: offsetX, animated: true });
+    }else{
+        const offsetX = index * windowWidth;
+      alert('dam')
+      scrollViewRef.current.scrollTo({ x: offsetX, animated: true });
+    }
+  };
+
+
     return (
         userdetails && 
-        <Pressable style={homestyles.post} key={index} onPress={()=>moveToPost()}>
+        <Pressable style={homestyles.post} key={index} >
             <View style={homestyles.posttop}>
                 <View style={homestyles.posttopleft}>
                     <View style={homestyles.posttopimg}>
@@ -64,11 +162,11 @@ const {user} = useContext(AppContext)
                             </Text>
                 </View>
             </View>
-            <View style={homestyles.postcontent}>
-                <Text style={homestyles.postcontenttext}>
+            <Pressable style={homestyles.postcontent} onPress={()=>moveToPost()}>
+                <Text selectable={true} style={homestyles.postcontenttext}>
                    {post.content}
                 </Text>
-            </View>{post.links.length>0&&
+            </Pressable>{post.links.length>0&&
             <View style={{flexDirection:'column',marginVertical:8,borderRadius:30,paddingVertical:2}}>
                 
         {
@@ -122,20 +220,25 @@ const {user} = useContext(AppContext)
         <View
         style={{
             width:'100%',
-            flexDirection:'row',
+            flexDirection:'column',
            
 
         }}
         >
             {
                 post.imgurls.length>0&&
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-                scrollEnabled={true}
-                
-                onScroll={(e)=>console.log(e)}
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}
+            
+                ref={scrollViewRef}
+                // onScroll={(e)=>console.log(e)}
                 contentContainerStyle={{
                   
                     // paddingHorizontal:10,
+                    flex:1,
+                    flexDirection:'row',
+                    alignItems:'center',
+                    // /justifyContent:'center',
+                    width:'100%',
                     paddingVertical:10,
                  
                     
@@ -143,17 +246,32 @@ const {user} = useContext(AppContext)
                 >
                     {
                         post.imgurls.map((imgurl,index)=>{
-                     
+                            const {width,height} = scaleImageToScreen(imgurl.width,imgurl.height)
                             return(
-                                <Image key={index} source={{uri:wrapPostImg(imgurl)}} style={{
-                                    width:windowWidth-12,
-                                    height:430,
-                                    marginRight:20,
+                              
+                                <View
+                                key={index}
+                                style={{
+                                    width:windowWidth
+                                }}
+                                >
+
+                                
+                               
+                                <Image key={index} source={{uri:wrapPostImg(imgurl.uri)}} style={{
+                                    //width:windowWidth-1,
+                                  
+                                    width:width,
+                                    height:height,
+                                    
+                                    // marginRight:20,
                                     marginBottom:10,
-                                    borderRadius:10,
-                                    borderColor:'#aaa',
-                                    borderWidth:0.6
+                                    borderRadius:1,
+                               
+                              
                                 }}/>
+                                </View>
+                            
                             )
                         }
                         )
@@ -161,6 +279,7 @@ const {user} = useContext(AppContext)
                 </ScrollView>
 
             }
+       
         </View>
         <View
         style={{
@@ -173,20 +292,20 @@ const {user} = useContext(AppContext)
 
             <View style={homestyles.postinsights1}>
             <View style={homestyles.postinsight}>
-                 <LikeBtn setPost={setPosti} likesno={post.likesuserlist.length} postid={post._id} likestat={post.likesuserlist.includes(user.userid)}/>
+                 <LikeBtn setPost={setPosti} likesno={post.likesuserlist.length} postid={post._id} isLike={isLike} setIsLike={setIsLike}/>
                 
                 </View>
                  
                <View>
-               <View  style={homestyles.insightbtn}  >
-            <MessageText1 color="#333" size={23} variant="Linear"/>
+               <Pressable onPress={()=>moveToPost()}  style={homestyles.insightbtn}  >
+            <MessageText1 color="#aaa" size={23} variant="Bold"/>
             <Text style={homestyles.postinsights1text}>
    
                 </Text>
-        </View> 
+        </Pressable> 
                </View>
                <View  style={homestyles.insightbtn}  >
-            <Send2 color="#333" size={23} variant="Linear"/>
+            <Send2 color="#aaa" size={23} variant="Bold"/>
             <Text style={homestyles.postinsights1text}>
    
                 </Text>
@@ -197,7 +316,7 @@ const {user} = useContext(AppContext)
             <View>
                 
             <View  style={homestyles.insightbtn}  >
-            <Entypo name="dots-three-horizontal" size={18} color="#333" />
+            <Entypo name="dots-three-horizontal" size={18} color="#aaa" />
         
             </View>
             </View>
@@ -220,9 +339,9 @@ const {user} = useContext(AppContext)
             >
                 <Text
                 style={{
-                    color:"#333",
-                    fontWeight:"400",
-                    fontSize:19,
+                    color:"#aaa",
+                    fontWeight:"600",
+                    fontSize:16,
                     marginRight:5
                     
                 }}
@@ -231,9 +350,9 @@ const {user} = useContext(AppContext)
                 </Text>
                 <Text
                    style={{
-                    color:"#999",
-                    fontWeight:"300",
-                    fontSize:15,
+                    color:"#aaa",
+                    fontWeight:"600",
+                    fontSize:13,
                     marginRight:5
                     
                 }}
@@ -260,19 +379,19 @@ const {user} = useContext(AppContext)
                 <Text
                 
                 style={{
-                    color:"#333",
-                    fontWeight:"400",
-                    fontSize:19,
+                    color:"#aaa",
+                    fontWeight:"600",
+                    fontSize:16,
                     marginRight:5
                     
                 }}>
-                {post.commentsno}
+                {post.commentslist.length}
                 </Text>
                 <Text
                    style={{
-                    color:"#999",
-                    fontWeight:"300",
-                    fontSize:15,
+                    color:"#aaa",
+                    fontWeight:"600",
+                    fontSize:13,
                     marginRight:5
 
                     
@@ -283,38 +402,7 @@ const {user} = useContext(AppContext)
             </View>
                 </View>
             <View style={homestyles.postinsights}>
-                <View style={[homestyles.postcommentbox,{
-                    justifyContent:'space-between',
-                    alignItems:'center',
-                    width:'100%'
-                }]}>
-                    <TextInput
-                    style={{
-                        width:'80%',
-                        height:'100%',
-                    }}
-                    placeholder="Add Comment"
-                    multiline={true}
-                    />
-                   <Pressable
-
-
-
-        style={{
-            width:30,
-            height:30,
-            flexDirection:'row',
-            alignItems:'center',
-            justifyContent:'center',
-            borderRadius:100,
-            backgroundColor:'#333',
-
-        }}
-        >
-            <ArrowUp color="white" size={16}/>
-
-            </Pressable>
-                </View>
+             <CommentInput postid={post._id} setPost={setPosti}/>
                 
 
             </View>

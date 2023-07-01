@@ -261,11 +261,11 @@ export default function MakeEvent({navigation,route,eventBottomSheet}){
    
         // Geolocation.getCurrentPosition(
         //     (position) => {
-        //       console.log(position);
+        
         //     },
         //     (error) => {
         //       // See error code charts below.
-        //       console.log(error.code, error.message);
+        // 
         //     },
         //     { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
         // );
@@ -372,7 +372,7 @@ export default function MakeEvent({navigation,route,eventBottomSheet}){
             createdby:user.userid
         }
         axios.post(endpoints['addcalendar'],data).then(res=>{
-            console.log(res.data)
+         
             resetState()
             eventBottomSheet.current.close()
         

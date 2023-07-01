@@ -1,7 +1,8 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import DiscoverScreen from './Discover';
 import ProfilesScreen from '../Home/Profiles';
-const DiscoverStack = createStackNavigator();
+import { HomeStack } from '../Home';
+const DiscoverStack = HomeStack
 
 function DiscoverStacks() {
   return (

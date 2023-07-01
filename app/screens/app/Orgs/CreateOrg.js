@@ -9,6 +9,7 @@ import axios from "axios";
 import { endpoints } from "../../../config/endpoints";
 import Spinner from "../../../components/Spinner";
 import successgif from '../../../assets/successorg.gif'
+import * as ImagePicker from 'expo-image-picker';
 const LoadingModal = ({ isVisible, onClose,success }) => {
  
     return (
@@ -133,11 +134,33 @@ export default function CreateOrgs({navigation}){
     const [orgEmail,setOrgEmail] = useState('')
     const [orgPhone,setOrgPhone] = useState('')
     const [orgSchool,setOrgSchool] = useState('')
- 
+    const [orgImage,setOrgImage] = useState(null)
+    
     const [teams,setTeams] = useState(['Executive','Finance','Media'])
  
     const [positions,setPositions] = useState(['President','Vice President','Secretary'])
- 
+    const addImage = async () => {
+        let _image = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        //   allowsEditing: true,
+          aspect: [1,1],
+          selectionLimit:1,
+        
+          quality: 1,
+          allowsMultipleSelection:false
+        });
+        console.log(JSON.stringify(_image));
+        if (!_image.canceled) {
+            console.log(_image)
+            setOrgImage(_image.assets[0]);
+        }
+      };
+      function randomNumberString() {
+        var min = 10000; // Minimum 5-digit number (10,000)
+        var max = 99999; // Maximum 5-digit number (99,999)
+        var randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+        return randomNumber.toString();
+      }
     function resetState(){
         setOrgType('General')
         setOrgName('')
@@ -161,7 +184,34 @@ export default function CreateOrgs({navigation}){
     const hideModal = () => {
       setModalVisible(false);
     };
+    async function uploadImages(random){
+        const data = new FormData()
+       
+        data.append('name','avatar')
+        data.append('email',user.username)
+        data.append('random',`${random}`)
+        data.append('uri',orgImage.uri)
+        data.append('file',{
+            uri:orgImage.uri,
+       
+            name:'profile.jpg'
+        })
+        console.log(data)
+        await axios.post(endpoints['uploadprofile'],data).then(res=>{
+            navigation.goBack()
+        })
+    }
     async function createOrgMethod(){
+        const random = `${randomNumberString()}`
+        let primg
+        if(orgImage){
+            primg = {
+                uri:orgImage.uri,
+                random:random,
+            email:user.username
+    
+            }
+        }
         const body ={
             name:orgName,
             description:orgDescription,
@@ -175,23 +225,26 @@ export default function CreateOrgs({navigation}){
             email:orgEmail,
             phone:orgPhone,
             website:orgWebsite,
+            primg:primg
 
         }
 
         showModal()
    
-        await axios.post(endpoints['createorg'],body).then(res=>{
-       
-            resetState()
-            setSuccess(true)
-            setTimeout(()=>{
-                hideModal()
-                navigation.goBack()
-            }
-            ,1880)
+        await axios.post(endpoints['createorg'],body) 
+        if(orgImage){
+            await uploadImages(random)
+        }
+        resetState()
+        setSuccess(true)
+        setTimeout(()=>{
+            hideModal()
+            navigation.goBack()
+        }
+        ,1880)
          
 
-        })
+ 
 
     }
     
@@ -228,6 +281,80 @@ export default function CreateOrgs({navigation}){
                 showsVerticalScrollIndicator={false}
                 >
                     <View>
+                    <View style={[makeeventstyles.formgrp,{
+                        alignItems:'center'
+                    }]}>
+                        <View
+                        style={{
+                            flexDirection:'column',
+                            alignItems:'flex-end',
+                            marginBottom:-4,
+
+                        }}
+                        >
+
+              
+                                {
+                                  orgImage?
+                                  <Image
+                                  source={{uri:orgImage.uri}}
+  
+                                  style={{
+                                      height:108,
+                                      width:108,
+                                      borderRadius:100
+                                  }}
+                                  />:
+                            <View
+                            style={{
+                                borderWidth:1,
+                                borderColor:'#bbb',
+                                backgroundColor:'#ddd',
+                                borderStyle:'solid',
+                                borderRadius:100,
+                                padding:18
+
+                                
+                            }}
+                            >
+                                  <Image
+                                  source={require('../../../assets/orgusers.png')}
+  
+                                  style={{
+                                      height:90,
+                                      width:90
+                                  }}
+                                  />  
+                             
+                              
+                            </View>
+                               }
+                            <TouchableOpacity
+                            onPress={()=>addImage()}
+                            style={{
+                                paddingHorizontal:10,
+                                paddingVertical:10,
+                                borderRadius:6,
+                                backgroundColor:'#333',
+                                position:'relative',
+                                top:-22,
+                                left:-5
+                                
+                            }}
+                            >
+                                <Text
+                                style={{
+                                    color:'white',
+                                    fontWeight:'700',
+                                    fontSize:11,
+                                }}
+                                >
+                                   {orgImage?"Update": 'Upload'}
+                                </Text>
+                            </TouchableOpacity>
+                            </View>
+                            <Text style={makeeventstyles.formtext}>Organization Picture</Text>
+                        </View>
                         <View style={makeeventstyles.formgrp}>
                             <Text style={makeeventstyles.formtext}>Organization Name</Text>
                             <TextInput style={makeeventstyles.forminput} placeholder="Organization Name" value={orgName} onChangeText={(text)=>setOrgName(text)}/>
