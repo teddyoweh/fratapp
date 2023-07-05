@@ -142,7 +142,7 @@ export default function CreateOrgs({navigation}){
     const addImage = async () => {
         let _image = await ImagePicker.launchImageLibraryAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        //   allowsEditing: true,
+          allowsEditing: true,
           aspect: [1,1],
           selectionLimit:1,
         
@@ -374,7 +374,7 @@ export default function CreateOrgs({navigation}){
                             <TextInput style={makeeventstyles.forminput} placeholder="Organization Symbol" value={orgSymbol} onChangeText={(text)=>setOrgSymbol(text)}/>
                         </View>
                         <View style={makeeventstyles.formgrp}>
-        <Text style={makeeventstyles.formtext}>Organization Type</Text>
+        <Text style={makeeventstyles.formtext}>Organization Cohorts</Text>
         <ScrollView horizontal={true} contentContainerStyle={{paddingVertical:5}} showsHorizontalScrollIndicator={false}>
 
 

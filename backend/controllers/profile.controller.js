@@ -41,7 +41,7 @@ function editprofilecontroller(req,res){
                 console.log('e no work')
                 res.status(500).send({message: 'Error updating user profile.'});
             } else {
-                res.status(200).send(updatedUser);
+                res.status(200).json(updatedUser);
             }
         }
     );

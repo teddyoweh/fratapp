@@ -20,7 +20,7 @@ export default function EditProfile({navigation}){
 
 
     }
-    const {user} = useContext(AppContext)
+    const {user,setUser} = useContext(AppContext)
     const dataBottomSheet= useRef()
     const [selectedDate, setSelectedDate] = useState('');
     const [medata,setMeData]  = useState(user)
@@ -64,6 +64,8 @@ export default function EditProfile({navigation}){
             if(initialImg==false){
                 await uploadImages(random);
             }
+            setUser(res.data)
+            navigation.goBack()
            
         })
     

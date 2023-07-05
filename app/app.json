@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.teddyoweh.app"
     },
     "android": {
       "adaptiveIcon": {
@@ -32,9 +33,13 @@
         {
           "icon": "./assets/union.png",
           "color": "#ffffff"
-        
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "07d2db23-adcf-49e2-999d-73f9802db499"
+      }
+    }
   }
 }

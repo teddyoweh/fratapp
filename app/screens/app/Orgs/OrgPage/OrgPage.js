@@ -1,6 +1,6 @@
 import { View,Text,Animated, Image,TouchableOpacity,Keyboard, ScrollView, TextInput,  RefreshControl,KeyboardAvoidingView, Button, Pressable, Vibration} from "react-native";
 import { homestyles,discoverstyles } from "../../../../styles";
-import { Message, Messages1,Message2, Messages2, SearchNormal, PictureFrame,Chart,Link21,VoiceCricle,Calendar,VolumeHigh,Briefcase,Send2, Messages3, MessageSquare,More,Like, Like1,AddCircle, ElementPlus, UserCirlceAdd, Add, DirectUp, ArrowUp, Microphone, Microphone2} from 'iconsax-react-native';
+import { Message, Messages1,Message2, Messages2, SearchNormal, PictureFrame,Chart,Link21,VoiceCricle,Calendar,VolumeHigh,Briefcase,Send2, Messages3, MessageSquare,More,Like, Like1,AddCircle, ElementPlus, UserCirlceAdd, Add, DirectUp, ArrowUp, Microphone, Microphone2, Hashtag, ArrowRight2, Box2, Celo, Command, Notepad2, People, UserAdd, CalendarAdd, ArchiveBook} from 'iconsax-react-native';
 import { FontAwesome5,Feather, Ionicons,AntDesign, MaterialIcons,Entypo} from '@expo/vector-icons';
 import { useContext, useEffect,useRef, useState,useCallback, useLayoutEffect } from "react";
 import { AppContext } from "../../../../context/appContext";
@@ -230,8 +230,10 @@ function AddUserAccessSheet({bottomSheet,org}){
     
 }
 
-function RenderMembers({members,memberSheet}){
+function RenderMembers({members1,memberSheet}){
+    const members = members1.slice(0,8)
     let margin;
+    let finalindex;
     function isAdmin(uid, memberDetails) {
         const user = memberDetails.find((member) => member.userid === uid);
         return user && user.role === 'admin';
@@ -253,7 +255,7 @@ style={{
 }}
 >
 
-    Members ({members.length})
+    Members ({members1.length})
 </Text>
 
 <View 
@@ -276,7 +278,7 @@ style={{
             }}
             >
                 {members.map((member,index) => {
-                    
+                    finalindex = index
                     return(
                         <>
                  
@@ -302,6 +304,35 @@ style={{
                     )
                 }
                 )}
+                {
+                    members.length!=members.length &&
+                    <View 
+                    
+                    style={{
+                        width: 35,
+                        height: 35,
+                        borderRadius: 25,
+                        position:'relative',
+                        left:finalindex+8*-15,
+                        flexDirection:'row',
+                        alignItems:"center",
+                        justifyContent:'center',
+                    
+                        backgroundColor:'#eee',
+              
+
+                    }}
+                    > 
+                    <Text
+                    style={{
+                        color:'#999',
+                        fontWeight:'400'
+                    }}
+                    >
+                        +{members1.length-members.length}
+                    </Text>
+                        </View>
+                }
                
                 </View>
                 <View
@@ -309,13 +340,13 @@ style={{
                     marginLeft:margin
                 }}
                 >
-                    {
+                    {/* {
 isAdmin(user.userid,members)==true&&
             
                     <TouchableOpacity
 
                     onPress={()=>memberSheet()}
-                    style={{flexDirection:'row',alignItems:'center',backgroundColor:'#ddd',paddingHorizontal:7,borderRadius:10,paddingVertical:5,marginRight:10}}
+                    style={{flexDirection:'row',alignItems:'center',backgroundColor:'#eee',paddingHorizontal:7,borderRadius:10,paddingVertical:5,marginRight:10}}
                     >
                         
                     <Text
@@ -324,17 +355,17 @@ isAdmin(user.userid,members)==true&&
                         fontSize:13,
                         fontWeight:'400',
                   
-                        color:'#333'
+                        color:'#999'
                     }}
                     >
                         Add Member
                     </Text>
                     <AddCircle
                     size={15}
-                    color="#333"
+                    color="#999"
                     variant="Broken"
                     />
-                          </TouchableOpacity>        }
+                          </TouchableOpacity>        } */}
 
                 </View>
             </View>
@@ -687,8 +718,10 @@ function RendorOrgPost({orgid}){
 export default function OrgPage({navigation,route}){
     const scrollViewRef = useRef()
     const {org} = route.params
+    const {user} = useContext(AppContext)
     console.log(org._id)
     const [orgData,setOrgData] = useState(null)
+    const orgoptions = ['New Event','New Cohort','Study Hours','Add Members']
     async function getOrg(){
        await axios.post(endpoints['getorg'],{
                 org_id:org._id
@@ -698,7 +731,29 @@ export default function OrgPage({navigation,route}){
         })
     }
     const AddUserAccessSheetref = useRef()
+    const optionsicon = {
+        'New Event':<CalendarAdd size="20" color="#777" style={{
+            marginRight:4,
+            fontWeight:'800'
+            }}/>
+    ,
+        'New Cohort':<People size="20" color="#777" style={{
+            marginRight:4,
+            fontWeight:'800'
+            }}/>
+    ,
+        'Study Hours':<ArchiveBook size="20" color="#777" style={{
+            marginRight:4,
+            fontWeight:'800'
+            }}/>
+    ,
+        'Add Members':<UserAdd size="20" color="#777" style={{
+        marginRight:4,
+        fontWeight:'800'
+        }}/>
 
+
+    }
     useEffect(() => {
    
         getOrg()
@@ -711,7 +766,8 @@ export default function OrgPage({navigation,route}){
  
     <View
     style={{
-        
+        flex:1,
+        height:'100%',
         backgroundColor:'white',
  
         width:'100%',
@@ -741,21 +797,14 @@ export default function OrgPage({navigation,route}){
             </TouchableOpacity>
 
         </View>
-        <View
-        style={{
-
-            width:'100%',
-        height:'100%',
-            backgroundColor:'white'
-        }}
-        >
+        
 
 
 
         <ScrollView
         ref={scrollViewRef}
         contentContainerStyle={{
-           
+       
             width:'100%',
             height:'100%',
             backgroundColor:'white'
@@ -765,17 +814,27 @@ export default function OrgPage({navigation,route}){
         >
         <View
         style={{
-            borderWidth:1,
+            borderBottomWidth:1,
             borderStyle:'solid',
             borderColor:'#ddd',
-            paddingBottom:10
+            paddingBottom:10,
+          
         }}
         >
             <View
             style={{
             flexDirection:'row',
             paddingHorizontal:15,
-            paddingVertical:20
+            paddingVertical:20,
+            // shadowColor: '#333',
+            // backgroundColor:'transparent',
+            // shadowOffset: {
+            //   width: 0,
+            //   height: 20,
+            // },
+            // shadowOpacity: 0.15,
+            // shadowRadius: 3.84,
+            // elevation: 35,
             }}
             >
                  <View>
@@ -859,26 +918,169 @@ export default function OrgPage({navigation,route}){
 
    
             <View>
-                    <RenderMembers members={orgData.members} memberSheet={opeAddMemberSheet}/>
+                    <RenderMembers members1={orgData.members} memberSheet={opeAddMemberSheet}/>
             </View>
             </View>
               }
         </View>
         <View
         style={{
-        flex:1,
-        height:'100%'
+ 
+        paddingTop:20,
+        backgroundColor:'#fff'
+        }}
+        >
+      
+      <View
+        style={{
+            paddingBottom:10
         }}
         >
 
+    
+        <ScrollView
+        horizontal
+        contentContainerStyle={{
+            paddingHorizontal:16,
+            paddingVertical:10
+ 
+        }}
+        showsHorizontalScrollIndicator={false}
+        
+        >
+        {
+            orgoptions.map((orgopt,index)=>{
+                return (
+                    <View
+                    style={{
+                        marginRight:10,
+                        backgroundColor:'#eee',
+                        paddingHorizontal:8,
+                        paddingVertical:6,
+                        borderRadius:10,
+                        flexDirection:'row',
+                        alignItems:'center',
+                        justifyContent:'center',
+                        borderWidth:1,
+                        borderStyle:'solid',
+                        borderColor:'#ccc'
+              
+                    }}
+                    >
+                        {optionsicon[orgopt]}
+                        <Text
+                        style={{
+                            color:'#777',
+                            fontWeight:'600',
+                            fontSize:13
+                            
+                        }}>
+                            {orgopt}
+                        </Text>
+                    </View>
+                )
+            })
+        }    
+        </ScrollView>
+        </View>
+        
+        { orgData &&
+            orgData.channels.map((cohort,index)=>{
+                return (
+                    <TouchableOpacity
+                    key={index}
+                    onPress={()=>navigation.navigate('OrgChannelScreen',{
+                        org,
+                        cohort
+                    })}
+                    style={{
+                        backgroundColor:'#f5f5f5',
+                        marginVertical:8,
+                        marginHorizontal:10,
+                        borderRadius:10,
+                        flexDirection:'row',
+                        alignItems:'center',
+                        justifyContent:'space-between',
+                        paddingHorizontal:10,
+                        paddingVertical:10,
+                        // borderWidth:0.5,
+                        // borderColor:'#ddd',
+                        // borderStyle:'solid',
+                        shadowColor: '#666',
+             
+                        shadowOffset: {
+                          width: 0,
+                          height: 5,
+                        },
+                        shadowOpacity: 0.15,
+                        shadowRadius: 3.84,
+                        elevation: 5,
+                    }}
+                    >
+                        <View
+                          style={{
+                            flexDirection:'row',
+                            alignItems:'center',
+                         
+                        }}
+                        >
+                        <Notepad2 size="40" color="#333"variant="Bulk"/>
+                        <View
+                        style={{
+                            flexDirection:'column',
+                            marginLeft:10,
+                        }}
+                        >
+
+             
+                        <Text
+                        style={{
+                         
+                            fontSize:18,
+                            color:'#333',
+                            fontWeight:'300'
+                        }}
+                        >
+                        {cohort.channel_name}
+                        </Text>
+                        <View
+                        style={{
+                            flexDirection:'row',
+                            alignItems:'center',
+                            marginTop:4,
+                        }}
+                        >
+         
+                        
+                        <Text
+                        style={{
+             
+                            fontSize:14,
+                        fontStyle:'italic',
+                            color:'#aaa',
+                            fontWeight:'500'
+                        }}
+                        >
+                        {cohort.channel_members.length} Members
+                        </Text>
+                        </View>
+                        </View>
+                        </View>
 
 
-        <RendorOrgPost orgid={org._id}/>
+                        <ArrowRight2 size="20" color="#aaa"/>
+                    </TouchableOpacity>
+                )
+            })
+        }
+   
+        {/* <RendorOrgPost orgid={org._id}/> */}
         </View>
         </ScrollView>
-        <RenderMessageBox orgid={org._id}/>
+   
+        {/* <RenderMessageBox orgid={org._id}/> */}
               <AddUserAccessSheet bottomSheet={AddUserAccessSheetref} org={orgData} />
-        </View>
+      
     </View>
        )
 

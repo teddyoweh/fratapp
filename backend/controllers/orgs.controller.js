@@ -1,3 +1,4 @@
+const Channels = require('../models/Channels');
 const Organizations = require('../models/Organizations')
 const OrgMembership = require('../models/OrgMemberships');
 const OrgPosts = require('../models/OrgPosts');
@@ -40,12 +41,12 @@ async function createOrg(req, res) {
         org_school: org_school,
         org_shortname: shortname,
         org_positions: positions,
-        org_teams: teams,
+        org_teams: ['General',...teams],
         createdby: uid,
       });
-  
+      
       const org = await newOrg.save();
-  
+      
       const newOrgMembership = new OrgMembership({
         org_id: org.id,
         org_type: type,
@@ -56,7 +57,14 @@ async function createOrg(req, res) {
       });
   
       const membership = await newOrgMembership.save();
-  
+      ['General',...teams].map(async (team,index)=>{
+        const newChannel = new Channels({
+          org_id:org.id,
+          channel_members:[uid],
+          channel_name:team
+        })
+        await newChannel.save()
+      })
       res.status(200).json({
         status: true,
         org: org,
@@ -79,6 +87,7 @@ async function createOrg(req, res) {
       const orgs = await Promise.all(
         orgMemberships.map(async (membership) => {
           const org = await Organizations.findById(membership.org_id);
+      
           return {
             org: org,
             membership: membership,
@@ -108,7 +117,7 @@ async function createOrg(req, res) {
       const memberUserRoles = memberships.slice(0, 6).map((membership) => membership.role);
       
       const members = await User.find({ _id: { $in: memberUserIds } }).exec();
-      
+      const channels = await Channels.find({org_id:org_id})
       const memberDetails = members.map((member, index) => ({
         name: `${member.firstname} ${member.lastname}`,
         userid: member._id,
@@ -116,11 +125,12 @@ async function createOrg(req, res) {
         role: memberUserRoles[index]
       }));
       
-  
+      
       res.status(200).json({
         status: true,
         org: org,
         members: memberDetails,
+        channels:channels
       });
     } catch (error) {
       res.status(500).json({ status: false, error: error.message });

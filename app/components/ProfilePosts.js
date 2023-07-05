@@ -25,7 +25,7 @@ export default function ProfilePosts({navigation,userid}){
     }
     async function loadMyPosts(){
  
-       await axios.post(endpoints['getposts'],{userid:id})
+       await axios.post(endpoints['getposts'],{userid:userid})
         .then(res=>{
         
             setPostData(res.data)
