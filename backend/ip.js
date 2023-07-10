@@ -19,6 +19,6 @@ for (const name of Object.keys(nets)) {
     }
 }
 const dd = results
-const ans = results['en0'][0];
+const ans = JSON.stringify(results);
 module.exports = ans
 
