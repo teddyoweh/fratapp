@@ -722,6 +722,13 @@ export default function OrgPage({navigation,route}){
     console.log(org._id)
     const [orgData,setOrgData] = useState(null)
     const orgoptions = ['New Event','New Cohort','Study Hours','Add Members']
+    const orgoptionshashmap ={
+        'Add Members':opeAddMemberSheet,
+        "New Event":null,
+        'New Cohort':null, 
+        'Study Hours':null,
+        'Add Member':null
+    }
     async function getOrg(){
        await axios.post(endpoints['getorg'],{
                 org_id:org._id
@@ -951,7 +958,7 @@ export default function OrgPage({navigation,route}){
         {
             orgoptions.map((orgopt,index)=>{
                 return (
-                    <View
+                    <TouchableOpacity
                     style={{
                         marginRight:10,
                         backgroundColor:'#eee',
@@ -966,6 +973,8 @@ export default function OrgPage({navigation,route}){
                         borderColor:'#ccc'
               
                     }}
+                    onPress={()=>orgoptionshashmap[orgopt]()}
+                    key={index}
                     >
                         {optionsicon[orgopt]}
                         <Text
@@ -977,7 +986,7 @@ export default function OrgPage({navigation,route}){
                         }}>
                             {orgopt}
                         </Text>
-                    </View>
+                    </TouchableOpacity>
                 )
             })
         }    
