@@ -1,3 +1,3 @@
-const serverip = 'http://10.0.0.58:9990'
-const serverhost = '10.0.0.58'
+const serverip = 'http://50.116.24.45:9990'
+const serverhost = '50.116.24.45'
 export {serverip,serverhost}
