@@ -994,7 +994,7 @@ export default function OrgPage({navigation,route}){
                         cohort
                     })}
                     style={{
-                        backgroundColor:'#f5f5f5',
+                        backgroundColor:'#ffffff',
                         marginVertical:8,
                         marginHorizontal:10,
                         borderRadius:10,

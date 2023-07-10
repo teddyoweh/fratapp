@@ -99,7 +99,7 @@ const homestyles = StyleSheet.create({
     },
     posttop:{
         flexDirection:'row',
-        alignItems:'flex-start',
+        alignItems:'center',
         justifyContent:'space-between',
         paddingHorizontal:10
     },
@@ -134,8 +134,8 @@ const homestyles = StyleSheet.create({
     },
     postname:{
         fontSize:16.5,
-        fontWeight:'500',
-        color:'#181823',
+        fontWeight:'600',
+        color:'#333',
     },
     postuserrole:{
         fontSize:13.5,

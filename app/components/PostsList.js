@@ -142,15 +142,15 @@ function scaleImageToScreen(imageWidth, imageHeight) {
                     </View>
                     <Pressable style={homestyles.postuserdetails} onPress={()=>navigateToUser()}>
                         <View style={{flexDirection:'row',alignItems:'center'}}>
-                            <Text style={homestyles.postname}>{`${userdetails.firstname} ${userdetails.lastname}`}</Text>
+                            <Text style={homestyles.postname}>@{`${userdetails.username}`}</Text>
                            
                         </View>
 
         
-                        <Text style={homestyles.postusername}>@{`${userdetails.username}`}</Text>
+                        
                     </Pressable>
                 </View>
-                <View style={homestyles.posttopright}>
+                <View style={{flexDirection:'row',alignItems:'center'}}>
                     {/* <TouchableOpacity>
                     
                         <More color="grey" size={16}/>
