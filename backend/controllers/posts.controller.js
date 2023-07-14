@@ -19,9 +19,9 @@ function hashcode(data){
 function postscontroller(req, res) {
     const images = []
      
-
+    console.log(req.body.images)
     req.body.images.map((image,index)=>{
-        images.push({uri:hashfilename(image.assets[0].uri,req.body.email,req.body.random),width:image.assets[0].width,height:image.assets[0].height})
+        images.push({uri:hashfilename(image.uri,req.body.email,req.body.random),width:image.width,height:image.height})
 
     })
      

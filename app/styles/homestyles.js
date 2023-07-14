@@ -5,7 +5,7 @@ const homestyles = StyleSheet.create({
  
     container:{
         flex:1,
-        backgroundColor:'white',
+   
     },
     toptop:{
         flexDirection:'row',
@@ -68,7 +68,7 @@ const homestyles = StyleSheet.create({
     topusername:{
         fontWeight:'bold',
         fontSize:20,
-        color:'#181823',
+
         textTransform:'capitalize'
     },
     topuserimg:{
@@ -77,12 +77,11 @@ const homestyles = StyleSheet.create({
         marginRight:10,
         borderRadius:100,
  
-        borderWidth:1,
-        borderColor:'#ccc',
+    
     },
     postcontainer:{
         paddingVertical:30,
-        backgroundColor:'white',
+ 
  
         
      
@@ -93,7 +92,7 @@ const homestyles = StyleSheet.create({
         marginBottom:10,
         borderStyle:'solid',
         borderBottomWidth:0.4,
-        borderColor:'#ddd',
+     
         paddingBottom:15,
 
     },
@@ -133,9 +132,9 @@ const homestyles = StyleSheet.create({
         color:'#828282',
     },
     postname:{
-        fontSize:16.5,
-        fontWeight:'600',
-        color:'#333',
+        fontSize:15.5,
+        fontWeight:'500',
+ 
     },
     postuserrole:{
         fontSize:13.5,
@@ -152,7 +151,7 @@ const homestyles = StyleSheet.create({
     postcontenttext:{
         fontSize:16,
         fontWeight:'300',
-        color:'#333',
+     
         fontWeight:'400'
     },
     filters:{
@@ -163,7 +162,7 @@ const homestyles = StyleSheet.create({
     filter:{
         marginRight:10,
         borderStyle:'solid',
-        borderColor:"#ccc",
+        
         borderWidth:0.5,
         paddingHorizontal:16,
         paddingVertical:8,
@@ -177,7 +176,7 @@ const homestyles = StyleSheet.create({
         borderStyle:'solid',
         borderWidth:0,
          
-        paddingHorizontal:8,
+        paddingHorizontal:13,
         paddingVertical:9,
         borderRadius:30,
         backgroundColor:'#a330d0',
@@ -189,12 +188,12 @@ const homestyles = StyleSheet.create({
     },
     filtertext:{
         fontSize:15,
-        fontWeight:'400',
+        fontWeight:'300',
         color:'#bbb',
     },
     filtertexta:{
         fontSize:15,
-        fontWeight:'400',
+        fontWeight:'600',
         color:'#fff',
     },
     postinsights:{
@@ -218,7 +217,7 @@ const homestyles = StyleSheet.create({
       paddingHorizontal:5,
       paddingVertical:5,
       
-        backgroundColor:'white',
+ 
         // borderStyle:'solid',
         // // borderColor:'#aaa',
         // borderWidth:0.4,
@@ -243,12 +242,14 @@ const homestyles = StyleSheet.create({
 
     },
     postcommentbox:{
+   
         flexDirection:'row',
-        borderRadius:10,
+        borderRadius:30,
         paddingHorizontal:15,
         paddingVertical:8,
         borderStyle:'solid',
-        borderColor:'#ccc',
+   
+       
 
         borderWidth:0.4,
         width:'100%'

@@ -1,5 +1,5 @@
 import React,{useState,useContext,useRef,useEffect,useCallback}from "react";
-import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,  RefreshControl} from "react-native";
+import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,  RefreshControl, Dimensions} from "react-native";
 import { homestyles } from "../../../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
@@ -11,6 +11,8 @@ import axios from "axios";
 import { endpoints } from "../../../config/endpoints";
 import { createStackNavigator } from "@react-navigation/stack";
 import Loading from "../../../components/Loading";
+import { color_scheme } from "../../../config/color_scheme";
+import { useFocusEffect } from '@react-navigation/native';
 
 function LoadingScreen(){
     return(
@@ -20,7 +22,7 @@ function LoadingScreen(){
     )
 }
 function MapOutPosts({posts,navigation,users,route}){
- 
+ const {colorMode} = useContext(AppContext)
     return(
 <View
 style={{
@@ -29,12 +31,32 @@ height:'100%'
 }}
 >
 {
-
+posts.length>0?
 
 
         posts.map((post, index) => (
             Object.keys(users).includes(post.userid) && <PostsList key={index} route={route} move={true} index={index} navigation={navigation} posti={post} userdetails={users[post.userid]} />
-        ))
+        )):<View
+        style={{
+            flex:1,
+            height:Dimensions.get('screen').height/2,
+            flexDirection:'row',
+            alignItems:"center",
+            justifyContent:"center",
+            
+            
+        }}
+        >
+            <Text
+            style={{
+                color:color_scheme(colorMode,'#aaa'),
+                fontSize:25,
+                fontWeight:'600'
+            }}
+            >
+                No Posts
+            </Text>
+            </View>
     
 } 
     </View>
@@ -117,23 +139,33 @@ const memoizedLoadPosts = useCallback(async () => {
     setPostData(res.data);
 }, []);
   
-  useEffect(() => {
-    memoizedLoadPosts()
-  }, []);
+//   useEffect(() => {
+//     memoizedLoadPosts()
+//   }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+        memoizedLoadPosts()
+ 
+    }, [])
+  );
 
+  const {colorMode} = useContext(AppContext)
+  
 return (
   
 
   <View
   style={{
-    backgroundColor:'white',
+    backgroundColor:color_scheme(colorMode,'white'),
     flex:1,
     height:'100%'
   }}
   >
 
 
-    <ScrollView  contentContainerStyle={homestyles.postcontainer}
+    <ScrollView  contentContainerStyle={[homestyles.postcontainer,{
+        backgroundColor:color_scheme(colorMode,'white')
+    }]}
             
     refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={()=>loadPosts()} />

@@ -5,7 +5,7 @@ const poststyles = StyleSheet.create({
  
     container:{
         flex:1,
-        backgroundColor:'white'
+ 
     },
     top:{
         paddingHorizontal:10,
@@ -21,7 +21,7 @@ const poststyles = StyleSheet.create({
         paddingBottom:10,
         borderStyle:'solid',
         borderBottomWidth:1,
-        borderColor:'#eee',
+     
 
     },
     commentheadtext:{

@@ -1,5 +1,5 @@
 import React,{useContext,useEffect,useState,useRef} from "react";
-import { View, Image, Animated, useColorScheme, } from 'react-native';
+import { View, Image, Animated, useColorScheme, Appearance, } from 'react-native';
 
 import { SafeAreaView } from "react-native";
 import AuthScreen from "./auth";
@@ -15,6 +15,7 @@ import { NotificationContext } from "../context/notificationContext";
 import { registerForPushNotificationsAsync, setupNotifications } from "../config/setup";
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
+import { color_scheme } from "../config/color_scheme";
 
 function AuthScreens(){
     
@@ -117,27 +118,26 @@ export default function Screens(){
   
     
     }  
-    const getDeviceColorScheme = () => {
-      const colorScheme = useColorScheme();
-      return colorScheme === 'dark' ? 'dark' : 'light';
-    };
-    const [colorMode,setColorMode]=useState(getDeviceColorScheme())
-   
+    const colorScheme = 'dark'
+
+ 
+    const [colorMode,setColorMode]=useState(colorScheme)
+  
       useEffect(() => {
         setupNotifications()
         VerifyAuth()
- 
+   
  
         
       }, [])
       
 
 
-      
+   
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: color_scheme(colorMode,'white') }}>
             <AuthContext.Provider value={{isAuth,setIsAuth}}>
-<AppContext.Provider value={{user,setUser,colorMode,setColorMode}}>
+<AppContext.Provider value={{user,setUser,colorMode,setColorMode,   color_scheme}}>
   <NotificationContext.Provider value={{notificationListener,responseListener,notification}}>
 
 

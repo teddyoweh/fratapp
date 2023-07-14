@@ -9,9 +9,10 @@ import { endpoints } from "../../../config/endpoints";
 import Spinner from '../../../components/Spinner'
 import Loading from "../../../components/Loading";
 import { wrapUIMG } from "../../../utils/utils";
+import { color_scheme } from "../../../config/color_scheme";
 function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
-    const {user} = useContext(AppContext);
-    console.log(Orgs)
+    const {user,colorMode} = useContext(AppContext);
+
     useEffect(
         ()=>{
             FetchOrgs()
@@ -38,7 +39,7 @@ function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
             >
                 <Text
                 style={{
-                    color:'#aaa',
+                    color:color_scheme(colorMode,'#aaa'),
                     fontSize:18,
                     fontWeight:'700'
                 }}
@@ -65,7 +66,7 @@ function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
                             alignItems:'center',
                             borderBottomWidth:1,
                             borderStyle:'solid',
-                            borderColor:'#eee'
+                            borderColor:color_scheme(colorMode,'#eee'),
                         }}
                         onPress={()=>navigation.navigate('OrgPageStacks',{
                             org:org
@@ -97,7 +98,7 @@ function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
                                         height:50,
                                     width:50,
                                         borderRadius:10,
-                                        backgroundColor:'#eee', 
+                                        backgroundColor:color_scheme(colorMode,'#eee'), 
                                         marginRight:10,
                                         flexDirection:'row',
                                         justifyContent:'center',
@@ -110,7 +111,7 @@ function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
                                     >
                                         <Text
                                         style={{
-                                            color:'#333',
+                                            color:color_scheme(colorMode,'#333'),
                                             fontSize:16,
                                             fontWeight:500
                                         }}
@@ -124,7 +125,7 @@ function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
                
                         <Text
                         style={{
-                            color:'#333',
+                            color:color_scheme(colorMode,'#333'),
                             fontSize:16,
                             fontWeight:500
                         }}
@@ -153,7 +154,7 @@ function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
 export default function OrgHome({navigation}){
     const [refreshing, setRefreshing] = useState(false);
     const [Orgs,setOrgs] =  useState(null);
-    const {user} = useContext(AppContext);
+    const {user,colorMode} = useContext(AppContext);
     async function FetchOrgs(){
         await axios.post(endpoints['getorgs'],{user_id:user.userid}).then(res=>{
             setOrgs(res.data.orgs)
@@ -168,8 +169,9 @@ export default function OrgHome({navigation}){
         setRefreshing(false);
       }, 2000);
     }, []);
+    const [search,setSearch] = useState('')
     return (
-        <View style={{backgroundColor:'white',flex:1,height:'100%'}}>
+        <View style={{backgroundColor:color_scheme(colorMode,'white'),flex:1,height:'100%'}}>
             <View style={{
                 flexDirection:'row',
                 alignItems:'center',
@@ -184,7 +186,7 @@ export default function OrgHome({navigation}){
                     marginLeft:5,
                     fontSize:25,
                     fontWeight:'700',
-                    color:'#333'
+                    color:color_scheme(colorMode,'#333')
                 }}
                 >
                     Organizations
@@ -198,9 +200,14 @@ export default function OrgHome({navigation}){
                 </TouchableOpacity>
             </View>
             <View style={{marginVertical:10,paddingHorizontal:10}}>
-            <View style={discoverstyles.searchbox}>
+            <View style={[discoverstyles.searchbox,{backgroundColor:color_scheme(colorMode,'#eeee')}]}>
                     <SearchNormal variant="Broken" color="grey" />
-                    <TextInput style={discoverstyles.search}placeholder="Search My Organizations"/>
+                    <TextInput style={discoverstyles.search}placeholder="Search My Organizations"
+                    
+                    placeholderTextColor={color_scheme(colorMode,'gray')}
+                    value={search}
+                    keyboardAppearance={colorMode}
+                    />
             </View>
             </View>
             <View

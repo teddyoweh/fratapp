@@ -10,8 +10,9 @@ import { endpoints } from "../../../config/endpoints";
 import Spinner from "../../../components/Spinner";
 import successgif from '../../../assets/successorg.gif'
 import * as ImagePicker from 'expo-image-picker';
+import { color_scheme } from "../../../config/color_scheme";
 const LoadingModal = ({ isVisible, onClose,success }) => {
- 
+    const {colorMode} = useContext(AppContext)
     return (
       <Modal
         visible={isVisible}
@@ -20,7 +21,7 @@ const LoadingModal = ({ isVisible, onClose,success }) => {
         onRequestClose={onClose}
       >
         <View style={styles.modalContainer}>
-          <View style={{paddingHorizontal:10, borderStyle:'solid',borderWidth:1,borderColor:'#aaa', width:250,backgroundColor:'white',height:200,borderRadius:10,flexDirection:'column',alignContent:'space-around',alignItems:'center',justifyContent:'center'}}>
+          <View style={{paddingHorizontal:10, borderStyle:'solid',borderWidth:1,bordercolor:color_scheme(colorMode,'#eee'),borderColor:color_scheme(colorMode,'#aaa'), width:250,backgroundcolor:color_scheme(colorMode,'white'),height:200,borderRadius:10,flexDirection:'column',alignContent:'space-around',alignItems:'center',justifyContent:'center'}}>
             {
                 success==false?
            <>
@@ -30,7 +31,7 @@ const LoadingModal = ({ isVisible, onClose,success }) => {
             style={{
                 marginTop:20,
                 fontSize:16,
-                color:'#333',
+                cocolor:color_scheme(colorMode,'#eee'),
                 fontWeight:'700'
             }}
             >
@@ -51,6 +52,7 @@ const LoadingModal = ({ isVisible, onClose,success }) => {
     );
   };
 function RenderGroupInput({group,setGroup,name}){
+    const {colorMode} = useContext(AppContext)
     function addToGroup(item){
         setGroup([...group,item])
         setText('')
@@ -74,13 +76,15 @@ function RenderGroupInput({group,setGroup,name}){
             alignItems:'center',
             marginBottom:10,
         }}>  
-             <Text style={[makeeventstyles.formtext,{marginBottom:0}]}>Organization {name}</Text>
+             <Text style={[makeeventstyles.formtext,{marginBottom:0,color:color_scheme(colorMode,'#333')}]}>Organization {name}</Text>
                 {/* <Text style={{color:'red',paddingLeft:5}}>*</Text> */}
               
      
         </View>
-                 <View style={[makeeventstyles.forminput,{justifyContent:'space-between'}]} >
-                 <TextInput placeholder={`Add ${name}`}  value={text} onChangeText={(tex)=>setText(tex)}/>
+                 <View style={[makeeventstyles.forminput,{justifyContent:'space-between', backgroundColor:color_scheme(colorMode,'#eeee')}]} >
+                 <TextInput placeholder={`Add ${name}`}  value={text} onChangeText={(tex)=>setText(tex)}
+                            placeholderTextColor={color_scheme(colorMode,'gray')}
+                 />
                 <TouchableOpacity
                 onPress={()=>addMethod(text)}
                 >
@@ -107,9 +111,11 @@ function RenderGroupInput({group,setGroup,name}){
                     {
                         group.map((item,index)=>{
                             return (
-                                <View key={index} style={{flexDirection:'row',alignItems:'center',backgroundColor:'#ddd',paddingHorizontal:7,borderRadius:10,paddingVertical:5,marginRight:10}}>
+                                <View key={index} style={{flexDirection:'row',alignItems:'center', backgroundColor:color_scheme(colorMode,'#ddd'),paddingHorizontal:7,borderRadius:10,paddingVertical:5,marginRight:10}}>
     
-                                <Text style={makeeventstyles.accessusername}>{item}</Text>
+                                <Text style={[makeeventstyles.accessusername,{
+                                    color:color_scheme(colorMode,'#333')
+                                }]}>{item}</Text>
                                 <TouchableOpacity onPress={()=>removeFromGroup(item)}>
                                     <Text style={makeeventstyles.accessremove}>x</Text>
                                 </TouchableOpacity>
@@ -174,7 +180,7 @@ export default function CreateOrgs({navigation}){
         setPositions(['President','Vice President','Secretary'])
     }
 
-    const {user} = useContext(AppContext)
+    const {user,colorMode} = useContext(AppContext)
     const [modalVisible, setModalVisible] = useState(false);
     const [success,setSuccess] = useState(false)
     const showModal = () => {
@@ -259,26 +265,26 @@ export default function CreateOrgs({navigation}){
     }
     
     return (
-        <View style={{backgroundColor:'white',flex:1,height:'100%'}}>
+        <View style={{backgroundColor:color_scheme(colorMode,'white'),flex:1,height:'100%'}}>
              <View style={{
                 flexDirection:'row',
                 alignItems:'center',
                 paddingHorizontal:10,
                 borderBottomWidth:1,
-                borderColor:'#ddd',
+                borderColor:color_scheme(colorMode,'#ddd'),
                 borderStyle:"solid",
                 paddingBottom:10,
             
             }}>
                 <TouchableOpacity onPress={()=>navigation.goBack()}>
-                <Ionicons name="chevron-back" size={24} color="black" />
+                <Ionicons name="chevron-back" size={24} color={color_scheme(colorMode,'black')} />
                 </TouchableOpacity>
                 <Text 
                 style={{
                     marginLeft:5,
                     fontSize:23,
                     fontWeight:'700',
-                    color:'#333'
+                    color:color_scheme(colorMode,'#333')
                 }}
                 >
                     New Organization
@@ -345,7 +351,7 @@ export default function CreateOrgs({navigation}){
                                 paddingHorizontal:10,
                                 paddingVertical:10,
                                 borderRadius:6,
-                                backgroundColor:'#333',
+                                backgroundCocolor:color_scheme(colorMode,'#eee'),borderColor:color_scheme(colorMode,'#333'),
                                 position:'relative',
                                 top:-22,
                                 left:-5
@@ -354,7 +360,7 @@ export default function CreateOrgs({navigation}){
                             >
                                 <Text
                                 style={{
-                                    color:'white',
+                                    color:color_scheme(colorMode,'white'),
                                     fontWeight:'700',
                                     fontSize:11,
                                 }}
@@ -363,18 +369,22 @@ export default function CreateOrgs({navigation}){
                                 </Text>
                             </TouchableOpacity>
                             </View>
-                            <Text style={makeeventstyles.formtext}>Organization Picture</Text>
+                            <Text style={[makeeventstyles.formtext,{color:color_scheme(colorMode,'#333')}]}>Organization Picture</Text>
                         </View>
                         <View style={makeeventstyles.formgrp}>
-                            <Text style={makeeventstyles.formtext}>Organization Name</Text>
-                            <TextInput style={makeeventstyles.forminput} placeholder="Organization Name" value={orgName} onChangeText={(text)=>setOrgName(text)}/>
+                            <Text style={[makeeventstyles.formtext,{color:color_scheme(colorMode,'#333')}]}>Organization Name</Text>
+                            <TextInput
+                                placeholderTextColor={color_scheme(colorMode,'gray')}
+                            style={[makeeventstyles.forminput,{        backgroundColor:color_scheme(colorMode,'#eeee'),borderColor:color_scheme(colorMode,'#ccc')}]} placeholder="Organization Name" value={orgName} onChangeText={(text)=>setOrgName(text)}/>
                         </View>
                         <View style={makeeventstyles.formgrp}>
-                            <Text style={makeeventstyles.formtext}>Organization Shortname / Symbol</Text>
-                            <TextInput style={makeeventstyles.forminput} placeholder="Organization Symbol" value={orgSymbol} onChangeText={(text)=>setOrgSymbol(text)}/>
+                            <Text style={[makeeventstyles.formtext,{color:color_scheme(colorMode,'#333')}]}>Organization Shortname / Symbol</Text>
+                            <TextInput
+                                placeholderTextColor={color_scheme(colorMode,'gray')}
+                             style={[makeeventstyles.forminput,{        backgroundColor:color_scheme(colorMode,'#eeee'),borderColor:color_scheme(colorMode,'#ccc')}]} placeholder="Organization Symbol" value={orgSymbol} onChangeText={(text)=>setOrgSymbol(text)}/>
                         </View>
                         <View style={makeeventstyles.formgrp}>
-        <Text style={makeeventstyles.formtext}>Organization Cohorts</Text>
+        <Text style={[makeeventstyles.formtext,{color:color_scheme(colorMode,'#333')}]}>Organization Cohorts</Text>
         <ScrollView horizontal={true} contentContainerStyle={{paddingVertical:5}} showsHorizontalScrollIndicator={false}>
 
 
@@ -385,8 +395,8 @@ export default function CreateOrgs({navigation}){
                     return (
 
                   
-                    <TouchableOpacity key={index} style={orgType==org?makeeventstyles.eventtypea:makeeventstyles.eventtype} onPress={()=>setOrgType(org)}>
-                        <Text style={orgType==org?makeeventstyles.eventtypetexta:makeeventstyles.eventtypetext}>{org}</Text>
+                    <TouchableOpacity key={index} style={orgType==org?makeeventstyles.eventtypea:[makeeventstyles.eventtype,{backgroundColor:color_scheme(colorMode,'#eee'),borderColor:color_scheme(colorMode,'#eeee')}]} onPress={()=>setOrgType(org)}>
+                        <Text style={orgType==org?makeeventstyles.eventtypetexta:[makeeventstyles.eventtypetext,{color:color_scheme(colorMode,'black'),fontWeight:'300'}]}>{org}</Text>
                     </TouchableOpacity>
                       )
                 })
@@ -399,14 +409,18 @@ export default function CreateOrgs({navigation}){
        
                         </View>
                         <View style={makeeventstyles.formgrp}>
-                            <Text style={makeeventstyles.formtext}>Organization School</Text>
-                            <TextInput style={makeeventstyles.forminput} placeholder="Organization Name" value={orgSchool} onChangeText={(text)=>setOrgSchool(text)}/>
+                            <Text style={[makeeventstyles.formtext,{color:color_scheme(colorMode,'#333')}]}>Organization School</Text>
+                            <TextInput
+                                       placeholderTextColor={color_scheme(colorMode,'gray')}
+                            style={[makeeventstyles.forminput,{        backgroundColor:color_scheme(colorMode,'#eeee'),borderColor:color_scheme(colorMode,'#ccc')}]} placeholder="Organization Name" value={orgSchool} onChangeText={(text)=>setOrgSchool(text)}/>
                         </View>
                         <RenderGroupInput group={positions} setGroup={setPositions} name={'Positions'}/>
                         <RenderGroupInput group={teams} setGroup={setTeams} name={'Teams'}/>
                         <View style={makeeventstyles.formgrp}>
-        <Text style={makeeventstyles.formtext}>Organization Description</Text>
-        <TextInput style={[makeeventstyles.forminput,{height:200}]} multiline={true} placeholder="Organization Description" value={orgDescription} onChangeText={(text)=>setOrgDescription(text)}/>
+        <Text style={[makeeventstyles.formtext,{color:color_scheme(colorMode,'#333')}]}>Organization Description</Text>
+        <TextInput style={[makeeventstyles.forminput,{height:200, backgroundColor:color_scheme(colorMode,'#eeee')}]}
+                   placeholderTextColor={color_scheme(colorMode,'gray')}
+        multiline={true} placeholder="Organization Description" value={orgDescription} onChangeText={(text)=>setOrgDescription(text)}/>
     </View>
     <View style={makeeventstyles.formgrp}> 
     <View style={{
@@ -414,12 +428,12 @@ export default function CreateOrgs({navigation}){
         alignItems:'center',
         marginBottom:10,
     }}>  
-         <Text style={[makeeventstyles.formtext,{marginBottom:0}]}>Organization Website</Text>
+         <Text style={[makeeventstyles.formtext,{marginBottom:0,color:color_scheme(colorMode,'#333')}]}>Organization Website</Text>
             {/* <Text style={{color:'red',paddingLeft:5}}>*</Text> */}
             <Text
             style={{
 
-                color:'#aaa',
+                color:color_scheme(colorMode,'gray'),
                 marginLeft:5,
                 fontSize:13
 
@@ -428,7 +442,10 @@ export default function CreateOrgs({navigation}){
  
     </View>
                          
-                            <TextInput style={makeeventstyles.forminput} placeholder="Organization Website" value={orgWebsite} onChangeText={(text)=>setOrgWebsite(text)}/>
+                            <TextInput style={[makeeventstyles.forminput,{        backgroundColor:color_scheme(colorMode,'#eeee'),borderColor:color_scheme(colorMode,'#ccc')}]} placeholder="Organization Website" value={orgWebsite} onChangeText={(text)=>setOrgWebsite(text)}
+                            
+                            placeholderTextColor={color_scheme(colorMode,'gray')}
+                            />
                         </View>
     <View style={makeeventstyles.formgrp}> 
     <View style={{
@@ -436,12 +453,13 @@ export default function CreateOrgs({navigation}){
         alignItems:'center',
         marginBottom:10,
     }}>  
-         <Text style={[makeeventstyles.formtext,{marginBottom:0}]}>Organization Email</Text>
+         <Text style={[makeeventstyles.formtext,{marginBottom:0,color:color_scheme(colorMode,'#333')}]}>Organization Email</Text>
             {/* <Text style={{color:'red',paddingLeft:5}}>*</Text> */}
             <Text
             style={{
 
-                color:'#aaa',
+    
+                color:color_scheme(colorMode,'gray'),
                 marginLeft:5,
                 fontSize:13
 
@@ -450,7 +468,7 @@ export default function CreateOrgs({navigation}){
  
     </View>
                          
-                            <TextInput style={makeeventstyles.forminput} placeholder="Organization Email" value={orgEmail} onChangeText={(text)=>setOrgEmail(text)}/>
+                            <TextInput style={[makeeventstyles.forminput,{        backgroundColor:color_scheme(colorMode,'#eeee'),borderColor:color_scheme(colorMode,'#ccc')}]} placeholder="Organization Email" value={orgEmail} onChangeText={(text)=>setOrgEmail(text)}/>
                         </View>
 
                         <View style={makeeventstyles.formgrp}> 
@@ -459,12 +477,13 @@ export default function CreateOrgs({navigation}){
         alignItems:'center',
         marginBottom:10,
     }}>  
-         <Text style={[makeeventstyles.formtext,{marginBottom:0}]}>Organization Phone</Text>
+         <Text style={[makeeventstyles.formtext,{marginBottom:0,color:color_scheme(colorMode,'#333')}]}>Organization Phone</Text>
             {/* <Text style={{color:'red',paddingLeft:5}}>*</Text> */}
             <Text
             style={{
 
-                color:'#aaa',
+
+                color:color_scheme(colorMode,'gray'),
                 marginLeft:5,
                 fontSize:13
 
@@ -473,7 +492,7 @@ export default function CreateOrgs({navigation}){
  
     </View>
                          
-                            <TextInput style={makeeventstyles.forminput} placeholder="Organization Phone" value={orgPhone} onChangeText={(text)=>setOrgPhone(text)}/>
+                            <TextInput style={[makeeventstyles.forminput,{        backgroundColor:color_scheme(colorMode,'#eeee'),borderColor:color_scheme(colorMode,'#ccc')}]} placeholder="Organization Phone" value={orgPhone} onChangeText={(text)=>setOrgPhone(text)}/>
                         </View>
 
                     </View>

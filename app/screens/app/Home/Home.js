@@ -11,15 +11,16 @@ import Feed from "./Feed";
 import { wrapUIMG } from "../../../utils/utils";
 import Spinner from "../../../components/Spinner";
 import { setupNotifications } from "../../../config/setup";
+import { color_scheme } from "../../../config/color_scheme";
 
 export default function HomeScreen({navigation}){
-    const filters = ['All','Announments','Events','Posts','Polls','Opportunities']
-    const [activeFilter,setActiveFilter]=useState('All')
+    const filters = ['For You','Announments','Events','Posts','Polls','Opportunities']
+    const [activeFilter,setActiveFilter]=useState('For You')
     const {user} = useContext(AppContext)
     const postBottomSheet = useRef()
     function swapFeed(item) {
         setActiveFilter(item);
-        navigateToFeed(item);
+        //navigateToFeed(item);
       }
       
       function navigateToFeed(filter) {
@@ -51,6 +52,7 @@ export default function HomeScreen({navigation}){
       
      
     
+ const {colorMode} = useContext(AppContext)
  
     return (
         <>
@@ -61,13 +63,13 @@ export default function HomeScreen({navigation}){
 
         </View>:
     
-        <View style={homestyles.container}>
+        <View style={[homestyles.container,{backgroundColor:color_scheme(colorMode,'white')}]}>
             <View style={homestyles.top}>
                 <View style={homestyles.toptop}>
                    <View style={homestyles.topleft}>
                         <Image source={{uri:wrapUIMG(user.uimg)}} style={homestyles.topuserimg}/>
                         <View style={homestyles.topuser}>
-                            <Text style={homestyles.topusername}>{`${user.firstname} ${user.lastname}`}</Text>
+                            <Text style={[homestyles.topusername,{color:color_scheme(colorMode,'#333')}]}>{`${user.firstname} ${user.lastname}`}</Text>
                             
                            
                         </View>
@@ -78,7 +80,7 @@ export default function HomeScreen({navigation}){
                 
                         <TouchableOpacity style={homestyles.msgicon} onPress={()=>navigation.navigate('MessagesScreen')}>
                        
-                            <Messenger color="#333" variant="Outline" size={30} />
+                            <Messenger color={color_scheme(colorMode,'#333')} variant="Outline" size={30} />
                             <View style={homestyles.msgiconnumb}>
                                 <Text style={homestyles.msgiconnum}>
                                     3
@@ -96,8 +98,8 @@ export default function HomeScreen({navigation}){
                     {
                         filters.map((filter,i)=>{
                             return(
-                                <TouchableOpacity key={i} style={activeFilter==filter?homestyles.filtera:homestyles.filter} onPress={()=>swapFeed(filter)}>
-                                    <Text style={activeFilter==filter?homestyles.filtertexta:homestyles.filtertext}>{filter}</Text>
+                                <TouchableOpacity key={i} style={activeFilter==filter?[homestyles.filtera,{backgroundColor:color_scheme(colorMode,'black')}]:[homestyles.filter,{borderColor:color_scheme(colorMode,"#ccc"),backgroundColor:color_scheme(colorMode,'#eee')}]} onPress={()=>swapFeed(filter)}>
+                                    <Text style={activeFilter==filter?[homestyles.filtertexta,{color:color_scheme(colorMode,'white')}]:homestyles.filtertext}>{filter}</Text>
                                 </TouchableOpacity>
                             )
                         })

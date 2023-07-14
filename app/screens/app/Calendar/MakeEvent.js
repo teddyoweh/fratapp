@@ -572,7 +572,7 @@ const makeeventstyles = StyleSheet.create({
     forminput:{
         fontSize:16,
         fontWeight:'300',
-        backgroundColor:'#eee',
+
         borderRadius:10,
         paddingHorizontal:10,
         paddingVertical:10,
@@ -581,7 +581,7 @@ const makeeventstyles = StyleSheet.create({
         justifyContent:'flex-start',
         borderStyle:'solid',
         borderWidth:1,
-        borderColor:'#ccc'
+        
 
     },
     forminpute:{
@@ -646,7 +646,7 @@ const makeeventstyles = StyleSheet.create({
         fontSize:13,
         fontWeight:'400',
         marginLeft:5,
-        color:'#333'
+  
 
     },
     accessremove:{

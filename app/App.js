@@ -1,8 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, useColorScheme } from 'react-native';
 import { homestyles, globalstyles, discoverstyles, authstyles,profilestyle } from './styles';
 import Screens from './screens';
 export default function App() {
+ 
   return (
     <Screens/>
   );
@@ -11,7 +12,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+ 
     alignItems: 'center',
     justifyContent: 'center',
   },

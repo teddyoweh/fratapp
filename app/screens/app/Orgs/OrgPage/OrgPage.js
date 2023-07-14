@@ -11,6 +11,8 @@ import { makeeventstyles } from "../../Calendar/MakeEvent";
 import { wrapUIMG } from "../../../../utils/utils";
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import { getTimeDifference } from "../../../../utils/utils";
+import { color_scheme } from "../../../../config/color_scheme";
+import * as Haptics from 'expo-haptics';
 
 function AddUserAccessSheet({bottomSheet,org}){
     const {user} = useContext(AppContext)
@@ -53,24 +55,25 @@ function AddUserAccessSheet({bottomSheet,org}){
             bottomSheet.current.close()
         })
     }
+    const {colorMode} = useContext(AppContext)
     return (
         <>
 
         <BottomSheet  hasDraggableIcon={false} ref={bottomSheet} height={850} >
-        <KeyboardAvoidingView style={{backgroundColor:"white",flex:1,
+        <KeyboardAvoidingView style={{backgroundColor:color_scheme(colorMode,'white'),flex:1,
     paddingTop:20}}>
 
-        <View style={[discoverstyles.searchbox,{marginHorizontal:10}]}>
+<View style={[discoverstyles.searchbox,{backgroundColor:color_scheme(colorMode,'#eeee'),marginHorizontal:10}]}>
                     <SearchNormal variant="Broken" color="grey" />
                     <TextInput style={discoverstyles.search}    autoCapitalize="none"  placeholderTextColor={'#aaa'} placeholder="Search Username, Firstname, Lastname" value={input} onChangeText={(text)=>searchUsers(text)}/>
                 </View>
         <ScrollView
               keyboardShouldPersistTaps="always"
                 keyboardDismissMode="on-drag"
-                contentContainerStyle={{backgroundColor:"white",flex:1}}
+                contentContainerStyle={{backgroundColor:color_scheme(colorMode,'white'),flex:1}}
               >
 
-<View style={{flexDirection:'column', backgroundColor:'white', height:"100%",paddingTop:10}}>
+<View style={{flexDirection:'column', backgroundColor:color_scheme(colorMode,'white'), height:"100%",paddingTop:10}}>
 
  
 {
@@ -123,7 +126,7 @@ function AddUserAccessSheet({bottomSheet,org}){
         </View>
         {
             users.map((suser,index)=>{
-                const bgcolor = selectedUsers.includes(suser._id)?'#f5f5f5':'transparent'
+                const bgcolor = selectedUsers.includes(suser._id)?color_scheme(colorMode,'#f5f5f5'):'transparent'
                 const isSelected = selectedUsers.includes(suser._id)
                 return (
                     <TouchableOpacity
@@ -137,7 +140,7 @@ function AddUserAccessSheet({bottomSheet,org}){
                         justifyContent:'space-between',
                      
                         borderStyle:'solid',
-                        borderColor:'#f5f5f5',
+                        borderColor:color_scheme(colorMode,'#eee'),
                         borderBottomWidth:2.4,
                         paddingHorizontal:10,
                         paddingVertical:10,
@@ -166,7 +169,7 @@ function AddUserAccessSheet({bottomSheet,org}){
                             <Text style={{
                                 fontSize:18,
                                 fontWeight:'bold',
-                                color:'#333'
+                                color:color_scheme(colorMode,'#333')
                             
                             }}>
                                 {suser.firstname+' '+suser.lastname}
@@ -174,7 +177,7 @@ function AddUserAccessSheet({bottomSheet,org}){
                             <Text
                             style={{
                                 fontSize:14,
-                                color:'#888'
+                                color:color_scheme(colorMode,'#aaa')
                             }}
                             >
                                 @{suser.username}
@@ -230,15 +233,16 @@ function AddUserAccessSheet({bottomSheet,org}){
     
 }
 
-function RenderMembers({members1,memberSheet}){
+function RenderMembers({members1,memberSheet,navigation,orgid,orgdt}){
     const members = members1.slice(0,8)
     let margin;
     let finalindex;
+  
     function isAdmin(uid, memberDetails) {
         const user = memberDetails.find((member) => member.userid === uid);
         return user && user.role === 'admin';
       }
-    const {user} = useContext(AppContext)
+    const {user,colorMode} = useContext(AppContext)
     return (
         <View
         style={{
@@ -249,7 +253,7 @@ function RenderMembers({members1,memberSheet}){
 <Text
 style={{
     marginBottom:4,
-    color:'#333',
+    color:color_scheme(colorMode,'#333'),
     fontSize:13,
     fontWeight:'bold'
 }}
@@ -267,7 +271,10 @@ style={{
 >
 
 
-            <View
+            <TouchableOpacity
+            onPress={()=>navigation.navigate('MembersScreen',{
+                orgid,orgdt
+            })}
             style={{
                 width:"70%",
                 flexDirection:'row',
@@ -291,8 +298,7 @@ style={{
                                 borderRadius: 25,
                                 position:'relative',
                                 left:index*-15,
-                                borderColor:'#bbb',
-                                borderWidth:0.5
+                               
 
                             }}
                             >
@@ -334,7 +340,7 @@ style={{
                         </View>
                 }
                
-                </View>
+                </TouchableOpacity>
                 <View
                 style={{
                     marginLeft:margin
@@ -602,7 +608,7 @@ function RenderMessageBox({orgid}) {
 
  
 function RendorOrgPost({orgid}){
-    const {user}=useContext(AppContext)
+    const {user,colorMode}=useContext(AppContext)
     const [posts,setPosts]= useState(null)
     
     async function fetchPosts(){
@@ -718,7 +724,7 @@ function RendorOrgPost({orgid}){
 export default function OrgPage({navigation,route}){
     const scrollViewRef = useRef()
     const {org} = route.params
-    const {user} = useContext(AppContext)
+    const {user,colorMode} = useContext(AppContext)
     console.log(org._id)
     const [orgData,setOrgData] = useState(null)
     const orgoptions = ['New Event','New Cohort','Study Hours','Add Members']
@@ -775,7 +781,7 @@ export default function OrgPage({navigation,route}){
     style={{
         flex:1,
         height:'100%',
-        backgroundColor:'white',
+        backgroundColor:color_scheme(colorMode,'white'),
  
         width:'100%',
         flexDirection:'column'
@@ -790,17 +796,17 @@ export default function OrgPage({navigation,route}){
             alignItems:'center',
             borderBottomWidth:1,
             borderStyle:'solid',
-            borderColor:'#ddd'
+            borderColor:color_scheme(colorMode,'#ddd')
 
         }}
         >
               <TouchableOpacity onPress={()=>navigation.goBack()}>
-                <Ionicons name="chevron-back" size={24} color="black" />
+                <Ionicons name="chevron-back" size={24} color={color_scheme(colorMode,'black')} />
                 </TouchableOpacity>
 
             <TouchableOpacity>
 
-            <Entypo name="dots-three-horizontal" size={20} color="#333" />
+            <Entypo name="dots-three-horizontal" size={20} color={color_scheme(colorMode,'#333')} />
             </TouchableOpacity>
 
         </View>
@@ -814,7 +820,7 @@ export default function OrgPage({navigation,route}){
        
             width:'100%',
             height:'100%',
-            backgroundColor:'white'
+            backgroundColor:color_scheme(colorMode,'white')
         }}
         //onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
 
@@ -823,7 +829,7 @@ export default function OrgPage({navigation,route}){
         style={{
             borderBottomWidth:1,
             borderStyle:'solid',
-            borderColor:'#ddd',
+            borderColor:color_scheme(colorMode,'#ddd'),
             paddingBottom:10,
           
         }}
@@ -870,13 +876,13 @@ export default function OrgPage({navigation,route}){
                                         alignItems:'center',
                                         borderStyle:'solid',
                                         borderWidth:1,
-                                        borderColor:'#ccc',
+                                        borderColor:color_scheme(colorMode,'#ddd'),
                                         paddingHorizontal:5
                                     }}
                                     >
                                         <Text
                                         style={{
-                                            color:'#333',
+                                            color:color_scheme(colorMode,'#333'),
                                             fontSize:16,
                                             fontWeight:500
                                         }}
@@ -899,7 +905,7 @@ export default function OrgPage({navigation,route}){
                     style={{
                         fontSize:20,
                         flexWrap:'wrap',
-                        color:'#333',
+                        color:color_scheme(colorMode,'#333'),
                         fontWeight:700
                     }}
                     >
@@ -908,7 +914,7 @@ export default function OrgPage({navigation,route}){
                     <Text
                     style={{
                         fontSize:16,
-                        color:'#333',
+                        color:color_scheme(colorMode,'#333'),
                         fontWeight:500,
                         marginTop:5
                     }}
@@ -925,7 +931,7 @@ export default function OrgPage({navigation,route}){
 
    
             <View>
-                    <RenderMembers members1={orgData.members} memberSheet={opeAddMemberSheet}/>
+                    <RenderMembers orgdt={{name:org.org_name,uimg:org.org_logo,members:orgData.members}} navigation={navigation} orgid={orgData.org._id} members1={orgData.members} memberSheet={opeAddMemberSheet}/>
             </View>
             </View>
               }
@@ -934,7 +940,7 @@ export default function OrgPage({navigation,route}){
         style={{
  
         paddingTop:20,
-        backgroundColor:'#fff'
+        backgroundColor:color_scheme(colorMode,'white')
         }}
         >
       
@@ -961,7 +967,7 @@ export default function OrgPage({navigation,route}){
                     <TouchableOpacity
                     style={{
                         marginRight:10,
-                        backgroundColor:'#eee',
+                        backgroundColor:color_scheme(colorMode,'#eee'),
                         paddingHorizontal:8,
                         paddingVertical:6,
                         borderRadius:10,
@@ -970,10 +976,12 @@ export default function OrgPage({navigation,route}){
                         justifyContent:'center',
                         borderWidth:1,
                         borderStyle:'solid',
-                        borderColor:'#ccc'
+                        borderColor:color_scheme(colorMode,'#ccc')
               
                     }}
-                    onPress={()=>orgoptionshashmap[orgopt]()}
+                    onPress={()=>{
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                        orgoptionshashmap[orgopt]()}}
                     key={index}
                     >
                         {optionsicon[orgopt]}
@@ -998,12 +1006,14 @@ export default function OrgPage({navigation,route}){
                 return (
                     <TouchableOpacity
                     key={index}
-                    onPress={()=>navigation.navigate('OrgChannelScreen',{
+                    onPress={()=>{
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                        navigation.navigate('OrgChannelScreen',{
                         org,
                         cohort
-                    })}
+                    })}}
                     style={{
-                        backgroundColor:'#ffffff',
+                        backgroundColor:color_scheme(colorMode,'#eee'),
                         marginVertical:8,
                         marginHorizontal:10,
                         borderRadius:10,
@@ -1015,7 +1025,7 @@ export default function OrgPage({navigation,route}){
                         // borderWidth:0.5,
                         // borderColor:'#ddd',
                         // borderStyle:'solid',
-                        shadowColor: '#666',
+                       
              
                         shadowOffset: {
                           width: 0,
@@ -1033,7 +1043,7 @@ export default function OrgPage({navigation,route}){
                          
                         }}
                         >
-                        <Notepad2 size="40" color="#333"variant="Bulk"/>
+                        <Notepad2 size="40" color={color_scheme(colorMode,'#333')}variant="Bulk"/>
                         <View
                         style={{
                             flexDirection:'column',
@@ -1046,7 +1056,7 @@ export default function OrgPage({navigation,route}){
                         style={{
                          
                             fontSize:18,
-                            color:'#333',
+                            color:color_scheme(colorMode,'#333'),
                             fontWeight:'300'
                         }}
                         >
@@ -1066,7 +1076,7 @@ export default function OrgPage({navigation,route}){
              
                             fontSize:14,
                         fontStyle:'italic',
-                            color:'#aaa',
+                            color:color_scheme(colorMode,'#aaa'),
                             fontWeight:'500'
                         }}
                         >
@@ -1077,7 +1087,7 @@ export default function OrgPage({navigation,route}){
                         </View>
 
 
-                        <ArrowRight2 size="20" color="#aaa"/>
+                        <ArrowRight2 size="20" color={color_scheme(colorMode,'#aaa')}/>
                     </TouchableOpacity>
                 )
             })

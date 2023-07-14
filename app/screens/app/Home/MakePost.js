@@ -12,6 +12,7 @@ import axios from "axios";
 import { endpoints } from "../../../config/endpoints";
 import * as ImagePicker from 'expo-image-picker';
 import {Dimensions} from 'react-native';
+import { color_scheme } from "../../../config/color_scheme";
 
 
 function LinkInputBox({addLinks}){
@@ -285,16 +286,19 @@ const addImage = async () => {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
     //   allowsEditing: true,
       aspect: [1,1],
-      selectionLimit:1,
+      selectionLimit:10,
     
     //   quality: 1,
       allowsMultipleSelection:true
     });
-    console.log(JSON.stringify(_image));
-    if (!_image.canceled) {
-        console.log(_image)
-        setImages((prevImages) => [...prevImages, _image]);
-    }
+ 
+    _image.assets.map((img,index)=>{
+        if (!_image.canceled) {
+            console.log(_image)
+            setImages((prevImages) => [...prevImages, img]);
+        }
+    })
+  
   };
   const  checkForCameraRollPermission=async()=>{
     const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
@@ -307,12 +311,14 @@ const addImage = async () => {
 // useEffect(() => {
 //     checkForCameraRollPermission()
 //   }, []);
-
+const {colorMode} = useContext(AppContext)
 return (
-    <BottomSheet hasDraggableIcon ref={postBottomSheet} height={850} >
+    <BottomSheet   ref={postBottomSheet} height={Dimensions.get('screen').height-150}
+    
+    >
         <KeyboardAvoidingView
         style={{
-            
+            backgroundColor:color_scheme(colorMode,'white'),
             height:'100%'
         }}
         >
@@ -375,19 +381,21 @@ return (
                 </View>
             </View>
             <View style={{paddingHorizontal:10}}>
-                <TextInput placeholder="Whats going on?"
+                <TextInput placeholder="Share your thoughts"
                 multiline={true}
                 autoFocus={true}
                 onChangeText={(text)=>setPostInput(text)}
+                placeholderTextColor={color_scheme(colorMode,'black')}
                 style={{
                     // backgroundColor:'#E8E8E8',
                     padding:10,
                     paddingTop:20,
                     borderRadius:10,
                     width:'99%',
-                    fontWeight:'600',
+                    fontWeight:'400',
                     fontSize:17,
                     // height:200,
+                    color:color_scheme(colorMode,'black')
              
                 }}
                 />

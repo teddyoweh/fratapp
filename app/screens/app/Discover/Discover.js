@@ -9,6 +9,7 @@ import axios from "axios";
 import { endpoints } from "../../../config/endpoints";
 import { AppContext } from "../../../context/appContext";
 import { wrapUIMG } from "../../../utils/utils";
+import { color_scheme } from "../../../config/color_scheme";
 const DiscoverFeedStack = createStackNavigator()
 function DiscoverFeedScreens(){
  
@@ -31,9 +32,9 @@ function DiscoverFeedScreens(){
         }
  function DiscoverPeople({navigation,people}){
 
-  
+    const {colorMode} = useContext(AppContext)
     return (
-<View style={discoverstyles.results}>
+<View style={[discoverstyles.results,{backgroundColor:color_scheme(colorMode,'white')}]}>
                  
                  <ScrollView style={{}}  >
              
@@ -41,13 +42,13 @@ function DiscoverFeedScreens(){
                      
                      people?
                      
-           
+                    people.length>0?
                      people.map(
                          (person,index)=>{
                             
                   
                              return(
-                                 <TouchableOpacity style={discoverstyles.result} key={index} onPress={()=>    navigation.navigate('ProfilesScreen',{userdetails:person})}>
+                                 <TouchableOpacity style={[discoverstyles.result,{borderColor:color_scheme(colorMode,'#ddd')}]} key={index} onPress={()=>    navigation.navigate('ProfilesScreen',{userdetails:person})}>
                                  <Image source={{uri:wrapUIMG(person.uimg)}} style={{
                                     width:40,
                                     height:40,
@@ -56,13 +57,34 @@ function DiscoverFeedScreens(){
                                  <View style={discoverstyles.resultinfo}>
                                      {/* <Text style={discoverstyles.resultname}>{greek.name} ({greek.letters})</Text>
                                      <Text style={discoverstyles.resultaddress}> - Tarleton State University</Text> */}
-                                     <Text style={discoverstyles.resultname}>{person.firstname+' '+person.lastname}</Text>
-                                    <Text style={discoverstyles.resultaddress}> @{person.username}</Text>
+                                     <Text style={[discoverstyles.resultname,{color:color_scheme(colorMode,"black")}]}>{person.firstname+' '+person.lastname}</Text>
+                                    <Text style={[discoverstyles.resultaddress,{color:color_scheme(colorMode,"#c3c3c3")}]}> @{person.username}</Text>
                                  </View> 
                              </TouchableOpacity>
                              )
                              }
-                     )
+                     ):
+                     <View
+                     style={{
+                        flex:1,
+                        flexDirection:'row',
+                        justifyContent:"center",
+                        alignItems:'center',
+                        height:Dimensions.get('window').height/2
+                     }}
+                     >
+                        
+                        <Text
+                            style={{
+                                color:'#aaa',
+                                fontSize:18,
+                                fontWeight:'700'
+
+                            }}
+                    
+                        >No Results Found
+                        </Text>
+                     </View>
                      :<View
                      style={{
                         flex:1,
@@ -111,27 +133,30 @@ export default function DiscoverScreen({navigation}){
         setSearch(t)
         SearchPeople()
     }
+    const {colorMode} = useContext(AppContext)
     return (
-        <View style={discoverstyles.container}>
-           <View style={discoverstyles.top}>
-                <Text style={discoverstyles.title}>Discover</Text>
-                <View style={discoverstyles.searchbox}>
+        <View style={[discoverstyles.container,{backgroundColor:color_scheme(colorMode,'white')}]}>
+           <View style={[discoverstyles.top]}>
+                <Text style={[discoverstyles.title,{color:color_scheme(colorMode,'black')}]}>Discover</Text>
+                <View style={[discoverstyles.searchbox,{backgroundColor:color_scheme(colorMode,'#eeee')}]}>
                     <SearchNormal variant="Broken" color="grey" />
-                    <TextInput style={discoverstyles.search}placeholder="Search People, Universitys Organizations, Fratenities, Sororities"
+                    <TextInput style={[discoverstyles.search,{color:color_scheme(colorMode,'black')}]}placeholder="Search People, Universitys Organizations, Fratenities, Sororities"
+                    placeholderTextColor={color_scheme(colorMode,'gray')}
                     value={search}
+                    keyboardAppearance={colorMode}
                     onChangeText={(text)=>performSearch(text)}
                     />
                 </View>
            </View>
-           <View style={[profilestyles.postfilters,{marginTop:4, marginBottom:0}]}>
+           <View style={[profilestyles.postfilters,{marginTop:4, marginBottom:0,  borderColor:color_scheme(colorMode,'#ddd'),}]}>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
 
 
                     {
                         filters.map((filter,index)=>{
                             return(
-                                <TouchableOpacity style={activeFilter==filter?profilestyles.postfiltera:profilestyles.postfilter} onPress={()=>setActiveFilter(filter)} key={index}>
-                                <Text style={activeFilter==filter?profilestyles.postfiltertxta:profilestyles.postfiltertxt}>
+                                <TouchableOpacity style={activeFilter==filter?profilestyles.postfiltera:[profilestyles.postfilter]} onPress={()=>setActiveFilter(filter)} key={index}>
+                                <Text style={activeFilter==filter?[profilestyles.postfiltertxta,{color:color_scheme(colorMode,'black')}]:[profilestyles.postfiltertxt,{color:color_scheme(colorMode,'grayy')}]}>
                                    {filter}</Text>
                                </TouchableOpacity>
                             )

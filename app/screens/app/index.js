@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View,Text,StyleSheet } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Home,Home2,Home3,SafeHome,Discover,Activity, LocationDiscover,Calendar,Profile,Notification1, Global, Bubble, Calendar2} from 'iconsax-react-native';
@@ -17,25 +17,32 @@ import OrgPageStacks from "./Orgs/OrgPage";
 import { setupNotifications } from "../../config/setup";
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
+import { color_scheme } from "../../config/color_scheme";
+import { AppContext } from "../../context/appContext";
 
 const AppTab = createBottomTabNavigator()  
 const AppStack = createStackNavigator()
 
  function AppScreen(){
- 
+  const {colorMode} = useContext(AppContext)
+
     return (
        
         <AppTab.Navigator
         
           screenOptions={({ route }) => ({
             tabBarStyle:{
-              backgroundColor:'white',
+              backgroundColor:  color_scheme(colorMode,'white'),
               borderStyle:'none',
+          
+             borderTopColor:color_scheme(colorMode,'#ddd'),
               borderWidth:0,
               
             },
+            tabBarShowLabel: false,
+           
             tabBarBackground: () => (
-                <BlurView tint="light" intensity={10} style={StyleSheet.absoluteFill} />
+                <BlurView tint="dark" intensity={100}   />
               ),
             headerShown:false,
             tabBarIcon: ({ focused, color, size }) => {
@@ -43,30 +50,30 @@ const AppStack = createStackNavigator()
   
               if (route.name === 'Home') {
                 iconName = focused
-                  ?<Global color="black" variant="Bold" size={30} />
+                  ?<Global color={  color_scheme(colorMode,'black')} variant="Bold" size={30} />
 
-                  : <Global color="grey" variant="Broken" size={30} />
+                  : <Global  color={color_scheme(colorMode,'grey')} variant="Broken" size={30} />
                   return   iconName
 
               } else if (route.name === 'Discover') {
                 iconName = focused
-                  ?<LocationDiscover color="black" variant="Bold" size={30} />
+                  ?<LocationDiscover color={  color_scheme(colorMode,'black')}variant="Bold" size={30} />
 
-                  : <LocationDiscover color="grey" variant="Broken" size={30} />
+                  : <LocationDiscover  color={color_scheme(colorMode,'grey')} variant="Broken" size={30} />
                   return   iconName
               }
               else if (route.name === 'Calendar') {
                 iconName = focused
-                  ?<Calendar2 color="black" variant="Bold" size={30} />
+                  ?<Calendar2 color={  color_scheme(colorMode,'black')}variant="Bold" size={30} />
 
-                  : <Calendar2 color="grey" variant="Broken" size={30} />
+                  : <Calendar2  color={color_scheme(colorMode,'grey')} variant="Broken" size={30} />
                   return   iconName
               }
               else if (route.name === 'Profile') {
                 iconName = focused
-                  ?<Profile color="black" variant="Bulk" size={30} />
+                  ?<Profile color={  color_scheme(colorMode,'black')}variant="Bulk" size={30} />
 
-                  : <Profile color="grey" variant="Broken" size={30} />
+                  : <Profile  color={color_scheme(colorMode,'grey')} variant="Broken" size={30} />
                   return   iconName
               }
   
@@ -74,11 +81,11 @@ const AppStack = createStackNavigator()
           
 
                 iconName = focused
-                  ?             <Activity color="black" variant="Bulk" size={30} />
+                  ?             <Activity color={  color_scheme(colorMode,'black')}variant="Bulk" size={30} />
 
                   : 
                   
-                  <Activity color="grey" variant="Linear" size={30} />
+                  <Activity  color={color_scheme(colorMode,'grey')} variant="Linear" size={30} />
                   return   iconName
                   
               }
@@ -86,11 +93,11 @@ const AppStack = createStackNavigator()
           
 
                 iconName = focused
-                  ?             <Bubble color="black" variant="Bulk" size={30} />
+                  ?             <Bubble color={  color_scheme(colorMode,'black')}variant="Bulk" size={30} />
 
                   : 
                   
-                  <Bubble color="grey" variant="Linear" size={30} />
+                  <Bubble  color={color_scheme(colorMode,'grey')} variant="Linear" size={30} />
                   return   iconName
                   
               }
@@ -98,6 +105,7 @@ const AppStack = createStackNavigator()
             },
             tabBarActiveTintColor: 'black',
             tabBarInactiveTintColor: 'gray',
+            
    
             
           })}
@@ -109,7 +117,7 @@ const AppStack = createStackNavigator()
           options={{
             tabBarBadge:10,
             tabBarBadgeStyle:{
-              backgroundColor:'#a330d0'
+              backgroundColor:'#a330d0',
             }
           }}
           />

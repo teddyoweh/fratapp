@@ -181,7 +181,7 @@ const profilestyles = StyleSheet.create({
         marginBottom:20,
         borderStyle:'solid',
         borderBottomWidth:0.4,
-        borderColor:'#777777',
+      
     },
     postfilter:{
         flexDirection:'row',

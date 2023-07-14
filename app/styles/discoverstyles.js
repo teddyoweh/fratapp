@@ -17,7 +17,7 @@ const discoverstyles = StyleSheet.create({
 
     },
     searchbox:{
-        backgroundColor:'#eee',
+     
         borderRadius:30,
         paddingHorizontal:10,
         paddingVertical:10,
@@ -40,7 +40,7 @@ const discoverstyles = StyleSheet.create({
     },
     results:{
         flexDirection:'column',
-   
+        
         height:'100%',
       
 
@@ -49,7 +49,7 @@ const discoverstyles = StyleSheet.create({
         flexDirection:'row',
         alignItems:'center',
         
-        borderColor:'#ccc',
+ 
         borderBottomWidth:0.4,
         borderStyle:'solid',
         paddingVertical:16,
@@ -64,9 +64,9 @@ resultaddress:{
     fontSize:13,
     marginTop:2,
     marginLeft:3,
-    fontWeight:'600',
+    fontWeight:'400',
     fontStyle:'italic',
-    color:'#c3c3c3'
+
 
 },
 contentheader:{

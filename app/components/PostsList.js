@@ -1,17 +1,163 @@
 import React,{useState,useEffect,useContext, useRef}from "react";
-import { View,Text,Dimensions, Image,TouchableOpacity, ScrollView, TextInput, Pressable} from "react-native";
+import { View,Text,Dimensions, Image,TouchableOpacity, ScrollView, TextInput, Pressable, Share, ActionSheetIOS} from "react-native";
 import { homestyles } from "../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, MessageText, Link2, Link, MessageText1, Send2, ArrowUp} from 'iconsax-react-native';
 import { FontAwesome5,Entypo,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
-
+import { captureRef, captureScreen } from 'react-native-view-shot';
+import * as Sharing from 'expo-sharing';
 import LikeBtn from "./LikeBtn";
 import axios from "axios";
 import { endpoints } from "../config/endpoints";
 import { getTimeDifference, wrapPostImg, wrapUIMG } from "../utils/utils";
 import { AppContext } from "../context/appContext";
+import { color_scheme } from "../config/color_scheme";
+import PagerView from 'react-native-pager-view';
 
+function RenderImages({images}){
+    const windowWidth = Dimensions.get('window').width;
+    const windowHeight = Dimensions.get('window').height;
+    const windowScale = Dimensions.get('window').scale;
+    const [pageheight,setPageHeight] = useState(scaleImageToScreen(images[0].width,images[0].height).height)
+    const [cidnex,setCindex] = useState(0)
+    const pagerRef = useRef(null);
+  const handleScroll = (event) => {
+    const { position } = event.nativeEvent;
+    const currentPageIndex = Math.floor(position);
 
+    
 
+    console.log('Current page key:', currentPageIndex);
+    setPageHeight(scaleImageToScreen(images[currentPageIndex].width,images[currentPageIndex].height).height)
+    setCindex(currentPageIndex)
+    
+  };
+    function scaleImageToScreen(imageWidth, imageHeight) {
+ 
+        const maxWidth = windowWidth  
+        const maxHeight = windowHeight  
+        const imageAspectRatio = imageWidth / imageHeight;
+        let scaledWidth = maxWidth;
+        let scaledHeight = maxWidth / imageAspectRatio;
+        if (scaledHeight > maxHeight) {
+          scaledHeight = maxHeight;
+          scaledWidth = maxHeight * imageAspectRatio;
+        }
+ 
+        return { width: scaledWidth, height: scaledHeight };
+      } 
+     
+    const {colorMode} = useContext(AppContext)
+    return (
+        <View
+        style={{
+            flex:1,
+            height:pageheight
+        }}
+        >
+
+      
+        <PagerView  style={{  flex: 1}} initialPage={0}
+                ref={pagerRef}
+
+          onPageScroll={handleScroll}
+        >
+       
+
+ 
+                        
+          {
+                images.map((imgurl,index)=>{
+                    const {width,height} = scaleImageToScreen(imgurl.width,imgurl.height)
+                   
+                    return(
+                      
+                        <View
+                        key={`${index}`}
+                        style={{
+                            width:windowWidth
+                        }}
+                        >
+
+                        
+                       
+                        <Image key={index} source={{uri:wrapPostImg(imgurl.uri)}} style={{
+                            //width:windowWidth-1,
+                          
+                            width:width,
+                            height:height,
+                            
+                            // marginRight:20,
+                            marginBottom:10,
+                            borderRadius:1,
+                       
+                      
+                        }}/>
+                        </View>
+                    
+                    )})
+                
+            } 
+    
+    
+        
+ 
+         
+      </PagerView>
+      {images.length>1&&
+      <View
+
+      style={{
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:"flex-end",
+        paddingVertical:10,
+        paddingHorizontal:10
+
+      }}
+      >
+        {
+            images.map((im,index)=>{
+                return (
+                    <TouchableOpacity
+                    key={index}
+                    style={{
+                        height:25,
+                        width:25,
+                        flexDirection:'row',
+                        alignItems:'center',
+                        justifyContent:"center",
+                        marginLeft:8,
+                        // backgroundColor:color_scheme(colorMode,'#aaa'),
+                        borderWidth:1,
+                        borderColor:index==cidnex?color_scheme(colorMode,'#eee'):'transparent',
+                        borderRadius:100,
+                    }}
+                    onPress={()=>pagerRef.current.setPage(index)}
+                    >
+                        <View
+                        style
+                        ={{
+                            height:15,
+                            width:15,
+                            backgroundColor:index==cidnex?color_scheme(colorMode,'#aaa'): color_scheme(colorMode,'#eee'),
+                            borderRadius:100,
+                      
+                            
+                        }}
+                        >
+
+                        </View>
+                    </TouchableOpacity>
+                    
+                )
+            })
+        }
+
+        </View>}
+      </View>
+    )
+
+}
 
 function CommentInput({postid,setPost}){
     const {user} = useContext(AppContext)
@@ -25,23 +171,32 @@ function CommentInput({postid,setPost}){
             }
         )
     }
-
+    const {colorMode} = useContext(AppContext)
     return (
 
 
     <View style={[homestyles.postcommentbox,{
         justifyContent:'space-between',
         alignItems:'center',
-        width:'100%'
+        width:'100%',
+        borderWidth:0.5,
+        borderColor:color_scheme(colorMode,'#222')
     }]}>
         <TextInput
         style={{
             width:'80%',
             height:'100%',
+            fontSize:14,
+            fontWeight:'600',
+            paddingTop:8,
+            color:color_scheme(colorMode,'black')
         }}
         value={comment}
+    
         onChangeText={(text)=>setComment(text)}
         placeholder="Add Comment"
+        placeholderTextColor={color_scheme(colorMode,'#222')}
+        
         multiline={true}
         />
        <Pressable
@@ -130,10 +285,54 @@ function scaleImageToScreen(imageWidth, imageHeight) {
     }
   };
 
+  const {colorMode} = useContext(AppContext)
 
+  async function shareBtn() {
+ 
+    const targetPixelCount = 1080; // If you want full HD pictures
+    const pixelRatio = Dimensions.get('window').scale; // The pixel ratio of the device
+  
+    const pixels = targetPixelCount / pixelRatio;
+  
+   
+    captureScreen({
+        format: "jpg",
+        quality: 0.8
+      }).then(
+       async (uri) => {
+            await Share.share({
+                message:
+                  'React Native | A framework for building native apps using React',
+              url:uri},{
+                tintColor:'black'
+              });
+        }
+   
+      );
+ 
+    
+  }
+  const onMore = () =>
+  ActionSheetIOS.showActionSheetWithOptions(
+    {
+      options: ['Cancel', 'Generate number', 'Reset'],
+      destructiveButtonIndex: 2,
+      cancelButtonIndex: 0,
+      userInterfaceStyle: 'dark',
+    },
+    buttonIndex => {
+      if (buttonIndex === 0) {
+        // cancel action
+      } else if (buttonIndex === 1) {
+        setResult(String(Math.floor(Math.random() * 100) + 1));
+      } else if (buttonIndex === 2) {
+        setResult('🔮');
+      }
+    },
+  );
     return (
         userdetails && 
-        <Pressable style={homestyles.post} key={index} >
+        <Pressable style={[homestyles.post,{borderColor:color_scheme(colorMode,'#ddd')}]} key={index} >
             <View style={homestyles.posttop}>
                 <View style={homestyles.posttopleft}>
                     <View style={homestyles.posttopimg}>
@@ -142,7 +341,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
                     </View>
                     <Pressable style={homestyles.postuserdetails} onPress={()=>navigateToUser()}>
                         <View style={{flexDirection:'row',alignItems:'center'}}>
-                            <Text style={homestyles.postname}>@{`${userdetails.username}`}</Text>
+                            <Text style={[homestyles.postname,{color:color_scheme(colorMode,'#333')}]}>@{`${userdetails.username}`}</Text>
                            
                         </View>
 
@@ -163,7 +362,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
                 </View>
             </View>
             <Pressable style={homestyles.postcontent} onPress={()=>moveToPost()}>
-                <Text selectable={true} style={homestyles.postcontenttext}>
+                <Text selectable={true} style={[homestyles.postcontenttext,{color:color_scheme(colorMode,'#333')}]}>
                    {post.content}
                 </Text>
             </Pressable>{post.links.length>0&&
@@ -221,62 +420,14 @@ function scaleImageToScreen(imageWidth, imageHeight) {
         style={{
             width:'100%',
             flexDirection:'column',
-           
+     
 
         }}
         >
             {
                 post.imgurls.length>0&&
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}
-            
-                ref={scrollViewRef}
-                // onScroll={(e)=>console.log(e)}
-                contentContainerStyle={{
-                  
-                    // paddingHorizontal:10,
-                    flex:1,
-                    flexDirection:'row',
-                    alignItems:'center',
-                    // /justifyContent:'center',
-                    width:'100%',
-                    paddingVertical:10,
-                 
-                    
-                }}
-                >
-                    {
-                        post.imgurls.map((imgurl,index)=>{
-                            const {width,height} = scaleImageToScreen(imgurl.width,imgurl.height)
-                            return(
-                              
-                                <View
-                                key={index}
-                                style={{
-                                    width:windowWidth
-                                }}
-                                >
-
-                                
-                               
-                                <Image key={index} source={{uri:wrapPostImg(imgurl.uri)}} style={{
-                                    //width:windowWidth-1,
-                                  
-                                    width:width,
-                                    height:height,
-                                    
-                                    // marginRight:20,
-                                    marginBottom:10,
-                                    borderRadius:1,
-                               
-                              
-                                }}/>
-                                </View>
-                            
-                            )
-                        }
-                        )
-                        }
-                </ScrollView>
+                <RenderImages images={post.imgurls}/>
+               
 
             }
        
@@ -298,27 +449,27 @@ function scaleImageToScreen(imageWidth, imageHeight) {
                  
                <View>
                <Pressable onPress={()=>moveToPost()}  style={homestyles.insightbtn}  >
-            <MessageText1 color="#aaa" size={23} variant="Bold"/>
+            <MessageText1 color={  color_scheme(colorMode,'#aaa')} size={23} variant="Bold"/>
             <Text style={homestyles.postinsights1text}>
    
                 </Text>
         </Pressable> 
                </View>
-               <View  style={homestyles.insightbtn}  >
-            <Send2 color="#aaa" size={23} variant="Bold"/>
+               <TouchableOpacity  style={homestyles.insightbtn}  onPress={()=>shareBtn()} >
+            <Send2 color={  color_scheme(colorMode,'#aaa')} size={23} variant="Bold"/>
             <Text style={homestyles.postinsights1text}>
    
                 </Text>
-        </View> 
+        </TouchableOpacity> 
                  
             </View>
            
             <View>
                 
-            <View  style={homestyles.insightbtn}  >
-            <Entypo name="dots-three-horizontal" size={18} color="#aaa" />
+            <TouchableOpacity  style={homestyles.insightbtn} onPress={()=>onMore()} >
+            <Entypo name="dots-three-horizontal" size={18} color={  color_scheme(colorMode,'#aaa')} />
         
-            </View>
+            </TouchableOpacity>
             </View>
             
             </View>
@@ -339,7 +490,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
             >
                 <Text
                 style={{
-                    color:"#aaa",
+                    color:color_scheme(colorMode,'#aaa'),
                     fontWeight:"600",
                     fontSize:16,
                     marginRight:5
@@ -350,7 +501,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
                 </Text>
                 <Text
                    style={{
-                    color:"#aaa",
+                    color:color_scheme(colorMode,'#aaa'),
                     fontWeight:"600",
                     fontSize:13,
                     marginRight:5
@@ -379,7 +530,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
                 <Text
                 
                 style={{
-                    color:"#aaa",
+              color:color_scheme(colorMode,'#aaa'),
                     fontWeight:"600",
                     fontSize:16,
                     marginRight:5
@@ -389,7 +540,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
                 </Text>
                 <Text
                    style={{
-                    color:"#aaa",
+                   color:color_scheme(colorMode,'#aaa'),
                     fontWeight:"600",
                     fontSize:13,
                     marginRight:5
@@ -401,11 +552,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
                 </Text>
             </View>
                 </View>
-            <View style={homestyles.postinsights}>
-             <CommentInput postid={post._id} setPost={setPosti}/>
-                
-
-            </View>
+            
         </Pressable>
         )
 }

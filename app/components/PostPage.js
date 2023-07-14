@@ -1,4 +1,4 @@
-import React,{useEffect, useState}from "react";
+import React,{useContext, useEffect, useState}from "react";
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,RefreshControl} from "react-native";
 import { homestyles,poststyles } from "../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Back, MessageSearch} from 'iconsax-react-native';
@@ -8,9 +8,11 @@ import axios from "axios";
 import { endpoints } from "../config/endpoints";
 import { getTimeDifference, wrapUIMG } from "../utils/utils";
 import Spinner from "./Spinner";
+import { AppContext } from "../context/appContext";
+import { color_scheme } from "../config/color_scheme";
 function RenderComments({post,FetchUsers,usersData}){
- 
-    return (
+ const {colorMode} = useContext(AppContext)
+    return ( 
         <View
         style={{
             flexDirection:"column",
@@ -29,7 +31,7 @@ function RenderComments({post,FetchUsers,usersData}){
                     paddingVertical:10,
                     width:'98%',
                     borderBottomWidth: index==post.commentslist.length-1?0: 1,
-                    borderBottomColor:"#eee"
+                    borderBottomColor:color_scheme(colorMode,'#eee')
                 }}
                 >
                     <Image source={{uri: wrapUIMG(usersData[comment.userid].uimg)}} style={{
@@ -132,9 +134,9 @@ export default function PostPage({navigation,route}){
     useEffect(()=>{
         FetchUsers(user_ids)
     },[])
-
+    const {colorMode} = useContext(AppContext)
     return (
-        <ScrollView style={poststyles.container}
+        <ScrollView style={[poststyles.container,{backgroundColor:color_scheme(colorMode,'white')}]}
         refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         
@@ -143,13 +145,15 @@ export default function PostPage({navigation,route}){
             <TouchableOpacity onPress={()=>navigation.goBack()}>
 
         
-            <Ionicons name="chevron-back" size={24} color="black" />
+            <Ionicons name="chevron-back" size={24} color={color_scheme(colorMode,'black')} />
             </TouchableOpacity>
             </View>
-            <View style={poststyles.content}>
+            <View style={[poststyles.content,{backgroundColor:color_scheme('white')}]}>
                 <PostsList navigation={navigation} index={1} move={false} route={route} posti={post} userdetails={userdetails}/>
                 <View style={poststyles.commentssec}>
-                    <View style={poststyles.commenthead}>
+                    <View style={[poststyles.commenthead,{borderColor:color_scheme(colorMode,'#eee')}]}
+                    
+                    >
                     <Messages2 variant="Bulk" color="#333" />
                     <Text style={poststyles.commentheadtext}>
           Comments ({post.commentslist.length})
