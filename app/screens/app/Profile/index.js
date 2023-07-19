@@ -5,7 +5,6 @@ import ProfileScreen from './Profile';
 import PostPage from '../../../components/PostPage';
 import EditProfile from './EditProfile';
 import { useRoute } from '@react-navigation/native';
-import { HomeStack } from '../Home';
 import Settings from './Settings';
 const ProfileStack =createStackNavigator()
 

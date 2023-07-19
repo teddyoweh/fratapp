@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { View,Text,StyleSheet } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Home,Home2,Home3,SafeHome,Discover,Activity, LocationDiscover,Calendar,Profile,Notification1, Global, Bubble, Calendar2} from 'iconsax-react-native';
+import { Home,Home2,Home3,SafeHome,Discover,Activity, LocationDiscover,Calendar,Profile,Notification1, Global, Bubble, Calendar2, SearchStatus, SearchNormal, SearchNormal1} from 'iconsax-react-native';
 import { BlurView } from 'expo-blur';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -50,30 +50,30 @@ const AppStack = createStackNavigator()
   
               if (route.name === 'Home') {
                 iconName = focused
-                  ?<Global color={  color_scheme(colorMode,'black')} variant="Bold" size={30} />
+                  ?<Home2 color={  color_scheme(colorMode,'black')} variant="Bold" size={25} />
 
-                  : <Global  color={color_scheme(colorMode,'grey')} variant="Broken" size={30} />
+                  : <Home2  color={color_scheme(colorMode,'#aaa')} variant="Broken" size={25} />
                   return   iconName
 
               } else if (route.name === 'Discover') {
                 iconName = focused
-                  ?<LocationDiscover color={  color_scheme(colorMode,'black')}variant="Bold" size={30} />
+                  ?<SearchNormal1 color={  color_scheme(colorMode,'black')}variant="Bold" size={25} />
 
-                  : <LocationDiscover  color={color_scheme(colorMode,'grey')} variant="Broken" size={30} />
+                  : <SearchNormal1 color={color_scheme(colorMode,'#aaa')} variant="Broken" size={25} />
                   return   iconName
               }
               else if (route.name === 'Calendar') {
                 iconName = focused
-                  ?<Calendar2 color={  color_scheme(colorMode,'black')}variant="Bold" size={30} />
+                  ?<Calendar2 color={  color_scheme(colorMode,'black')}variant="Bold" size={25} />
 
-                  : <Calendar2  color={color_scheme(colorMode,'grey')} variant="Broken" size={30} />
+                  : <Calendar2  color={color_scheme(colorMode,'#aaa')} variant="Broken" size={25} />
                   return   iconName
               }
               else if (route.name === 'Profile') {
                 iconName = focused
-                  ?<Profile color={  color_scheme(colorMode,'black')}variant="Bulk" size={30} />
+                  ?<Profile color={  color_scheme(colorMode,'black')}variant="Bulk" size={25} />
 
-                  : <Profile  color={color_scheme(colorMode,'grey')} variant="Broken" size={30} />
+                  : <Profile  color={color_scheme(colorMode,'#aaa')} variant="Broken" size={25} />
                   return   iconName
               }
   
@@ -81,11 +81,11 @@ const AppStack = createStackNavigator()
           
 
                 iconName = focused
-                  ?             <Activity color={  color_scheme(colorMode,'black')}variant="Bulk" size={30} />
+                  ?             <Activity color={  color_scheme(colorMode,'black')}variant="Bulk" size={25} />
 
                   : 
                   
-                  <Activity  color={color_scheme(colorMode,'grey')} variant="Linear" size={30} />
+                  <Activity  color={color_scheme(colorMode,'#aaa')} variant="Linear" size={25} />
                   return   iconName
                   
               }
@@ -93,11 +93,11 @@ const AppStack = createStackNavigator()
           
 
                 iconName = focused
-                  ?             <Bubble color={  color_scheme(colorMode,'black')}variant="Bulk" size={30} />
+                  ?             <Bubble color={  color_scheme(colorMode,'black')}variant="Bulk" size={25} />
 
                   : 
                   
-                  <Bubble  color={color_scheme(colorMode,'grey')} variant="Linear" size={30} />
+                  <Bubble  color={color_scheme(colorMode,'#aaa')} variant="Linear" size={25} />
                   return   iconName
                   
               }

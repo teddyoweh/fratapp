@@ -64,9 +64,9 @@ function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
                             flexDirection:'row',
                             justifyContent:'space-between',
                             alignItems:'center',
-                            borderBottomWidth:1,
+                            borderBottomWidth:0.5,
                             borderStyle:'solid',
-                            borderColor:color_scheme(colorMode,'#eee'),
+                            borderColor:color_scheme(colorMode,'#dddd'),
                         }}
                         onPress={()=>navigation.navigate('OrgPageStacks',{
                             org:org
@@ -105,7 +105,7 @@ function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
                                         alignItems:'center',
                                         borderStyle:'solid',
                                         borderWidth:1,
-                                        borderColor:'#ccc',
+                                        borderColor:color_scheme(colorMode,'#ccc'),
                                         paddingHorizontal:5
                                     }}
                                     >
@@ -134,7 +134,7 @@ function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
                         </Text>
                         </View>
                         <View>
-                        <Ionicons name="ios-chevron-forward" size={24} color="black" />
+                        <Ionicons name="ios-chevron-forward" size={22} color={color_scheme(colorMode,'#eee')} />
                         </View>
                         </TouchableOpacity>
                     </View>
@@ -200,7 +200,7 @@ export default function OrgHome({navigation}){
                 </TouchableOpacity>
             </View>
             <View style={{marginVertical:10,paddingHorizontal:10}}>
-            <View style={[discoverstyles.searchbox,{backgroundColor:color_scheme(colorMode,'#eeee')}]}>
+            <View style={[discoverstyles.searchbox,{backgroundColor:color_scheme(colorMode,'#eee')}]}>
                     <SearchNormal variant="Broken" color="grey" />
                     <TextInput style={discoverstyles.search}placeholder="Search My Organizations"
                     

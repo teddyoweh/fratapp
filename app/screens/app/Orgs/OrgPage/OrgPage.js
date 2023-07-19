@@ -1,4 +1,4 @@
-import { View,Text,Animated, Image,TouchableOpacity,Keyboard, ScrollView, TextInput,  RefreshControl,KeyboardAvoidingView, Button, Pressable, Vibration} from "react-native";
+import { View,Text,Animated, Image,TouchableOpacity,Keyboard, ScrollView, TextInput,  RefreshControl,KeyboardAvoidingView, Button, Pressable, Vibration, ActionSheetIOS} from "react-native";
 import { homestyles,discoverstyles } from "../../../../styles";
 import { Message, Messages1,Message2, Messages2, SearchNormal, PictureFrame,Chart,Link21,VoiceCricle,Calendar,VolumeHigh,Briefcase,Send2, Messages3, MessageSquare,More,Like, Like1,AddCircle, ElementPlus, UserCirlceAdd, Add, DirectUp, ArrowUp, Microphone, Microphone2, Hashtag, ArrowRight2, Box2, Celo, Command, Notepad2, People, UserAdd, CalendarAdd, ArchiveBook} from 'iconsax-react-native';
 import { FontAwesome5,Feather, Ionicons,AntDesign, MaterialIcons,Entypo} from '@expo/vector-icons';
@@ -13,227 +13,11 @@ import BottomSheet from "react-native-gesture-bottom-sheet";
 import { getTimeDifference } from "../../../../utils/utils";
 import { color_scheme } from "../../../../config/color_scheme";
 import * as Haptics from 'expo-haptics';
-
-function AddUserAccessSheet({bottomSheet,org}){
-    const {user} = useContext(AppContext)
-    const [users,setUsers] = useState(null)
-    const [selectedUsers,setSelectedUsers] = useState([])
-    const [input,setInput] = useState('')
-    async function searchUsers(input){
-        setInput(input)
-        await axios.post(endpoints['searchuser'],{
-            search:input.toLowerCase(),
-            userid:user.userid
-        }).then(res=>{
-            console.log(res.data)
-            setUsers(res.data)
-        })
-    }
-    const addUser = (uid) => {
-        if(!selectedUsers.includes(uid)){
-            setSelectedUsers([...selectedUsers,uid])
-        }else{
-            removeUser(uid)
-        }
-        console.log(selectedUsers)
-    }
-    const removeUser = (uid) =>{
-        setSelectedUsers(selectedUsers.filter(u=>u!==uid))
-    }
-        
-        
-    async function addToOrg(){
-        var ids = [];
-        for (var i = 0; i < users.length; i++) {
-        ids.push(users[i]._id);
-        }
-
-        await axios.post(endpoints['add_member'],{
-            orgid:org.org._id,
-            userids:ids
-        }).then(res=>{
-            bottomSheet.current.close()
-        })
-    }
-    const {colorMode} = useContext(AppContext)
-    return (
-        <>
-
-        <BottomSheet  hasDraggableIcon={false} ref={bottomSheet} height={850} >
-        <KeyboardAvoidingView style={{backgroundColor:color_scheme(colorMode,'white'),flex:1,
-    paddingTop:20}}>
-
-<View style={[discoverstyles.searchbox,{backgroundColor:color_scheme(colorMode,'#eeee'),marginHorizontal:10}]}>
-                    <SearchNormal variant="Broken" color="grey" />
-                    <TextInput style={discoverstyles.search}    autoCapitalize="none"  placeholderTextColor={'#aaa'} placeholder="Search Username, Firstname, Lastname" value={input} onChangeText={(text)=>searchUsers(text)}/>
-                </View>
-        <ScrollView
-              keyboardShouldPersistTaps="always"
-                keyboardDismissMode="on-drag"
-                contentContainerStyle={{backgroundColor:color_scheme(colorMode,'white'),flex:1}}
-              >
-
-<View style={{flexDirection:'column', backgroundColor:color_scheme(colorMode,'white'), height:"100%",paddingTop:10}}>
-
- 
-{
-    users!=null?
-    
-    users.length==0?
-    <View
-    style={{
-        flexDirection: 'row',
-        justifyContent:'center',
-        alignItems:'center',
-        height:'90%'
-    }}
-    >
-        <Text
-        style={{
-            fontSize: 18,
-            color:'#333',
-            fontWeight:'700'
-        }}
-        >
-           No Users Found
-        </Text>
-    </View>
-    :
-    <View
-    style={{
-        flexDirection:"column",
-        justifyContent:'flex-start'
-
-    }}
-    >
-        <View
-        style={{
-            flexDirection:'row',
-            justifyContent:'space-between',
-            alignItems:'center',
-            paddingHorizontal:20
-        }}
-        >
-            <Text
-            style={{
-                fontSize: 15,
-                fontWeight:600
-            }}
-            >
-            Selected Users ({selectedUsers.length}) 
-            </Text>
-        <Button title="Add" onPress={()=>addToOrg()}/>
-        </View>
-        {
-            users.map((suser,index)=>{
-                const bgcolor = selectedUsers.includes(suser._id)?color_scheme(colorMode,'#f5f5f5'):'transparent'
-                const isSelected = selectedUsers.includes(suser._id)
-                return (
-                    <TouchableOpacity
-                    key={index}
-                    onPress={()=>{
-                        addUser(suser._id)}}
-                    style={{
-
-                        flexDirection:'row',
-                        alignItems:'center',
-                        justifyContent:'space-between',
-                     
-                        borderStyle:'solid',
-                        borderColor:color_scheme(colorMode,'#eee'),
-                        borderBottomWidth:2.4,
-                        paddingHorizontal:10,
-                        paddingVertical:10,
-                        backgroundColor:bgcolor
-                        
-                    }}
-                    >
-                    <View
-                    style={{
-                        flexDirection:'row',
-                        alignItems:'center',
-                        justifyContent:'flex-start'
-                    }}
-                    >
-                        <Image source={{uri:wrapUIMG(suser.uimg)}} style={{
-                            width:50,
-                            height:50,
-                            borderRadius:100,
-                            marginRight:10
-                        }}/>
-                        <View
-                        style={{
-                            flexDirection:'column'
-                        }}
-                        >
-                            <Text style={{
-                                fontSize:18,
-                                fontWeight:'bold',
-                                color:color_scheme(colorMode,'#333')
-                            
-                            }}>
-                                {suser.firstname+' '+suser.lastname}
-                            </Text>
-                            <Text
-                            style={{
-                                fontSize:14,
-                                color:color_scheme(colorMode,'#aaa')
-                            }}
-                            >
-                                @{suser.username}
-                            </Text>
-                        </View>
-                    </View>
-                    <View style={{}}>
-                        {isSelected==true &&
-                        <View>
-                            <Feather name="check" size={24} color="#047aff" />
-                        </View>
-                        }
-                    </View>
-                        
-                    </TouchableOpacity>
-                )
-            })
-        }
-
-        </View>:
-
-        <View
-        style={{
-            flexDirection: 'row',
-            justifyContent:'center',
-            alignItems:'center',
-            height:'90%'
-        }}
-        >
-            <Text
-            style={{
-                fontSize: 18,
-                color:'#333',
-                fontWeight:'700'
-            }}
-            >
-                Search for Users
-            </Text>
-        </View>
-}
+import AddUserAccessSheet from "./AddMemberSheet";
 
 
-     
-     
-        </View>
-        </ScrollView>
-        
-        </KeyboardAvoidingView>
-  </BottomSheet>
 
-  </>
-    )
-    
-}
-
-function RenderMembers({members1,memberSheet,navigation,orgid,orgdt}){
+function RenderMembers({members1,memberSheet,navigation,orgid,orgdt,orgdata}){
     const members = members1.slice(0,8)
     let margin;
     let finalindex;
@@ -273,7 +57,7 @@ style={{
 
             <TouchableOpacity
             onPress={()=>navigation.navigate('MembersScreen',{
-                orgid,orgdt
+                orgid,orgdt,orgdata
             })}
             style={{
                 width:"70%",
@@ -287,9 +71,9 @@ style={{
                 {members.map((member,index) => {
                     finalindex = index
                     return(
-                        <>
-                 
                         <View key={index}>
+                 
+                        <View>
                             <Image
                             source={{uri:wrapUIMG(member.uimg)}}
                             style={{
@@ -306,7 +90,7 @@ style={{
                             </Image>
                         </View>
 
-                        </>
+                       </View>
                     )
                 }
                 )}
@@ -723,17 +507,35 @@ function RendorOrgPost({orgid}){
 }
 export default function OrgPage({navigation,route}){
     const scrollViewRef = useRef()
+    const [refreshing, setRefreshing] = useState(false);
     const {org} = route.params
     const {user,colorMode} = useContext(AppContext)
     console.log(org._id)
     const [orgData,setOrgData] = useState(null)
     const orgoptions = ['New Event','New Cohort','Study Hours','Add Members']
+    function gottoStudyHours(){
+        navigation.navigate("StudyHourStack",{
+
+            org:org,orgdt:{name:org.org_name,uimg:org.org_logo,members:orgData.members},orgdata:orgData,orgid:org._id
+        })
+    }
     const orgoptionshashmap ={
         'Add Members':opeAddMemberSheet,
-        "New Event":null,
-        'New Cohort':null, 
-        'Study Hours':null,
-        'Add Member':null
+        "New Event":test,
+        'New Cohort':gotoCohort, 
+        'Study Hours':gottoStudyHours,
+        'Settings':test
+       
+    }
+    function test(){}
+    function gotoCohort(){
+
+        navigation.navigate('NewCohort',
+        {
+            org,
+            orgdt:{name:org.org_name,uimg:org.org_logo,members:orgData.members},
+            orgdata:orgData
+        })
     }
     async function getOrg(){
        await axios.post(endpoints['getorg'],{
@@ -745,22 +547,22 @@ export default function OrgPage({navigation,route}){
     }
     const AddUserAccessSheetref = useRef()
     const optionsicon = {
-        'New Event':<CalendarAdd size="20" color="#777" style={{
+        'New Event':<CalendarAdd size="20" color={color_scheme(colorMode,'#333')} variant="Bold" style={{
             marginRight:4,
             fontWeight:'800'
             }}/>
     ,
-        'New Cohort':<People size="20" color="#777" style={{
+        'New Cohort':<People size="20" color={color_scheme(colorMode,'#333')} variant="Bold" style={{
             marginRight:4,
             fontWeight:'800'
             }}/>
     ,
-        'Study Hours':<ArchiveBook size="20" color="#777" style={{
+        'Study Hours':<ArchiveBook size="20" color={color_scheme(colorMode,'#333')} variant="Bold" style={{
             marginRight:4,
             fontWeight:'800'
             }}/>
     ,
-        'Add Members':<UserAdd size="20" color="#777" style={{
+        'Add Members':<UserAdd size="20" color={color_scheme(colorMode,'#333')} variant="Bold" style={{
         marginRight:4,
         fontWeight:'800'
         }}/>
@@ -774,6 +576,26 @@ export default function OrgPage({navigation,route}){
     function opeAddMemberSheet(){
         AddUserAccessSheetref.current.show()
     }
+    const onSettingsPress = () =>
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: [...orgoptions,'Settings'],
+        title:`${org.org_name} Menu`,
+        cancelButtonIndex: [...orgoptions,'Settings'].length-1,
+        userInterfaceStyle: "dark",
+        tintColor:'#333'
+      },
+      buttonIndex => {
+         orgoptionshashmap[[...orgoptions,'Settings'][buttonIndex]]()
+      },
+    );
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        getOrg()
+        setTimeout(() => {
+          setRefreshing(false);
+        }, 2000);
+      }, []);
     return (
 
  
@@ -794,9 +616,9 @@ export default function OrgPage({navigation,route}){
             flexDirection:'row',
             justifyContent:'space-between',
             alignItems:'center',
-            borderBottomWidth:1,
-            borderStyle:'solid',
-            borderColor:color_scheme(colorMode,'#ddd')
+            // borderBottomWidth:0.5,
+            // borderStyle:'solid',
+            // borderColor:color_scheme(colorMode,'#ccc')
 
         }}
         >
@@ -804,7 +626,9 @@ export default function OrgPage({navigation,route}){
                 <Ionicons name="chevron-back" size={24} color={color_scheme(colorMode,'black')} />
                 </TouchableOpacity>
 
-            <TouchableOpacity>
+            <TouchableOpacity
+            onPress={()=>onSettingsPress()}
+            >
 
             <Entypo name="dots-three-horizontal" size={20} color={color_scheme(colorMode,'#333')} />
             </TouchableOpacity>
@@ -823,13 +647,13 @@ export default function OrgPage({navigation,route}){
             backgroundColor:color_scheme(colorMode,'white')
         }}
         //onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
-
+        refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         >
         <View
         style={{
-            borderBottomWidth:1,
-            borderStyle:'solid',
-            borderColor:color_scheme(colorMode,'#ddd'),
+       
             paddingBottom:10,
           
         }}
@@ -931,7 +755,7 @@ export default function OrgPage({navigation,route}){
 
    
             <View>
-                    <RenderMembers orgdt={{name:org.org_name,uimg:org.org_logo,members:orgData.members}} navigation={navigation} orgid={orgData.org._id} members1={orgData.members} memberSheet={opeAddMemberSheet}/>
+                    <RenderMembers orgdt={{name:org.org_name,uimg:org.org_logo,members:orgData.members}} orgdata={orgData}navigation={navigation} orgid={orgData.org._id} members1={orgData.members} memberSheet={opeAddMemberSheet}/>
             </View>
             </View>
               }
@@ -951,58 +775,27 @@ export default function OrgPage({navigation,route}){
         >
 
     
-        <ScrollView
-        horizontal
-        contentContainerStyle={{
-            paddingHorizontal:16,
-            paddingVertical:10
- 
-        }}
-        showsHorizontalScrollIndicator={false}
-        
-        >
-        {
-            orgoptions.map((orgopt,index)=>{
-                return (
-                    <TouchableOpacity
-                    style={{
-                        marginRight:10,
-                        backgroundColor:color_scheme(colorMode,'#eee'),
-                        paddingHorizontal:8,
-                        paddingVertical:6,
-                        borderRadius:10,
-                        flexDirection:'row',
-                        alignItems:'center',
-                        justifyContent:'center',
-                        borderWidth:1,
-                        borderStyle:'solid',
-                        borderColor:color_scheme(colorMode,'#ccc')
-              
-                    }}
-                    onPress={()=>{
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                        orgoptionshashmap[orgopt]()}}
-                    key={index}
-                    >
-                        {optionsicon[orgopt]}
-                        <Text
-                        style={{
-                            color:'#777',
-                            fontWeight:'600',
-                            fontSize:13
-                            
-                        }}>
-                            {orgopt}
-                        </Text>
-                    </TouchableOpacity>
-                )
-            })
-        }    
-        </ScrollView>
+
         </View>
+        <View
+         style={{
+            backgroundColor:color_scheme(colorMode,'#eee'),
+            marginHorizontal:10,
+    
+            borderRadius:10,
         
+        }}
+        >
+
+     
         { orgData &&
             orgData.channels.map((cohort,index)=>{
+                const borderstyle =index!=orgData.channels.length-1?{   borderBottomWidth:0.5,
+                    borderColor: color_scheme(colorMode,'#ddd'), 
+                    borderStyle:'solid',
+
+                }:{}
+          
                 return (
                     <TouchableOpacity
                     key={index}
@@ -1012,29 +805,19 @@ export default function OrgPage({navigation,route}){
                         org,
                         cohort
                     })}}
-                    style={{
-                        backgroundColor:color_scheme(colorMode,'#eee'),
-                        marginVertical:8,
-                        marginHorizontal:10,
-                        borderRadius:10,
+                    style={[{
+                      
+            
+                   
                         flexDirection:'row',
                         alignItems:'center',
                         justifyContent:'space-between',
                         paddingHorizontal:10,
                         paddingVertical:10,
-                        // borderWidth:0.5,
-                        // borderColor:'#ddd',
-                        // borderStyle:'solid',
+                     
                        
              
-                        shadowOffset: {
-                          width: 0,
-                          height: 5,
-                        },
-                        shadowOpacity: 0.15,
-                        shadowRadius: 3.84,
-                        elevation: 5,
-                    }}
+                    },borderstyle]}
                     >
                         <View
                           style={{
@@ -1043,7 +826,32 @@ export default function OrgPage({navigation,route}){
                          
                         }}
                         >
-                        <Notepad2 size="40" color={color_scheme(colorMode,'#333')}variant="Bulk"/>
+                            <View
+                            style={{
+                                height:54,
+                                width:54,
+                                flexDirection:"row",
+                                justifyContent:'center',
+                                alignItems:'center',
+                                backgroundColor:color_scheme(colorMode,'white'),
+                                borderRadius:10,
+                                   borderWidth:0.5,
+                        borderColor:'#333',//color_scheme(colorMode,'#fff'),
+                        borderStyle:'solid',
+
+                        shadowOffset: {
+                            width: 0,
+                            height: 5,
+                          },
+                          shadowOpacity: 0.15,
+                          shadowRadius: 3.84,
+                          elevation: 5,
+                            }}
+                            >
+
+                           
+                        <Notepad2 size="40" color={color_scheme(colorMode,'black')}variant="Bulk"/>
+                        </View>
                         <View
                         style={{
                             flexDirection:'column',
@@ -1057,7 +865,7 @@ export default function OrgPage({navigation,route}){
                          
                             fontSize:18,
                             color:color_scheme(colorMode,'#333'),
-                            fontWeight:'300'
+                            fontWeight:'500'
                         }}
                         >
                         {cohort.channel_name}
@@ -1075,9 +883,9 @@ export default function OrgPage({navigation,route}){
                         style={{
              
                             fontSize:14,
-                        fontStyle:'italic',
+                  
                             color:color_scheme(colorMode,'#aaa'),
-                            fontWeight:'500'
+                            fontWeight:'200'
                         }}
                         >
                         {cohort.channel_members.length} Members
@@ -1092,6 +900,7 @@ export default function OrgPage({navigation,route}){
                 )
             })
         }
+           </View>
    
         {/* <RendorOrgPost orgid={org._id}/> */}
         </View>

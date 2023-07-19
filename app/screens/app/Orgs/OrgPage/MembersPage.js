@@ -1,6 +1,6 @@
 import { View,Text,Animated, Image,TouchableOpacity,Keyboard, ScrollView, TextInput,  RefreshControl,KeyboardAvoidingView, Button, Pressable, Vibration} from "react-native";
 import { homestyles,discoverstyles } from "../../../../styles";
-import { Message, Messages1,Message2, Messages2, SearchNormal, PictureFrame,Chart,Link21,VoiceCricle,Calendar,VolumeHigh,Briefcase,Send2, Messages3, MessageSquare,More,Like, Like1,AddCircle, ElementPlus, UserCirlceAdd, Add, DirectUp, ArrowUp, Microphone, Microphone2} from 'iconsax-react-native';
+import { Message, Messages1,Message2, Messages2, SearchNormal, PictureFrame,Chart,Link21,VoiceCricle,Calendar,VolumeHigh,Briefcase,Send2, Messages3, MessageSquare,More,Like, Like1,AddCircle, ElementPlus, UserCirlceAdd, Add, DirectUp, ArrowUp, Microphone, Microphone2, AddSquare, UserAdd} from 'iconsax-react-native';
 import { FontAwesome5,Feather, Ionicons,AntDesign, MaterialIcons,Entypo} from '@expo/vector-icons';
 import { useContext, useEffect,useRef, useState,useCallback, useLayoutEffect } from "react";
 import { AppContext } from "../../../../context/appContext";
@@ -12,19 +12,34 @@ import { wrapUIMG } from "../../../../utils/utils";
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import { getTimeDifference } from "../../../../utils/utils";
 import { color_scheme } from "../../../../config/color_scheme";
+import AddUserAccessSheet from "./AddMemberSheet";
+import { BlurView } from "expo-blur";
 
 export default function MembersPage({navigation,route}){
-    const {orgid,orgdt} = route.params
+    const {orgid,orgdt,orgdata} = route.params
     const {user,colorMode}   = useContext(AppContext)
     const [search,setSearch] = useState('')
     console.log(    orgdt.members)
+    function opeAddMemberSheet(){
+        AddUserAccessSheetref.current.show()
+    }
+    const AddUserAccessSheetref = useRef()
     return (
         <View
         style={{
             backgroundColor:    color_scheme(colorMode,'white'),
             flex:1
         }}
+        
         >
+           
+
+           <BlurView
+            intensity={0}
+        
+            tint="dark"
+            
+            >
             <View
             style={{
                 paddingHorizontal:10,
@@ -87,7 +102,16 @@ export default function MembersPage({navigation,route}){
             >
                 Members ({orgdt.members.length})
             </Text>
-            <View style={[discoverstyles.searchbox,{backgroundColor:color_scheme(colorMode,'#eeee')}]}>
+            <View
+            style={{
+                flexDirection:'row',
+                alignItems:'center',
+                justifyContent:'space-between'
+            }}
+            >
+
+      
+            <View style={[discoverstyles.searchbox,{backgroundColor:color_scheme(colorMode,'#eee'),width:'89%'}]}>
                     <SearchNormal variant="Broken" color="grey" />
                     <TextInput style={[discoverstyles.search,{color:color_scheme(colorMode,'black')}]}placeholder="Search Members"
                     placeholderTextColor={color_scheme(colorMode,'gray')}
@@ -96,9 +120,22 @@ export default function MembersPage({navigation,route}){
                     onChangeText={(text)=>performSearch(text)}
                     />
                 </View>
+                <TouchableOpacity
+                onPress={()=>opeAddMemberSheet()}
+                >
+                    <UserCirlceAdd
+                    size={43}
+                    color={color_scheme(colorMode,'#aaa')}
+                    variant="Bulk"
+                    />
+                </TouchableOpacity>
                 </View>
+                </View>   
+                </BlurView>
+          
             <ScrollView>
-                {
+         
+          {
                     orgdt.members.map((member,index)=>{
                         return (
                             <View
@@ -148,7 +185,9 @@ export default function MembersPage({navigation,route}){
                         )
                     })
                 }
+             
             </ScrollView>
+            <AddUserAccessSheet bottomSheet={AddUserAccessSheetref} org={orgdata} />
         </View>
     )
 

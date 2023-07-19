@@ -254,11 +254,31 @@ async function getOrgPost(req, res) {
     res.json({ status: false, data: err });
   }
 }
+async function createCohort(req,res){
+  console.log(req.body)
+  const newChannel = new Channels({
+  
+    org_id:req.body.orgid,
+    channel_name:req.body.channel_name,
+    channel_members:req.body.channel_members,
+    createdby:req.body.createdby,
+    channel_logo:req.body.channel_logo,
+  })
+
+  await newChannel.save().then(
+    resp=>{
+      console.log(resp)
+      res.json(resp)
+    }
+  )
+
+}
 module.exports =  {
     createOrg,
     getOrgs,
     getOrg,
     addToOrg,
     MakeOrgPost,
-    getOrgPost
+    getOrgPost,
+    createCohort
 }

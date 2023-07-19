@@ -12,6 +12,7 @@ import { wrapUIMG } from "../../../utils/utils";
 import Spinner from "../../../components/Spinner";
 import { setupNotifications } from "../../../config/setup";
 import { color_scheme } from "../../../config/color_scheme";
+import { BlurView } from "expo-blur";
 
 export default function HomeScreen({navigation}){
     const filters = ['For You','Announments','Events','Posts','Polls','Opportunities']
@@ -64,6 +65,13 @@ export default function HomeScreen({navigation}){
         </View>:
     
         <View style={[homestyles.container,{backgroundColor:color_scheme(colorMode,'white')}]}>
+           
+      
+
+ 
+
+ 
+      
             <View style={homestyles.top}>
                 <View style={homestyles.toptop}>
                    <View style={homestyles.topleft}>
@@ -107,15 +115,16 @@ export default function HomeScreen({navigation}){
 
 
                 </ScrollView>
+                
             </View>
-        <View>
             
-        </View>
+ 
+        
       
 
   
-        <Feed navigation={navigation} postBottomSheet={postBottomSheet} />
-   
+        <Feed  navigation={navigation} postBottomSheet={postBottomSheet} />
+       
             <View style={homestyles.postbtndiv}>
                 <TouchableOpacity style={homestyles.postbtn} onPress={()=>postBottomSheet.current.show()}> 
                 <Add color="white" variant="Broken" size={42} />

@@ -138,7 +138,7 @@ export default function DiscoverScreen({navigation}){
         <View style={[discoverstyles.container,{backgroundColor:color_scheme(colorMode,'white')}]}>
            <View style={[discoverstyles.top]}>
                 <Text style={[discoverstyles.title,{color:color_scheme(colorMode,'black')}]}>Discover</Text>
-                <View style={[discoverstyles.searchbox,{backgroundColor:color_scheme(colorMode,'#eeee')}]}>
+                <View style={[discoverstyles.searchbox,{backgroundColor:color_scheme(colorMode,'#eee')}]}>
                     <SearchNormal variant="Broken" color="grey" />
                     <TextInput style={[discoverstyles.search,{color:color_scheme(colorMode,'black')}]}placeholder="Search People, Universitys Organizations, Fratenities, Sororities"
                     placeholderTextColor={color_scheme(colorMode,'gray')}

@@ -101,8 +101,8 @@ function OpportunitiesFeed({navigation,postBottomSheet}){
     return <AllFeed type='opportunity'  postBottomSheet={postBottomSheet}  navigation={navigation}/>
 }
 
-function AllFeed({navigation,route,type}){
-    const {postBottomSheet} = route.params
+function AllFeed({navigation,route,type,postBottomSheet}){
+ 
     
     const [refreshing, setRefreshing] = React.useState(false);
     const [posts,setPost]  = useState(null)
@@ -166,7 +166,9 @@ return (
     <ScrollView  contentContainerStyle={[homestyles.postcontainer,{
         backgroundColor:color_scheme(colorMode,'white')
     }]}
-            
+       scrollsToTop={true} 
+       showsVerticalScrollIndicator={false}    
+       //alwaysBounceVertical={true}
     refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={()=>loadPosts()} />
       }>

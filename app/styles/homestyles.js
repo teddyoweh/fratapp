@@ -152,7 +152,7 @@ const homestyles = StyleSheet.create({
         fontSize:16,
         fontWeight:'300',
      
-        fontWeight:'400'
+         
     },
     filters:{
         paddingHorizontal:10,

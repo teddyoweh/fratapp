@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useContext, useRef}from "react";
-import { View,Text,Dimensions, Image,TouchableOpacity, ScrollView, TextInput, Pressable, Share, ActionSheetIOS} from "react-native";
+import { View,Text,Dimensions, Image,TouchableOpacity, ScrollView, TextInput, Pressable, Share, ActionSheetIOS, KeyboardAvoidingView, InputAccessoryView, Button} from "react-native";
 import { homestyles } from "../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, MessageText, Link2, Link, MessageText1, Send2, ArrowUp} from 'iconsax-react-native';
 import { FontAwesome5,Entypo,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
@@ -51,7 +51,8 @@ function RenderImages({images}){
         <View
         style={{
             flex:1,
-            height:pageheight
+            height:pageheight,
+            marginBottom:10
         }}
         >
 
@@ -180,7 +181,8 @@ function CommentInput({postid,setPost}){
         alignItems:'center',
         width:'100%',
         borderWidth:0.5,
-        borderColor:color_scheme(colorMode,'#222')
+       
+        borderColor:color_scheme(colorMode,'#ddd')
     }]}>
         <TextInput
         style={{
@@ -191,8 +193,10 @@ function CommentInput({postid,setPost}){
             paddingTop:8,
             color:color_scheme(colorMode,'black')
         }}
+  
+
         value={comment}
-    
+        keyboardAppearance={colorMode}
         onChangeText={(text)=>setComment(text)}
         placeholder="Add Comment"
         placeholderTextColor={color_scheme(colorMode,'#222')}
@@ -210,7 +214,7 @@ flexDirection:'row',
 alignItems:'center',
 justifyContent:'center',
 borderRadius:100,
-backgroundColor:'#333',
+backgroundColor:color_scheme(colorMode,'#eee'),
 
 }}
 >
@@ -330,9 +334,14 @@ function scaleImageToScreen(imageWidth, imageHeight) {
       }
     },
   );
+  const inputcommentid = 'uniqueID';
+
     return (
         userdetails && 
-        <Pressable style={[homestyles.post,{borderColor:color_scheme(colorMode,'#ddd')}]} key={index} >
+        <View style={[homestyles.post,{borderColor:color_scheme(colorMode,'#dddd')}]} key={index} 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+
+        >
             <View style={homestyles.posttop}>
                 <View style={homestyles.posttopleft}>
                     <View style={homestyles.posttopimg}>
@@ -492,7 +501,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
                 style={{
                     color:color_scheme(colorMode,'#aaa'),
                     fontWeight:"600",
-                    fontSize:16,
+                    fontSize:13,
                     marginRight:5
                     
                 }}
@@ -508,7 +517,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
                     
                 }}
                 >
-                    Likes
+                    likes
                 </Text>
                 
                 </View>
@@ -517,7 +526,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
                 style={{
                     color:"#999",
                     fontWeight:"600",
-                    fontSize:16,}}>
+                    fontSize:13,}}>
                 •
                 </Text>
                 <View
@@ -532,7 +541,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
                 style={{
               color:color_scheme(colorMode,'#aaa'),
                     fontWeight:"600",
-                    fontSize:16,
+                    fontSize:13,
                     marginRight:5
                     
                 }}>
@@ -548,11 +557,19 @@ function scaleImageToScreen(imageWidth, imageHeight) {
                     
                 }}
                 >
-                    Comments
+                    comments
                 </Text>
             </View>
                 </View>
+            <View
+            style={{
+                paddingHorizontal:10
+            }}
+            >
+            <CommentInput  />
+            </View>
+         
             
-        </Pressable>
+        </View>
         )
 }

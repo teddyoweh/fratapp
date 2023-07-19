@@ -6,10 +6,11 @@ import { useRoute } from '@react-navigation/native';
  
 import { HomeStack } from '../../Home';
 import StudyHours from './StudyHours';
+import CreateStudyHours from './CreateStudyHours';
 const StudyHourStack = HomeStack
 
 function StudyHoursStacks({navigation,route}) {
-  const {org} = route.params
+  const {orgid,orgdt,orgdata,org} = route.params
 
   return (
     <StudyHourStack.Navigator
@@ -21,11 +22,11 @@ function StudyHoursStacks({navigation,route}) {
     
     >
 
-        <StudyHourStack.Screen name='StudyHoursScreen' component={OrgPage}
-        initialParams={{org:org}}
+        <StudyHourStack.Screen name='StudyHoursScreen' component={StudyHours}
+        initialParams={{orgid,orgdt,orgdata,org}}
         />
-        <StudyHourStack.Screen name='MembersScreen' component={MembersPage}/>
-        <StudyHourStack.Screen name='OrgChannelScreen' component={OrgChannel}/>
+        <StudyHourStack.Screen name='Create Study Hours' component={CreateStudyHours}/>
+ 
 
        
 

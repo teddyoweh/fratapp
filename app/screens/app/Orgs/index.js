@@ -7,8 +7,7 @@ import OrgHome from './Org';
 import CreateOrgs from './CreateOrg';
 import OrgPageStacks from './OrgPage';
 import { HomeStack } from '../Home';
-
- 
+import StudyHoursStacks from './StudyHours';
 const OrgStack = HomeStack
 
 function OrgStacks({navigation,route}) {
@@ -25,7 +24,7 @@ function OrgStacks({navigation,route}) {
 
         <OrgStack.Screen name="OrgHome" component={OrgHome} />
         <OrgStack.Screen name="CreateOrgs" component={CreateOrgs}/>
-        {/* <OrgStack.Screen name='OrgStack' component={OrgPageStacks}/> */}
+        <OrgStack.Screen name='OrgStack' component={OrgPageStacks}/>
 
        
 

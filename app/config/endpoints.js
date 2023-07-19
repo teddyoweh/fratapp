@@ -50,6 +50,8 @@ const endpoints = {
     'add_member':`${serverip}/api/orgs/add_member`,
     'make_org_post':`${serverip}/api/orgs/make_post`,
     'get_org_posts':`${serverip}/api/orgs/get_posts`,
+    'create_cohort':`${serverip}/api/orgs/create_cohort`,
+
 }
 
 export {endpoints}
