@@ -185,7 +185,18 @@ export default function StudyHours({route,navigation}){
             >
                 Study Hours
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity
+            onPress={()=>{
+                Haptics.impactAsync('medium');
+                navigation.navigate('CreateStudyHours',
+                {
+                    orgdt,
+                    orgdata,
+                    orgid
+                }
+                )
+            }}
+            >
             <NoteAdd size="30" variant="Bulk" color={color_scheme(colorMode,'gray')}/>
             </TouchableOpacity>
             </View>

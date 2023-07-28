@@ -6,7 +6,7 @@ const profilestyles = StyleSheet.create({
     
     container:{
         flex:1,
-        backgroundColor:'white',
+   
         width:'100%'
 
     },

@@ -16,6 +16,7 @@ import Loading from "./Loading";
 export default function ProfilePosts({navigation,userid}){
     const {user} = useContext(AppContext)
     const [postData,setPostData] = useState(null)
+    console.log(user,'shi')
     let id;
     if(userid){
         id = userid
@@ -25,7 +26,7 @@ export default function ProfilePosts({navigation,userid}){
     }
     async function loadMyPosts(){
  
-       await axios.post(endpoints['getposts'],{userid:userid})
+       await axios.post(endpoints['getposts'],{userid:id})
         .then(res=>{
         
             setPostData(res.data)
@@ -41,8 +42,37 @@ export default function ProfilePosts({navigation,userid}){
         postData.posts.map((post,index)=>{
  
             return(
-                
+                <>
+                { postData.posts.length>0?
                 <PostsList key={index }index={index} posti={post} navigation={navigation} move={false} userdetails ={postData.users[post.userid]}/>
+                :
+              <View
+        style={{
+          
+ 
+            flexDirection:'row',
+            alignItems:"center",
+            justifyContent:"center",
+            
+            
+        }}
+        >
+            <Text
+            style={{
+                color:color_scheme(colorMode,'#aaa'),
+                fontSize:25,
+                fontWeight:'600'
+            }}
+            >
+                No Posts
+            </Text>
+            </View>
+    
+ 
+ 
+        }
+                </>
+                
             )
         }):
         

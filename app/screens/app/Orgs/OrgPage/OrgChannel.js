@@ -29,33 +29,41 @@ function RenderOrgChannelPost(){
             paddingHorizontal:18,
             paddingVertical:10,
             marginVertical:6,
-            marginHorizontal:8,
-            borderRadius:10,
+     
+          
             // borderBottomWidth:0.5,
             // borderStyle:'solid',
             // borderColor:color_scheme(colorMode,'eeee'),
-            backgroundColor:color_scheme(colorMode,'eee'),
+          
         }}
         >
         <View
         style={{
             flexDirection:'row',
-            alignItems:'center'
+            alignItems:'flex-start',
+            justifyContent:"space-between"
         }}
         >
             <Image
             source={{uri:wrapUIMG(user.uimg)}}
             style={{
-                height:50,
-                width:50,
+                height:40,
+                width:40,
                 borderRadius:100
             }}
             />
             <View
             style={{
+                flexDirection:'column',
+                width:'88%'
+            }}
+            >
+            
+            <View
+            style={{
                 flexDirection:'row',
                 alignItems:'center',
-                paddingHorizontal:10
+             
             }}
             >
                 <Text
@@ -78,9 +86,7 @@ function RenderOrgChannelPost(){
                     @{user.username}
                 </Text>
             </View>
-        
-        </View>
-        <View
+            <View
         style={{
             paddingVertical:10
         }}
@@ -88,7 +94,8 @@ function RenderOrgChannelPost(){
                 <Text
                 style={{
                     color:color_scheme(colorMode,'black'),
-                    fontWeight:'600'
+                    fontWeight:'300',
+                    fontSize:15
                 }}
                 >
 
@@ -117,7 +124,8 @@ This dataset consists of synthetically generated images of clocks with the clock
                         >
                             <Text
                             style={{
-                                color:color_scheme(colorMode,'black')
+                                color:color_scheme(colorMode,'black'),
+                                fontWeight:'800'
                             }}
                             >
                                 1
@@ -155,7 +163,7 @@ This dataset consists of synthetically generated images of clocks with the clock
                         >
                             <Text
                             style={{
-                                color:color_scheme(colorMode,'black')
+                                color:color_scheme(colorMode,'black'),               fontWeight:'800'
                             }}
                             >
                                 1
@@ -189,39 +197,12 @@ This dataset consists of synthetically generated images of clocks with the clock
                         
                     </View>
                 </View>
-                <TouchableOpacity
-                style={{
-                    paddingHorizontal:10,
-                    paddingVertical:10,
-                    borderRadius:10,
-                    backgroundColor:color_scheme(colorMode,'eeee'),
-                  
-                    flexDirection:'row',
-                    alignItems:'center',
-                    justifyContent:'space-between'
-
-                }}
-                >
-                <View
-                style={{
-                    flexDirection:'row',
-                    alignItems:'center'
-                }}
-                >
-                <Ionicons name="ios-return-down-forward" size={24} color={color_scheme(colorMode,'black')} />
-                <Text
-                style={{
-                    marginLeft:10,
-                    color:color_scheme(colorMode,'#333')
-                }}
-                >
-                    Reply
-                </Text>
-                </View>
-                <ArrowRight2 size="18" color={color_scheme(colorMode,'grayy')}/>
-
-                </TouchableOpacity>
+             
             </View>
+            </View>
+        
+        </View>
+      
 
 
         </View>
@@ -310,7 +291,7 @@ export default function OrgChannel({route,navigation}){
             <ScrollView
             style={{
                 flex:1,
-                backgroundColor:color_scheme(colorMode,'white'),
+                backgroundColor:color_scheme(colorMode,'#f5f5f5,'),
                 paddingTop:20
                
 
@@ -332,7 +313,14 @@ export default function OrgChannel({route,navigation}){
                 paddingVertical:15,
                 backgroundColor:color_scheme(colorMode,'white'),
             }}
+            ><View
+            style={{
+                flexDirection:'row'
+            }}
             >
+ 
+    
+
                 <View
                 style={{
                     borderStyle:'solid',
@@ -346,8 +334,9 @@ export default function OrgChannel({route,navigation}){
                     flexDirection:'row',
                     alignItems:'center',
                     justifyContent:'space-between',
-                    paddingVertical:15,
+                    paddingVertical:10,
                     paddingHorizontal:15,
+                    width:'90%'
                  
                     
                     
@@ -370,7 +359,11 @@ export default function OrgChannel({route,navigation}){
                     
                      
            
-                    <Pressable
+             
+                
+                    
+                </View>
+                <Pressable
         onPress={()=>{
      
         }}
@@ -381,6 +374,7 @@ export default function OrgChannel({route,navigation}){
  
             width:40,
             height:40,
+            marginLeft:10,
             flexDirection:'row',
             alignItems:'center',
             justifyContent:'center',
@@ -392,8 +386,6 @@ export default function OrgChannel({route,navigation}){
             <ArrowUp color="white" size={23}/>
 
             </Pressable>
-                
-                    
                 </View>
             </View>
             

@@ -10,7 +10,7 @@ import { FontAwesome5,Ionicons,AntDesign, MaterialIcons,FontAwesome} from '@expo
 import { MessageAdd, MessageAdd1, PenAdd,SearchNormal } from "iconsax-react-native";
 import ChatScreen from "./ChatScreen";
 import { HomeStack } from '../../Home';
-
+import DMMessageViewer from "./ImageViewer";
 const ChatStack = HomeStack
 export default function ChatStacks({navigation,route}) {
  
@@ -28,6 +28,9 @@ export default function ChatStacks({navigation,route}) {
           party_data:party_data
         }} component={ChatScreen}
      
+        />
+          <ChatStack.Screen name='DMMessageViewer' component={DMMessageViewer}
+
         />
       
 

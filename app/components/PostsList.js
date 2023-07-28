@@ -1,7 +1,7 @@
 import React,{useState,useEffect,useContext, useRef}from "react";
 import { View,Text,Dimensions, Image,TouchableOpacity, ScrollView, TextInput, Pressable, Share, ActionSheetIOS, KeyboardAvoidingView, InputAccessoryView, Button} from "react-native";
 import { homestyles } from "../styles";
-import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, MessageText, Link2, Link, MessageText1, Send2, ArrowUp} from 'iconsax-react-native';
+import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, MessageText, Link2, Link, MessageText1, Send2, ArrowUp, Verify} from 'iconsax-react-native';
 import { FontAwesome5,Entypo,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
 import { captureRef, captureScreen } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
@@ -350,8 +350,12 @@ function scaleImageToScreen(imageWidth, imageHeight) {
                     </View>
                     <Pressable style={homestyles.postuserdetails} onPress={()=>navigateToUser()}>
                         <View style={{flexDirection:'row',alignItems:'center'}}>
-                            <Text style={[homestyles.postname,{color:color_scheme(colorMode,'#333')}]}>@{`${userdetails.username}`}</Text>
-                           
+                            <Text style={[homestyles.postname,{color:color_scheme(colorMode,'#333'),marginRight:5}]}>@{`${userdetails.username}`}</Text>
+                            {
+                                userdetails.isofficial &&
+                            
+                            <Verify size="18" color="#1d9bf0" variant="Bold"/>
+                        }
                         </View>
 
         

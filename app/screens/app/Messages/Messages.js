@@ -12,6 +12,8 @@ import { endpoints } from "../../../config/endpoints";
 import { AppContext } from "../../../context/appContext";
 import Spinner from "../../../components/Spinner";
 import { formatMsgDate, removeExcessWhitespace, wrapUIMG } from "../../../utils/utils";
+import { color_scheme } from "../../../config/color_scheme";
+import * as Haptics from 'expo-haptics'
 function RenderCheckMark({stat}){
     //<MaterialCommunityIcons name="account-multiple-check-outline" size={24} color="black" />
     return (
@@ -21,7 +23,7 @@ function RenderCheckMark({stat}){
     )
 }
 export default function MessagesScreen({navigation,route}){
-    const {user} = useContext(AppContext)
+    const {user,colorMode} = useContext(AppContext)
     const [data,setData] = useState(null)
     async function getMsgList(){
         await axios.post(endpoints['fetchmsglist'],{user_id:user.userid}).then(res=>{
@@ -48,7 +50,9 @@ export default function MessagesScreen({navigation,route}){
     },[])
     return (
 
-        <View style={messagestyles.container}>
+        <View style={[messagestyles.container,{
+            backgroundColor:color_scheme(colorMode,'white')
+        }]}>
             <View
             style={{
                 flexDirection:'column'
@@ -59,10 +63,23 @@ export default function MessagesScreen({navigation,route}){
      
             <View style={messagestyles.top}>
                 <View style={{flexDirection:'row',alignItems:'center'}}>
-                    <TouchableOpacity onPress={()=>navigation.goBack()}>
-                        <Ionicons name="chevron-back" size={24} color="black" />
+                    <TouchableOpacity onPress={()=>{
+                       Haptics.impactAsync('medium')
+                        navigation.goBack()}}
+                    style={{
+                        flexDirection:"row",
+                        alignItems:'center',
+                        justifyContent:'center',
+                        height:33,
+                        width:33,
+                        backgroundColor:'#222',
+                        borderRadius:100,
+                        marginRight:10
+                    }}
+                    >
+                        <Ionicons name="chevron-back" size={22} color={color_scheme(colorMode,'black')} />
                     </TouchableOpacity>
-                    <Text style={{marginHorizontal:5,fontSize:20,fontWeight:800}}>
+                    <Text style={{marginHorizontal:5,fontSize:20,fontWeight:800,color:color_scheme(colorMode,'black')}}>
                         Messages
                     </Text>
                 </View>
@@ -72,17 +89,19 @@ export default function MessagesScreen({navigation,route}){
                         marginRight:10
                     }}
                     >
-                    <Edit size="23" color="#333" variant="Broken"/>
+                    <Edit size="23" color={color_scheme(colorMode,'black')} variant="Broken"/>
                     </Pressable>
                 </View>
             </View>
             <View style={{marginVertical:10,paddingHorizontal:10}}>
-            <View style={discoverstyles.searchbox}>
+            <View style={[discoverstyles.searchbox,{backgroundColor:color_scheme(colorMode,'#eee')}]}>
                     <SearchNormal variant="Broken" color="grey" />
-                    <TextInput style={discoverstyles.search}placeholder="Search Messages, Groups, People"/>
+                    <TextInput style={discoverstyles.search}placeholder="Search Messages, Groups, People"
+                                    placeholderTextColor={color_scheme(colorMode,'gray')}
+                    />
             </View>
            
-            <ScrollView
+            {/* <ScrollView
                 horizontal
                 contentContainerStyle={{
                     marginTop:10,
@@ -148,7 +167,7 @@ style={{
 )
                     })}
                    
-                </ScrollView>
+                </ScrollView> */}
             </View>
             </View>
             {
@@ -180,7 +199,7 @@ style={{
                         paddingHorizontal:13,
                         fontSize:20,
                         marginBottom:10,
-                        color:'#333',
+                        color:color_scheme(colorMode,'#333'),
                         fontWeight:'600'
                     }}
                     >
@@ -199,9 +218,9 @@ style={{
                                         alignItems:'center',
                                         justifyContent:'space-between',
                                         width:'100%',
-                                        borderBottomWidth:1,
+                                        borderBottomWidth:0.5,
                                         borderStyle:'solid',
-                                        borderColor:'#eee',
+                                        borderColor:color_scheme(colorMode,'#ddd'),
                                         paddingVertical:11,
                                         paddingHorizontal:13
                                     
@@ -224,8 +243,8 @@ style={{
                                      >
                                     <Image
                                     style={{
-                                        height:55,
-                                        width:55,
+                                        height:50,
+                                        width:50,
                                         borderRadius:100
 
                                     }}
@@ -242,7 +261,7 @@ style={{
                                     >
                                         <Text
                                         style={{
-                                            color:"#333",
+                                            color:color_scheme(colorMode,"#333"),
                                             fontWeight:'400',
                                             fontSize:17,
                                      
@@ -252,9 +271,9 @@ style={{
                                         </Text>
                                         <Text
                                         style={{
-                                            color:'#999',
+                                            color:color_scheme(colorMode,'#777777'),
                                             marginTop:5,
-                                            fontWeight:'3400',
+                                            fontWeight:'400',
                                             paddingLeft:4,
                                             fontSize:16
                                         }}
@@ -274,8 +293,8 @@ style={{
                                     >
                                         <Text
                                         style={{
-                                            fontSize:15,
-                                            color:'#aaa'
+                                            fontSize:13,
+                                            color:color_scheme(colorMode,'#aaa')
                                         }}
                                         >
                                             {formatMsgDate(item.date)}
@@ -313,14 +332,14 @@ style={{
                         paddingHorizontal:13,
                         fontSize:20,
                         marginBottom:10,
-                        color:'#333',
+                        color:color_scheme(colorMode,'#333'),
                         fontWeight:'600'
                     }}
                     >
                         Suggested
                     </Text>
                     </View>
-                    {/* {
+                 {/* {
                      data.suggested &&   
                         data.suggested.map((item,index)=>{
                             console.log(item,'checking for sumn')
@@ -412,7 +431,7 @@ style={{
                                     </TouchableOpacity>
                             )
                         })
-                    } */}
+                    }  */}
 
                 </ScrollView>
             </View>

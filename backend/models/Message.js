@@ -19,6 +19,9 @@ sender_id:{
  msg_urls:{
     type:Array
  },
+ msg_images:{
+   type:Array
+ },
  viewedby:{
 type:Array
  },

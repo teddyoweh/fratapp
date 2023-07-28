@@ -22,7 +22,8 @@ function LoadingScreen(){
     )
 }
 function MapOutPosts({posts,navigation,users,route}){
- const {colorMode} = useContext(AppContext)
+ const {user,colorMode} = useContext(AppContext)
+ 
     return(
 <View
 style={{
@@ -64,6 +65,7 @@ posts.length>0?
 
 
 export default function Feed({navigation,postBottomSheet}){
+ 
     const FeedStacks = createStackNavigator()
     return (
             <FeedStacks.Navigator
@@ -74,7 +76,7 @@ export default function Feed({navigation,postBottomSheet}){
                 }
             }>
 
-                <FeedStacks.Screen name="AllFeed" initialParams={{postBottomSheet:postBottomSheet}} component={AllFeed} />
+                <FeedStacks.Screen name="AllFeed" initialParams={{postBottomSheet:postBottomSheet}} component={AllFeedM} />
                 <FeedStacks.Screen name="AnnouncementFeed" initialParams={{postBottomSheet:postBottomSheet}} component={AnnounmentFeed} />
                 <FeedStacks.Screen name="EventFeed" initialParams={{postBottomSheet:postBottomSheet}} component={EventFeed} />
                 <FeedStacks.Screen name="PostFeed" initialParams={{postBottomSheet:postBottomSheet}}component={PostFeed} />
@@ -85,25 +87,28 @@ export default function Feed({navigation,postBottomSheet}){
     )
 }
 
-function AnnounmentFeed({navigation,postBottomSheet}){
-    return <AllFeed type='announcement'  postBottomSheet={postBottomSheet}  navigation={navigation}/>
+function AnnounmentFeed({navigation,route}){
+    return <AllFeed type='announcement'  postBottomSheet={route.params.postBottomSheet}  navigation={navigation}/>
 }
-function EventFeed({navigation,postBottomSheet}){
-    return <AllFeed type='event' postBottomSheet={postBottomSheet}  navigation={navigation}/>
+function EventFeed({navigation,route}){
+    return <AllFeed type='event' postBottomSheet={route.params.postBottomSheet}  navigation={navigation}/>
 }
-function PostFeed({navigation,postBottomSheet}){
-    return <AllFeed type='post'  postBottomSheet={postBottomSheet}  navigation={navigation}/>
+function PostFeed({navigation,route}){
+    return <AllFeed type='post'  postBottomSheet={route.params.postBottomSheet}  navigation={navigation}/>
 }
-function PollsFeed({navigation,postBottomSheet}){
-    return <AllFeed type='poll'  postBottomSheet={postBottomSheet}  navigation={navigation}/>
+function PollsFeed({navigation,route}){
+    return <AllFeed type='poll'  postBottomSheet={route.params.postBottomSheet}  navigation={navigation}/>
 }
-function OpportunitiesFeed({navigation,postBottomSheet}){
-    return <AllFeed type='opportunity'  postBottomSheet={postBottomSheet}  navigation={navigation}/>
+function OpportunitiesFeed({navigation,route}){
+    return <AllFeed type='opportunity'  postBottomSheet={route.params.postBottomSheet}  navigation={navigation}/>
 }
 
 function AllFeed({navigation,route,type,postBottomSheet}){
  
+ 
+
     
+ 
     const [refreshing, setRefreshing] = React.useState(false);
     const [posts,setPost]  = useState(null)
     const [postData, setPostData] = useState(null)
@@ -182,7 +187,7 @@ postData ?
   
 
     </ScrollView>
-    <MakePost navigation={navigation} setPost={setPostData} postd = {postData} postBottomSheet={ postBottomSheet}/>
+    <MakePost navigation={navigation} setPost={setPostData} postd={postData} postBottomSheet={postBottomSheet}/>
     </View>
  
 )
@@ -190,3 +195,93 @@ postData ?
 }
 
 
+function AllFeedM({navigation,route,type}){
+  
+ 
+       const {postBottomSheet} = route.params
+ 
+ 
+    const [refreshing, setRefreshing] = React.useState(false);
+    const [posts,setPost]  = useState(null)
+    const [postData, setPostData] = useState(null)
+    const [users,setUsers] = useState(null)
+ 
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
+    }, []);
+ 
+
+
+
+async function loadPosts(){
+ 
+    await axios.post(endpoints['getposts'],{cursor:null}).then(res=>{
+        setPostData(res.data)
+   
+        
+      
+    
+         
+    })
+
+}
+const MemoizedMapOutPosts = React.memo(MapOutPosts);
+
+const memoizedLoadPosts = useCallback(async () => {
+    const res = await axios.post(endpoints['getposts'], { cursor: null });
+ 
+    setPostData(res.data);
+}, []);
+  
+//   useEffect(() => {
+//     memoizedLoadPosts()
+//   }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+        memoizedLoadPosts()
+ 
+    }, [])
+  );
+
+  const {colorMode} = useContext(AppContext)
+  
+return (
+  
+
+  <View
+  style={{
+    backgroundColor:color_scheme(colorMode,'white'),
+    flex:1,
+    height:'100%'
+  }}
+  >
+
+
+    <ScrollView  contentContainerStyle={[homestyles.postcontainer,{
+        backgroundColor:color_scheme(colorMode,'white')
+    }]}
+       scrollsToTop={true} 
+       showsVerticalScrollIndicator={false}    
+       //alwaysBounceVertical={true}
+    refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={()=>loadPosts()} />
+      }>
+ 
+{
+postData ?
+
+<MemoizedMapOutPosts posts={postData.posts} navigation={navigation} route={route}  users={postData.users} />
+
+: <Loading />}
+  
+
+    </ScrollView>
+    <MakePost navigation={navigation} setPost={setPostData} postd={postData} postBottomSheet={postBottomSheet}/>
+    </View>
+ 
+)
+
+}

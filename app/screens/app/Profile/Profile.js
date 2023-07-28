@@ -9,12 +9,15 @@ import ProfileActionbtn from "../../../components/ProfileActionbtn";
 import { AppContext } from "../../../context/appContext";
 import ProfilePosts from "../../../components/ProfilePosts";
 import { wrapUIMG } from "../../../utils/utils";
+import { color_scheme } from "../../../config/color_scheme";
 export default function ProfileScreen({navigation}){
-    const {user} = useContext(AppContext)
+    const {user,colorMode} = useContext(AppContext)
     const [filters,setFilters]=useState(['All','Posts','Polls','Media','Info','Tagged'])
     const [activeFilter,setActiveFilter]=useState('All')
     return (
-        <View style={profilestyles.container}>
+        <View style={[profilestyles.container,{
+            backgroundColor:color_scheme(colorMode,'white')
+        }]}>
             <View style={profilestyles.settingstop}>
                 <TouchableOpacity style={profilestyles.settingstopitem} onPress={()=>navigation.navigate('Settings')} >
                 <EvilIcons name="gear" size={30} color="black" />
@@ -31,7 +34,9 @@ export default function ProfileScreen({navigation}){
 
                         </View>
                         <View style={profilestyles.profiledetailssec}>
-                            <View style={{flexDirection:'row',alignItems:'center'}}><Text style={profilestyles.profilename}>{`${user.firstname} ${user.lastname}`}</Text>
+                            <View style={{flexDirection:'row',alignItems:'center'}}><Text style={[profilestyles.profilename,{
+                                color:color_scheme(colorMode,'black')
+                            }]}>{`${user.firstname} ${user.lastname}`}</Text>
                         <Text style={profilestyles.profileusername}>{`@${user.username}`}</Text></View>
                 
                        
@@ -49,21 +54,13 @@ export default function ProfileScreen({navigation}){
 
                     </View>
                     <View style={profilestyles.profilebio}>
-                        <Text style={profilestyles.profilebiotxt}>
+                        <Text style={[profilestyles.profilebiotxt,{
+                            color:color_scheme(colorMode,'black')
+                        }]}>
                           {user.bio}
                         </Text>
                     </View>
-                    <View style={profilestyles.profileorgs}>
-                    <View style={profilestyles.profileorg}>
-                            <Image source={require('../../../assets/tcs.png')} style={profilestyles. profileorglogo}/>
-                                    <Text style={[profilestyles.profileorgtxt,{color:'#502d81'}]}>Tarleton Computer Society (TCS)</Text>
-                        </View>
-                        <View style={profilestyles.profileorg}>
-                            <Image source={require('../../../assets/farmhouse.png')} style={profilestyles. profileorglogo}/>
-                                    <Text style={profilestyles.profileorgtxt}>FarmHouse (FH)</Text>
-                        </View>
-                       
-                    </View>
+                 
                     
                     
                     {/* <View style={profilestyles.profilesocials}>
@@ -108,7 +105,9 @@ export default function ProfileScreen({navigation}){
                         filters.map((filter,index)=>{
                             return(
                                 <TouchableOpacity key={index} style={activeFilter==filter?profilestyles.postfiltera:profilestyles.postfilter} onPress={()=>setActiveFilter(filter)}>
-                                <Text style={activeFilter==filter?profilestyles.postfiltertxta:profilestyles.postfiltertxt}>
+                                <Text style={activeFilter==filter?[profilestyles.postfiltertxta,{
+                                    color:color_scheme(colorMode,'black')
+                                }]:[profilestyles.postfiltertxt]}>
                                    {filter}</Text>
                                </TouchableOpacity>
                             )

@@ -13,8 +13,7 @@ import { endpoints } from "../../../config/endpoints";
 import * as ImagePicker from 'expo-image-picker';
 import {Dimensions} from 'react-native';
 import { color_scheme } from "../../../config/color_scheme";
-
-
+import AudioRecorderPlayerComponent from "../../../components/Audio";
 function LinkInputBox({addLinks}){
     const [link,setLink] = useState('')
     function add(){
@@ -312,10 +311,11 @@ const addImage = async () => {
 //     checkForCameraRollPermission()
 //   }, []);
 const {colorMode} = useContext(AppContext)
+console.log(postBottomSheet)
 return (
     <BottomSheet   ref={postBottomSheet} height={Dimensions.get('screen').height-150}
-    
     >
+        <AudioRecorderPlayerComponent/>
         <KeyboardAvoidingView
         style={{
             backgroundColor:color_scheme(colorMode,'white'),

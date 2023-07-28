@@ -14,6 +14,7 @@ const messages = require('./routes/messages');
 const calendar = require('./routes/calendar');
 const orgs = require('./routes/orgs');
 const discover = require('./routes/discover');
+const studyhours = require('./routes/studyhours')
 const ModDB = require('./services/db-mod');
 
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
@@ -51,6 +52,7 @@ if (cluster.isMaster) {
   app.use('/api/calendar', calendar);
   app.use('/api/orgs', orgs);
   app.use('/api/messages', messages);
+  app.use('/api/studyhours',studyhours)
 
   app.use('/images', express.static(__dirname + '/uploads'));
   app.use('/images/assets', express.static(__dirname + '/assets/imgs'));

@@ -32,6 +32,9 @@ const endpoints = {
     'majorslist':`${serverip}/api/discover/fetchmajors`,
     'courselist':`${serverip}/api/discover/fetchcourses`,
     'joincourse':`${serverip}/api/discover/joincourse`,
+    'discoverpeople':`${serverip}/api/discover/people`,
+    'discoverorgs':`${serverip}/api/discover/orgs`,
+    
 
     'fetchmsglist':`${serverip}/api/messages/msglist`,
     'fetchmsgs':`${serverip}/api/messages/fetch`,
@@ -42,8 +45,6 @@ const endpoints = {
     'getcalendar':`${serverip}/api/calendar/getcalendar`,
     'getcalendarevents':`${serverip}/api/calendar/getcalendarevents`,
 
-    'discoverpeople':`${serverip}/api/discover/people`,
-    'discoverorgs':`${serverip}/api/discover/orgs`,
     'createorg':`${serverip}/api/orgs/create`,
     'getorg':`${serverip}/api/orgs/getorg`,
     'getorgs':`${serverip}/api/orgs/getorgs`,
@@ -51,6 +52,9 @@ const endpoints = {
     'make_org_post':`${serverip}/api/orgs/make_post`,
     'get_org_posts':`${serverip}/api/orgs/get_posts`,
     'create_cohort':`${serverip}/api/orgs/create_cohort`,
+
+    'create_studyhours':`${serverip}/api/studyhours/create`
+
 
 }
 

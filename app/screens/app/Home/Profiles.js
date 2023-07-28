@@ -9,16 +9,19 @@ import ProfileActionbtn from "../../../components/ProfileActionbtn";
 import { AppContext } from "../../../context/appContext";
 import ProfilePosts from "../../../components/ProfilePosts";
 import { wrapUIMG } from "../../../utils/utils";
+import { color_scheme } from "../../../config/color_scheme";
 export default function ProfilesScreen({navigation,route}){
-    const {user} = useContext(AppContext)
+    const {user,colorMode} = useContext(AppContext)
     const [filters,setFilters]=useState(['All','Posts','Polls','Media','Info','Tagged'])
     const [activeFilter,setActiveFilter]=useState('All')
     const {userdetails} = route.params
-    console.log(userdetails)
+    
 
 
     return (
-        <View style={profilestyles.container}>
+        <View style={[profilestyles.container,{
+            backgroundColor:color_scheme(colorMode,'white')
+        }]}>
             <View style={{
                 flexDirection:'row',
                 alignItems:'flex-start',
@@ -44,7 +47,9 @@ export default function ProfilesScreen({navigation,route}){
 
                         </View>
                         <View style={profilestyles.profiledetailssec}>
-                            <View style={{flexDirection:'row',alignItems:'center'}}><Text style={profilestyles.profilename}>{`${userdetails.firstname} ${userdetails.lastname}`}</Text>
+                            <View style={{flexDirection:'row',alignItems:'center'}}><Text style={[profilestyles.profilename,{
+                                              color:color_scheme(colorMode,'black')
+                            }]}>{`${userdetails.firstname} ${userdetails.lastname}`}</Text>
                         <Text style={profilestyles.profileusername}>{`@${userdetails.username}`}</Text></View>
                         
                        
@@ -62,7 +67,9 @@ export default function ProfilesScreen({navigation,route}){
 
                     </View>
                     <View style={profilestyles.profilebio}>
-                        <Text style={profilestyles.profilebiotxt}>
+                        <Text style={[profilestyles.profilebiotxt,{
+                            color:color_scheme(colorMode,'black')
+                        }]}>
                           {userdetails.bio}
                         </Text>
                     </View>

@@ -1,7 +1,7 @@
 import React,{useState,useContext,useRef, useEffect}from "react";
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,  RefreshControl} from "react-native";
 import { homestyles } from "../../../styles";
-import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Add, Send2, Messenger} from 'iconsax-react-native';
+import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Add, Send2, Messenger, Verify} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
 import { AppContext } from "../../../context/appContext";
 import LikeBtn from "../../../components/LikeBtn";
@@ -13,6 +13,7 @@ import Spinner from "../../../components/Spinner";
 import { setupNotifications } from "../../../config/setup";
 import { color_scheme } from "../../../config/color_scheme";
 import { BlurView } from "expo-blur";
+import * as Haptics from 'expo-haptics'
 
 export default function HomeScreen({navigation}){
     const filters = ['For You','Announments','Events','Posts','Polls','Opportunities']
@@ -76,10 +77,16 @@ export default function HomeScreen({navigation}){
                 <View style={homestyles.toptop}>
                    <View style={homestyles.topleft}>
                         <Image source={{uri:wrapUIMG(user.uimg)}} style={homestyles.topuserimg}/>
-                        <View style={homestyles.topuser}>
-                            <Text style={[homestyles.topusername,{color:color_scheme(colorMode,'#333')}]}>{`${user.firstname} ${user.lastname}`}</Text>
-                            
+                        <View style={{
+                            flexDirection:'row',
+                            alignItems:'center'
+                        }}>
+                            <Text style={[homestyles.topusername,{color:color_scheme(colorMode,'#333'),marginRight:5}]}>{`${user.firstname} ${user.lastname}`}</Text>
+                            {
+                                user.isofficial &&
                            
+                            <Verify size="18" color="#1d9bf0" variant="Bold"/>
+                        }
                         </View>
 
                    
@@ -126,7 +133,9 @@ export default function HomeScreen({navigation}){
         <Feed  navigation={navigation} postBottomSheet={postBottomSheet} />
        
             <View style={homestyles.postbtndiv}>
-                <TouchableOpacity style={homestyles.postbtn} onPress={()=>postBottomSheet.current.show()}> 
+                <TouchableOpacity style={homestyles.postbtn} onPress={()=>{
+                    Haptics.impactAsync('medium')
+                    postBottomSheet.current.show()}}> 
                 <Add color="white" variant="Broken" size={42} />
                 {/* <Text style={homestyles.postbtntext}>New Post</Text> */}
                 </TouchableOpacity>
@@ -135,7 +144,9 @@ export default function HomeScreen({navigation}){
 
           
         </View>
+        
             }
+            
         </>
     )
 }

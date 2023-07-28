@@ -3,6 +3,22 @@ const User = require('../models/User')
 const Membership = require('../models/Memberships')
 const Message = require('../models/Message')
 const Links = require('../models/Links')
+const crypto = require('crypto');
+
+var fs = require('fs');
+function hashcode(data){
+    
+    const hash = crypto.createHash('sha256');
+    
+    hash.update(data);
+    const hashedData = hash.digest('hex');
+    
+    return hashedData
+     }
+     function hashfilename(filename,email,randomNumberString1){
+     
+        return hashcode(hashcode(filename)+hashcode(hashcode(email)+hashcode(randomNumberString1)))+'.jpeg';
+     }
 function fetchmessagescontroller(req, res) {
  
 
@@ -27,12 +43,24 @@ function fetchmessagescontroller(req, res) {
 
 
 async function sendmessagescontroller(req,res){
+  const images = []
+     console.log(req.body)
+ if(req.body.images){
+
+
+  req.body.images.map((image,index)=>{
+      images.push({uri:hashfilename(image.uri,req.body.email,req.body.random),width:image.width,height:image.height})
+
+  })
+}
    const newMessage = new Message({
       sender_id:req.body.user_id,
       receiver_id:req.body.receiver_id,
       content:req.body.text,
       msg_type:req.body.msg_type,
-      receiver_type:req.body.receiver_type
+      receiver_type:req.body.receiver_type,
+      msg_images:images
+
 
     })
      const mes =  await newMessage.save()
@@ -60,8 +88,13 @@ async function getContactList(userId) {
   for (let i = 0; i < messages.length; i++) {
   const message = messages[i];
   const counterpartId = message.sender_id === userId ? message.receiver_id : message.sender_id;
+  if(counterpartId){
+
+  
   if (!processedUsers.includes(counterpartId)) {
     const userInfo = await User.findById(counterpartId);
+
+    
     const { firstname, lastname, isofficial, uimg, username } = userInfo;
   
     latestMessages.push({
@@ -77,13 +110,14 @@ async function getContactList(userId) {
     });
   
     processedUsers.push(counterpartId);
-  }
+  }}
   }
   return latestMessages;
 
 }  
 async function messageListController(req,res){
   const {user_id} = req.body
+  
     const contactLict = await getContactList(user_id)
   const suggested = await getSuggested(user_id)
 

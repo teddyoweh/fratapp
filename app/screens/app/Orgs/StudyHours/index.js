@@ -25,7 +25,7 @@ function StudyHoursStacks({navigation,route}) {
         <StudyHourStack.Screen name='StudyHoursScreen' component={StudyHours}
         initialParams={{orgid,orgdt,orgdata,org}}
         />
-        <StudyHourStack.Screen name='Create Study Hours' component={CreateStudyHours}/>
+        <StudyHourStack.Screen name='CreateStudyHours' component={CreateStudyHours}/>
  
 
        
