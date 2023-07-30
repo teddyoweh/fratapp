@@ -5,27 +5,24 @@ const authstyles = StyleSheet.create({
  
     container:{
         flex: 1,
-        backgroundColor: '#fff',
+ 
         flexDirection:'column',
         justifyContent:'space-between'
     },
     logobox:{
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:'#fff',
+       
         height:'80%',
 
     },
 
-    logo:{
-        width: 500,
-        height:500,
-    },
+    
     btnsbox:{
         height:'20%',
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:'white',
+ 
     },
     landingbtn:{
         alignItems:'center',
@@ -48,7 +45,7 @@ const authstyles = StyleSheet.create({
         marginBottom:10,
         paddingHorizontal:20,
         paddingVertical:20,
-        backgroundColor:'white',
+ 
         borderRadius:30,
         width:'70%'
 
@@ -62,7 +59,7 @@ const authstyles = StyleSheet.create({
     authcontainer:{
         flex:1,
         flexDirection:'column',
-        backgroundColor:'white'
+       
     },
     // authlogobx:{
     //     height:'60%'
@@ -91,7 +88,7 @@ const authstyles = StyleSheet.create({
         borderStyle:'solid',
         borderWidth:1,
         borderRadius:10,
-        borderColor:'#e0e0e0',
+ 
     },
     formtxt:{
         color:'#666',
