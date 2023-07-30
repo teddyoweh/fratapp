@@ -33,6 +33,7 @@ import { endpoints } from "../../../config/endpoints";
 import { AuthContext } from "../../../context/authContext";
 import { AppContext } from "../../../context/appContext";
 import  { getData,getJSONData,storeData,storeJSONData } from "../../../utils/storage";
+import { color_scheme } from "../../../config/color_scheme";
 function borderError(error){
 if(error==false){
   return {borderColor:'#FF4136'}
@@ -191,9 +192,19 @@ function RegisterPage({navigation}) {
   
 
   }
-  return (
+
+  const {colorMode} = useContext(AppContext)
+  const applogo = colorMode=='dark'?require('../../../assets/union-black.png'):require('../../../assets/union.png')
+  const logostyle  = colorMode=='dark'?{      width: 150,
+      height:150}:{
+          width:500,
+          height:500,
+      }
+  return ( 
     <KeyboardAvoidingView
-      style={authstyles.authcontainer}
+ style={[authstyles.container,{
+      backgroundColor:color_scheme(colorMode,'white')
+  }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View style={{ paddingHorizontal: 10 }}>
@@ -203,14 +214,19 @@ function RegisterPage({navigation}) {
       </View>
       <ScrollView>
         <View style={authstyles.authlogobx}>
-          <Image style={authstyles.authlogo} source={require("../../../assets/union.png")} />
+          <Image style={logostyle} source={applogo} />
         </View>
 
         <View style={authstyles.formbx}>
           <View style={authstyles.formgrp}>
-            <Text style={authstyles.formtxt}>First Name</Text>
-            <View style={[authstyles.forminput,{flexDirection:'row',alignItems:'center'},borderError(firstnameerror)]}>
-            <TextInput style={{width:'95%'}}
+            <Text style={[authstyles.formtxt,
+            {
+              color:color_scheme(colorMode,"#222")
+            }
+            ]}>First Name</Text>
+            <View style={[authstyles.forminput,{borderColor:color_scheme(colorMode,'#eee'),flexDirection:'row',alignItems:'center'},borderError(firstnameerror)]}>
+            <TextInput  style={{width:'95%',color:color_scheme(colorMode,'black')}}
+                  keyboardAppearance={colorMode}
                autoCapitalize='none'
                autoComplete="given-name"
                autoCorrect={false}
@@ -230,15 +246,20 @@ function RegisterPage({navigation}) {
           </View>
 
           <View style={authstyles.formgrp}>
-            <Text style={authstyles.formtxt}>Last Name</Text>
-            <View style={[authstyles.forminput,{flexDirection:'row',alignItems:'center'},borderError(lastnameerror)]}>
-            <TextInput style={{width:'95%'}}
+            <Text style={[authstyles.formtxt,
+            {
+              color:color_scheme(colorMode,"#222")
+            }
+            ]}>Last Name</Text>
+            <View style={[authstyles.forminput,{borderColor:color_scheme(colorMode,'#eee'), flexDirection:'row',alignItems:'center'},borderError(lastnameerror)]}>
+            <TextInput style={{width:'95%',color:color_scheme(colorMode,'black')}}
+                  keyboardAppearance={colorMode}
             autoCapitalize="none"
             autoCorrect={false}
             autoComplete="family-name"
             inputMode="text"
             onChangeText={(text) => setLastName(text)}
-
+      
             placeholder="" />
             {lastnameerror!=null &&
              <InputStatusIcon state={lastnameerror}/>            }
@@ -251,9 +272,14 @@ function RegisterPage({navigation}) {
           </View>
           
           <View style={authstyles.formgrp}>
-            <Text style={authstyles.formtxt}>Username</Text>
-            <View style={[authstyles.forminput,{flexDirection:'row',alignItems:'center'},borderError(usernameerror)]}>
-            <TextInput style={{width:'95%'}}
+            <Text style={[authstyles.formtxt,
+            {
+              color:color_scheme(colorMode,"#222")
+            }
+            ]}>Username</Text>
+            <View style={[authstyles.forminput,{borderColor:color_scheme(colorMode,'#eee'),flexDirection:'row',alignItems:'center'},borderError(usernameerror)]}>
+            <TextInput  style={{width:'95%',color:color_scheme(colorMode,'black')}}
+                  keyboardAppearance={colorMode}
             autoCapitalize="none"
             autoCorrect={false}
             autoComplete="username"
@@ -275,10 +301,15 @@ function RegisterPage({navigation}) {
 
    
           <View style={authstyles.formgrp}>
-            <Text style={authstyles.formtxt}
+            <Text style={[authstyles.formtxt,
+            {
+              color:color_scheme(colorMode,"#222")
+            }
+            ]}
             >Email</Text>
-                        <View style={[authstyles.forminput,{flexDirection:'row',alignItems:'center',}, borderError(emailerror)]}>
-            <TextInput  style={{width:'95%'}}
+                        <View style={[authstyles.forminput,{borderColor:color_scheme(colorMode,'#eee'),flexDirection:'row',alignItems:'center',}, borderError(emailerror)]}>
+            <TextInput   style={{width:'95%',color:color_scheme(colorMode,'black')}}
+                  keyboardAppearance={colorMode}
             autoCapitalize="none"
             autoCorrect={false}
             autoComplete="email"
@@ -297,9 +328,13 @@ function RegisterPage({navigation}) {
             }
           </View>
           <View style={authstyles.formgrp}>
-            <Text style={authstyles.formtxt}>Password</Text>
+            <Text style={[authstyles.formtxt,
+            {
+              color:color_scheme(colorMode,"#222")
+            }
+            ]}>Password</Text>
             
-            <View style={[authstyles.forminput,{flexDirection:'row',alignItems:'center',},borderError(passworderror)]}>
+            <View style={[authstyles.forminput,{borderColor:color_scheme(colorMode,'#eee'),flexDirection:'row',alignItems:'center',},borderError(passworderror)]}>
 
     
             <TextInput style={{width:passworderror!=null?'85%':'95%'}}

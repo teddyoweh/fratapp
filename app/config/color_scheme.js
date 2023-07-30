@@ -19,7 +19,7 @@ const color_hashmap = {
     'eee':'#1c1d1f',
     'eeee':'#323335',
     '#939496':'#939496',
- 
+    '#222':'#eee'
 }
 const color_scheme = (mode,color)=>{
     if(mode=='light'){

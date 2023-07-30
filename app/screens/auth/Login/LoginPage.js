@@ -33,6 +33,7 @@ import { endpoints } from "../../../config/endpoints";
 import { AuthContext } from "../../../context/authContext";
 import { AppContext } from "../../../context/appContext";
 import  { getData,getJSONData,storeData,storeJSONData } from "../../../utils/storage";
+import { color_scheme } from "../../../config/color_scheme";
 
 function InputStatusIcon({state}){
     if(!state){
@@ -157,23 +158,36 @@ function LoginPage({navigation}){
           
         
           }
+
+          const {colorMode} = useContext(AppContext)
+  const applogo = colorMode=='dark'?require('../../../assets/union-black.png'):require('../../../assets/union.png')
+  const logostyle  = colorMode=='dark'?{      width: 150,
+      height:150}:{
+          width:500,
+          height:500,
+      }
     return (
-        <View style={authstyles.authcontainer}>
+        <View style={[authstyles.authcontainer,{backgroundColor:color_scheme(colorMode,'white')}]}>
             <View style={{paddingHorizontal:10}}>
                 <TouchableOpacity onPress={()=>{navigation.goBack()}}>
                 <Ionicons name="chevron-back" size={24} color="#666" />
                 </TouchableOpacity>
             </View>
             <View style={authstyles.authlogobx}>
-                <Image style={authstyles.authlogo} source={require('../../../assets/union.png')}/>
+            <Image style={logostyle} source={applogo} /> 
             </View>
             <View style={authstyles.formbx}>
          
             <View style={authstyles.formgrp}>
-            <Text style={authstyles.formtxt}
+            <Text style={[authstyles.formtxt,
+            {
+              color:color_scheme(colorMode,"#222")
+            }
+            ]}
             >Email</Text>
-                        <View style={[authstyles.forminput,{flexDirection:'row',alignItems:'center',}, borderError(emailerror)]}>
-            <TextInput  style={{width:'95%'}}
+                        <View style={[authstyles.forminput,{borderColor:color_scheme(colorMode,'#eee'),flexDirection:'row',alignItems:'center',}, borderError(emailerror)]}>
+            <TextInput   style={{width:'95%',color:color_scheme(colorMode,'black')}}
+                  keyboardAppearance={colorMode}
             autoCapitalize="none"
             autoCorrect={false}
             autoComplete="email"
@@ -192,12 +206,17 @@ function LoginPage({navigation}){
             }
           </View>
           <View style={authstyles.formgrp}>
-            <Text style={authstyles.formtxt}>Password</Text>
+            <Text style={[authstyles.formtxt,
+            {
+              color:color_scheme(colorMode,"#222")
+            }
+            ]}>Password</Text>
             
-            <View style={[authstyles.forminput,{flexDirection:'row',alignItems:'center',},borderError(passworderror)]}>
+            <View style={[authstyles.forminput,{borderColor:color_scheme(colorMode,'#eee'),flexDirection:'row',alignItems:'center',},borderError(passworderror)]}>
 
     
-            <TextInput style={{width:passworderror!=null?'85%':'95%'}}
+            <TextInput style={{width:passworderror!=null?'85%':'95%',color:color_scheme(colorMode,'black')}}
+                  keyboardAppearance={colorMode}
              autoCapitalize="none"
              autoCorrect={false}
              secureTextEntry={!viewpass}
