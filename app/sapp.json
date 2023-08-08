@@ -7,10 +7,11 @@
     "icon": "./assets/HERDS-icon.png",
     "userInterfaceStyle": "dark",
     "splash": {
-      "image": "./assets/HERDS-SPLASH.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#111111"
-   
+      "image": "./assets/HERDS.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#000000",
+      "width": 50,
+      "height": 50
       
       
     },
@@ -34,7 +35,7 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/HERDS-icon.png",
+          "icon": "./assets/HERDS.png",
           "color": "#000000"
         }
       ],
@@ -49,6 +50,9 @@
       "eas": {
         "projectId": "956a2e0d-852f-4ac7-b345-5f0bfaee86a8"
       }
+    },
+    "ios": {
+      "bundleIdentifier": "com.teddyoweh.unionapp"
     }
   }
 }

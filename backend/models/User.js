@@ -25,7 +25,7 @@ const userSchema = new Schema({
         
     },
     schools:{
-        type:Array
+        type: Array
     },
     orgs:{
         type:Array

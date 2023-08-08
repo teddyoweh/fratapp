@@ -1,7 +1,7 @@
 import React,{useState,useContext}from "react";
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput} from "react-native";
 import { homestyles,profilestyles } from "../../../styles";
-import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Profile, MessageText1, CloudLightning, MessageAdd, MessageQuestion, MessageText} from 'iconsax-react-native';
+import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Profile, MessageText1, CloudLightning, MessageAdd, MessageQuestion, MessageText, DirectInbox} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons,EvilIcons,Entypo} from '@expo/vector-icons';
 
 import PostsList from "../../../components/PostsList";
@@ -32,9 +32,23 @@ export default function ProfilesScreen({navigation,route}){
                 paddingBottom:15,
                 width:'100%'
             }}>
-            <TouchableOpacity onPress={()=>navigation.goBack()}>
-                        <Ionicons name="chevron-back" size={24} color="black" />
-                    </TouchableOpacity>
+       <TouchableOpacity onPress={()=>{
+                       Haptics.impactAsync('medium')
+                        navigation.goBack()}}
+                    style={{
+                        flexDirection:"row",
+                        alignItems:'center',
+                        justifyContent:'center',
+                        height:33,
+                        width:33,
+                        backgroundColor:'#222',
+                        borderRadius:100,
+                        marginRight:10
+                    }}
+                    >
+            <Ionicons name="chevron-back-outline" size={24} color={color_scheme(colorMode,'black')} />
+            </TouchableOpacity>
+        
             </View>
             <ScrollView>
 
@@ -73,17 +87,7 @@ export default function ProfilesScreen({navigation,route}){
                           {userdetails.bio}
                         </Text>
                     </View>
-                    <View style={profilestyles.profileorgs}>
-                    <View style={profilestyles.profileorg}>
-                            <Image source={require('../../../assets/tcs.png')} style={profilestyles. profileorglogo}/>
-                                    <Text style={[profilestyles.profileorgtxt,{color:'#502d81'}]}>Tarleton Computer Society (TCS)</Text>
-                        </View>
-                        <View style={profilestyles.profileorg}>
-                            <Image source={require('../../../assets/farmhouse.png')} style={profilestyles. profileorglogo}/>
-                                    <Text style={profilestyles.profileorgtxt}>FarmHouse (FH)</Text>
-                        </View>
-                       
-                    </View>
+             
                     
                     
                     {/* <View style={profilestyles.profilesocials}>
@@ -128,7 +132,7 @@ export default function ProfilesScreen({navigation,route}){
                                 })
                             }}
                             >
-                                <MessageText1 variant="Bulk" color="#a330d0"/>
+                                <DirectInbox variant="Bulk" color="#777"/>
                             </TouchableOpacity>
                         </View>
                 </View>
@@ -138,8 +142,8 @@ export default function ProfilesScreen({navigation,route}){
                     {
                         filters.map((filter,index)=>{
                             return(
-                                <TouchableOpacity key={index}style={activeFilter==filter?profilestyles.postfiltera:profilestyles.postfilter} onPress={()=>setActiveFilter(filter)}>
-                                <Text style={activeFilter==filter?profilestyles.postfiltertxta:profilestyles.postfiltertxt}>
+                                <TouchableOpacity key={index}style={activeFilter==filter?[profilestyles.postfiltera,{borderColor:color_scheme(colorMode,'black')}]:profilestyles.postfilter} onPress={()=>setActiveFilter(filter)}>
+                                <Text style={activeFilter==filter?[profilestyles.postfiltertxta,{color:color_scheme(colorMode,'black')}]:profilestyles.postfiltertxt}>
                                    {filter}</Text>
                                </TouchableOpacity>
                             )

@@ -1,18 +1,15 @@
 {
   "expo": {
-    "name": "HERDS",
-    "slug": "unionapp",
+    "name": "union",
+    "slug": "union",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/HERDS-icon.png",
+    "icon": "./assets/union.png",
     "userInterfaceStyle": "dark",
     "splash": {
-      "image": "./assets/HERDS-SPLASH.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#111111"
-   
-      
-      
+      "image": "./assets/union.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -24,18 +21,18 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#000000"
+        "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "favicon": "./assets/HERDS.png"
+      "favicon": "./assets/favicon.png"
     },
     "plugins": [
       [
         "expo-notifications",
         {
-          "icon": "./assets/HERDS-icon.png",
-          "color": "#000000"
+          "icon": "./assets/union.png",
+          "color": "#ffffff"
         }
       ],
       [
@@ -47,7 +44,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "956a2e0d-852f-4ac7-b345-5f0bfaee86a8"
+        "projectId": "07d2db23-adcf-49e2-999d-73f9802db499"
       }
     }
   }

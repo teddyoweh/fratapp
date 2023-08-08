@@ -315,28 +315,70 @@ console.log(postBottomSheet)
 return (
     <BottomSheet   ref={postBottomSheet} height={Dimensions.get('screen').height-150}
     >
-        <AudioRecorderPlayerComponent/>
+        {/* <AudioRecorderPlayerComponent/> */}
         <KeyboardAvoidingView
         style={{
             backgroundColor:color_scheme(colorMode,'white'),
-            height:'100%'
+            flexDirection:'column',
+            justifyContent:'space-between',
+            height:'95%'
         }}
         >
 
 
-        <ScrollView
+        {/* <ScrollView
               keyboardShouldPersistTaps="always"
                 keyboardDismissMode="on-drag"
                 style={{
-                  height:'100%'
+                  height:'50%',
+                  
                 }}
-              >
+                contentContainerStyle={{
+                  
+                }}
+              > */}
 
-<View style={{flexDirection:'column',flex:1}}>
+ 
 
 
 
         <View style={{flexDirection:'column',paddingBottom:0}}>
+      
+            <View style={{paddingHorizontal:10}}>
+                <TextInput placeholder="Share your thoughts"
+                multiline={true}
+                autoFocus={true}
+                onChangeText={(text)=>setPostInput(text)}
+                placeholderTextColor={color_scheme(colorMode,'black')}
+                style={{
+                    // backgroundColor:'#E8E8E8',
+                    padding:10,
+                    paddingTop:20,
+                    borderRadius:10,
+                    width:'99%',
+                    fontWeight:'400',
+                    fontSize:17,
+                    // height:200,
+                    color:color_scheme(colorMode,'black')
+             
+                }}
+                />
+
+                {linkStore.length>0&& 
+                <LinkBox links={linkStore} removeLinks={removeLinks}/>
+                }
+            </View>
+            <View style={{paddingHorizontal:10}}>
+                <RenderImages images={images} setImages={setImages}/>
+            </View>
+
+      
+
+
+          
+      
+        </View>
+    
         <View style={{paddingHorizontal:10,flexDirection:'row', justifyContent:'space-between', paddingTop:8}}>
                 <View style={{paddingHorizontal:10,flexDirection:'row',justifyContent:'space-between',width:'78%'}}>
 
@@ -380,40 +422,8 @@ return (
             </Pressable>
                 </View>
             </View>
-            <View style={{paddingHorizontal:10}}>
-                <TextInput placeholder="Share your thoughts"
-                multiline={true}
-                autoFocus={true}
-                onChangeText={(text)=>setPostInput(text)}
-                placeholderTextColor={color_scheme(colorMode,'black')}
-                style={{
-                    // backgroundColor:'#E8E8E8',
-                    padding:10,
-                    paddingTop:20,
-                    borderRadius:10,
-                    width:'99%',
-                    fontWeight:'400',
-                    fontSize:17,
-                    // height:200,
-                    color:color_scheme(colorMode,'black')
-             
-                }}
-                />
-
-                {linkStore.length>0&& 
-                <LinkBox links={linkStore} removeLinks={removeLinks}/>
-                }
-            </View>
-            <View style={{paddingHorizontal:10}}>
-                <RenderImages images={images} setImages={setImages}/>
-            </View>
-
-
-          
-      
-        </View>
-        </View>
-        </ScrollView>
+        {/* </ScrollView> */}
+   
         <View>
 
 

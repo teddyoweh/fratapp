@@ -16,7 +16,7 @@ import { BlurView } from "expo-blur";
 import * as Haptics from 'expo-haptics'
 
 export default function HomeScreen({navigation}){
-    const filters = ['For You','Announments','Events','Posts','Polls','Opportunities']
+    const filters = ['For You','Announments','Events','Polls']//'Posts','Polls','Opportunities'
     const [activeFilter,setActiveFilter]=useState('For You')
     const {user} = useContext(AppContext)
     const postBottomSheet = useRef()
@@ -76,7 +76,12 @@ export default function HomeScreen({navigation}){
             <View style={homestyles.top}>
                 <View style={homestyles.toptop}>
                    <View style={homestyles.topleft}>
-                        <Image source={{uri:wrapUIMG(user.uimg)}} style={homestyles.topuserimg}/>
+                    <Image source={require('../../../assets/HERDS-Landing.png')} style={{
+                    height:50,
+                    width:150,resizeMode:'contain'
+                    
+                    }}/>
+                        {/* <Image source={{uri:wrapUIMG(user.uimg)}} style={homestyles.topuserimg}/>
                         <View style={{
                             flexDirection:'row',
                             alignItems:'center'
@@ -87,7 +92,7 @@ export default function HomeScreen({navigation}){
                            
                             <Verify size="18" color="#1d9bf0" variant="Bold"/>
                         }
-                        </View>
+                        </View> */}
 
                    
                     </View>
@@ -119,6 +124,10 @@ export default function HomeScreen({navigation}){
                             )
                         })
                     }
+                      <TouchableOpacity style={[homestyles.filtera,{backgroundColor:color_scheme(colorMode,'#eee'),borderStyle:'dashed',borderColor:'#666',borderWidth:1}]} onPress={()=>swapFeed('s')}>
+                                    <Text style={[homestyles.filtertext,{color:"#666"}]}>New Feed </Text>
+                                </TouchableOpacity>
+
 
 
                 </ScrollView>

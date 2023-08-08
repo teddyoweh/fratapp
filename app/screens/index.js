@@ -32,7 +32,7 @@ function LandingScreen() {
   
     useEffect(() => {
       Animated.timing(scaleValue, {
-        toValue: 0.7,
+        toValue: 0.4,
         duration: 4000,
         useNativeDriver: true,
       }).start();
@@ -41,7 +41,7 @@ function LandingScreen() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Animated.Image
-          source={require('../assets/union.png')}
+          source={require('../assets/HERDS.png')}
           style={{
             transform: [{ scale: scaleValue }],
           }}

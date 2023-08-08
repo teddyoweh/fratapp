@@ -34,7 +34,7 @@ import { AuthContext } from "../../../context/authContext";
 import { AppContext } from "../../../context/appContext";
 import  { getData,getJSONData,storeData,storeJSONData } from "../../../utils/storage";
 import { color_scheme } from "../../../config/color_scheme";
-
+import * as Haptics from 'expo-haptics'
 function InputStatusIcon({state}){
     if(!state){
       return (
@@ -160,7 +160,7 @@ function LoginPage({navigation}){
           }
 
           const {colorMode} = useContext(AppContext)
-  const applogo = colorMode=='dark'?require('../../../assets/union-black.png'):require('../../../assets/union.png')
+  const applogo = colorMode=='dark'?require('../../../assets/HERDS.png'):require('../../../assets/union.png')
   const logostyle  = colorMode=='dark'?{      width: 150,
       height:150}:{
           width:500,
@@ -169,9 +169,22 @@ function LoginPage({navigation}){
     return (
         <View style={[authstyles.authcontainer,{backgroundColor:color_scheme(colorMode,'white')}]}>
             <View style={{paddingHorizontal:10}}>
-                <TouchableOpacity onPress={()=>{navigation.goBack()}}>
-                <Ionicons name="chevron-back" size={24} color="#666" />
-                </TouchableOpacity>
+            <TouchableOpacity onPress={()=>{
+                       Haptics.impactAsync('medium')
+                        navigation.goBack()}}
+                    style={{
+                        flexDirection:"row",
+                        alignItems:'center',
+                        justifyContent:'center',
+                        height:33,
+                        width:33,
+                        backgroundColor:'#222',
+                        borderRadius:100,
+                        marginRight:10
+                    }}
+                    >
+            <Ionicons name="chevron-back-outline" size={24} color={color_scheme(colorMode,'black')} />
+            </TouchableOpacity>
             </View>
             <View style={authstyles.authlogobx}>
             <Image style={logostyle} source={applogo} /> 
@@ -185,8 +198,8 @@ function LoginPage({navigation}){
             }
             ]}
             >Email</Text>
-                        <View style={[authstyles.forminput,{borderColor:color_scheme(colorMode,'#eee'),flexDirection:'row',alignItems:'center',}, borderError(emailerror)]}>
-            <TextInput   style={{width:'95%',color:color_scheme(colorMode,'black')}}
+                        <View style={[authstyles.forminput,{flexDirection:'row',alignItems:'center',}, borderError(emailerror)]}>
+            <TextInput   style={[authstyles.forminputbx,{width:'95%',color:color_scheme(colorMode,'black')}]}
                   keyboardAppearance={colorMode}
             autoCapitalize="none"
             autoCorrect={false}
@@ -212,10 +225,10 @@ function LoginPage({navigation}){
             }
             ]}>Password</Text>
             
-            <View style={[authstyles.forminput,{borderColor:color_scheme(colorMode,'#eee'),flexDirection:'row',alignItems:'center',},borderError(passworderror)]}>
+            <View style={[authstyles.forminput,{flexDirection:'row',alignItems:'center',},borderError(passworderror)]}>
 
     
-            <TextInput style={{width:passworderror!=null?'85%':'95%',color:color_scheme(colorMode,'black')}}
+            <TextInput style={[authstyles.forminputbx,{width:passworderror!=null?'85%':'95%',paddingVertical:10, fontSize:18, color:color_scheme(colorMode,'black')}]}
                   keyboardAppearance={colorMode}
              autoCapitalize="none"
              autoCorrect={false}
@@ -223,8 +236,8 @@ function LoginPage({navigation}){
              onChangeText={(text)=>setPassword(text)}
             placeholder="" />
 
-            <TouchableOpacity style={{marginRight:10}}onPress={()=>setViewPass(!viewpass)}>
-            {viewpass?<Entypo name="eye" size={24} color="black" />:<Entypo name="eye-with-line" size={24} color="black" />}
+            <TouchableOpacity style={{marginRight:19}}onPress={()=>setViewPass(!viewpass)}>
+            {viewpass?<Entypo name="eye" size={22} color={color_scheme(colorMode,'black')} />:<Entypo name="eye-with-line" size={22} color={color_scheme(colorMode,'black')} />}
             </TouchableOpacity>
             {passworderror!=null
             
@@ -243,7 +256,7 @@ function LoginPage({navigation}){
                 <BouncyCheckbox
   size={25}
   fillColor="#a330d0"
-  unfillColor="#FFFFFF"
+  unfillColor={color_scheme(colorMode,'white')}
  
   iconStyle={{ borderColor: "red",borderRadius:10 }}
   innerIconStyle={{ borderWidth: 1,borderRadius:10 }}

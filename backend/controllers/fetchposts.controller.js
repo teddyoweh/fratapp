@@ -5,7 +5,7 @@ const Posts = require('../models/Posts');
   async function fetchpostscontroller(req, res) {
     const { cursor,userid} = req.body;
     const limit = 40;
-  
+    console.log(req.headers)
   
     let query = {};
   
@@ -77,6 +77,16 @@ const Posts = require('../models/Posts');
 
 function getOnePost(req,res){
     Posts.findOne({ _id: req.body.id }).then(post => {
+        res.json(post)
+        }).catch(err => {
+            console.log(err)
+            res.json({ status: false, data: err })
+            })
+    
+
+}
+async function deletePost(req,res){
+    Posts.findOneAndDelete({ _id: req.body.id }).then(post => {
         res.json(post)
         }).catch(err => {
             console.log(err)

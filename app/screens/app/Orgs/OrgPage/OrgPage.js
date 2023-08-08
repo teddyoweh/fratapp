@@ -583,7 +583,7 @@ export default function OrgPage({navigation,route}){
         title:`${org.org_name} Menu`,
         cancelButtonIndex: [...orgoptions,'Settings'].length-1,
         userInterfaceStyle: "dark",
-        tintColor:'#333'
+        tintColor:'#eee'
       },
       buttonIndex => {
          orgoptionshashmap[[...orgoptions,'Settings'][buttonIndex]]()

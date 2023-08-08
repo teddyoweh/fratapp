@@ -84,11 +84,16 @@ const authstyles = StyleSheet.create({
     forminput:{
         marginTop:5,
         paddingHorizontal:10,
-        paddingVertical:12,
+        paddingVertical:1,
         borderStyle:'solid',
         borderWidth:1,
         borderRadius:10,
+        backgroundColor:'#222',
+        borderColor:'#333'
  
+    },
+    forminputbx:{
+        paddingVertical:8, fontSize:18
     },
     formtxt:{
         color:'#666',

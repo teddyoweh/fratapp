@@ -52,28 +52,28 @@ const AppStack = createStackNavigator()
                 iconName = focused
                   ?<Home2 color={  color_scheme(colorMode,'black')} variant="Bold" size={25} />
 
-                  : <Home2  color={color_scheme(colorMode,'#aaa')} variant="Broken" size={25} />
+                  : <Home2  color={color_scheme(colorMode,'#aaa')} variant="Bold" size={25} />
                   return   iconName
 
               } else if (route.name === 'Discover') {
                 iconName = focused
                   ?<SearchNormal1 color={  color_scheme(colorMode,'black')}variant="Bold" size={25} />
 
-                  : <SearchNormal1 color={color_scheme(colorMode,'#aaa')} variant="Broken" size={25} />
+                  : <SearchNormal1 color={color_scheme(colorMode,'#aaa')} variant="Bold" size={25} />
                   return   iconName
               }
               else if (route.name === 'Calendar') {
                 iconName = focused
                   ?<Calendar2 color={  color_scheme(colorMode,'black')}variant="Bold" size={25} />
 
-                  : <Calendar2  color={color_scheme(colorMode,'#aaa')} variant="Broken" size={25} />
+                  : <Calendar2  color={color_scheme(colorMode,'#aaa')} variant="Bold" size={25} />
                   return   iconName
               }
               else if (route.name === 'Profile') {
                 iconName = focused
                   ?<Profile color={  color_scheme(colorMode,'black')}variant="Bulk" size={25} />
 
-                  : <Profile  color={color_scheme(colorMode,'#aaa')} variant="Broken" size={25} />
+                  : <Profile  color={color_scheme(colorMode,'#aaa')} variant="Bold" size={25} />
                   return   iconName
               }
   
@@ -85,7 +85,7 @@ const AppStack = createStackNavigator()
 
                   : 
                   
-                  <Activity  color={color_scheme(colorMode,'#aaa')} variant="Linear" size={25} />
+                  <Activity  color={color_scheme(colorMode,'#aaa')} variant="Bold" size={25} />
                   return   iconName
                   
               }
@@ -97,7 +97,7 @@ const AppStack = createStackNavigator()
 
                   : 
                   
-                  <Bubble  color={color_scheme(colorMode,'#aaa')} variant="Linear" size={25} />
+                  <Bubble  color={color_scheme(colorMode,'#aaa')} variant="Bold" size={25} />
                   return   iconName
                   
               }

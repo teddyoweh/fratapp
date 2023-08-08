@@ -14,13 +14,14 @@ import { AppContext } from "../../../context/appContext";
 import axios from "axios";
 import { endpoints } from "../../../config/endpoints";
 import { wrapUIMG } from "../../../utils/utils";
+import { color_scheme } from "../../../config/color_scheme";
 
 export default function EditProfile({navigation}){
     async function saveProfile(){
 
 
     }
-    const {user,setUser} = useContext(AppContext)
+    const {user,setUser,colorMode} = useContext(AppContext)
     const dataBottomSheet= useRef()
     const [selectedDate, setSelectedDate] = useState('');
     const [medata,setMeData]  = useState(user)
@@ -138,7 +139,7 @@ export default function EditProfile({navigation}){
     //   );
     
     return (
-        <View style={{backgroundColor:'white',flex:1}}>
+        <View style={{backgroundColor:color_scheme(colorMode,'white'),flex:1}}>
             <View style={{flexDirection:'row',justifyContent:'space-between'}}>
                 <Button title="Cancel"onPress={()=>navigation.goBack()}/>
                 <Button title="Save" onPress={()=>saveProfile()}/>
@@ -170,7 +171,7 @@ export default function EditProfile({navigation}){
                                 borderRadius:50,
                             }}/>
                             
-                            <Camera color="#333" variant="Bulk" size={24} style={{
+                            <Camera color={color_scheme(colorMode,'#333')} variant="Bold" size={24} style={{
                             position:'absolute',
                             bottom:5
                             }}/>
@@ -181,24 +182,28 @@ export default function EditProfile({navigation}){
                             <View style={editprofilestyles.frm1}>
 
                             <View style={editprofilestyles.formheadbx}>
-                                    <Text style={editprofilestyles.formhead}>Personal Information</Text>
+                                    <Text style={[editprofilestyles.formhead,{
+                                        color:color_scheme(colorMode,'black')
+                                    }]}>Personal Information</Text>
                                 </View>
                             <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>First Name</Text>
-                                <TextInput style={editprofilestyles.frminput} value={firstname} onChangeText={(text)=>setFirstname(text)}/>
+                                <TextInput style={[editprofilestyles.frminput,{borderColor:color_scheme(colorMode,'grey'),color:color_scheme(colorMode,'black') }]} value={firstname} onChangeText={(text)=>setFirstname(text)}/>
                             </View>
                             <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>Last Name</Text>
-                                <TextInput style={editprofilestyles.frminput} value={lastname} onChangeText={(text)=>setLastname(text)}/>
+                                <TextInput style={[editprofilestyles.frminput,{borderColor:color_scheme(colorMode,'grey'),color:color_scheme(colorMode,'black') }]} value={lastname} onChangeText={(text)=>setLastname(text)}/>
                             </View>
                             <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>UserName</Text>
-                                <TextInput style={editprofilestyles.frminput} value={username} onChangeText={(text)=>setUsername(text)}/>
+                                <TextInput style={[editprofilestyles.frminput,{borderColor:color_scheme(colorMode,'grey'),color:color_scheme(colorMode,'black') }]} value={username} onChangeText={(text)=>setUsername(text)}/>
                             </View>
                             <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>DOB</Text>
-                                <View  style={[editprofilestyles.frminput,{flexDirection:'row'}]}>
-                                <TextInput value={selectedDate}style={{width:'90%'}}/>
+                                <View  style={[editprofilestyles.frminput,{flexDirection:'row',borderColor:color_scheme(colorMode,'grey'),color:color_scheme(colorMode,'black') }]}>
+                                <TextInput value={selectedDate}style={{width:'90%'}}
+                                                                placeholderTextColor={color_scheme(colorMode,'grey')}
+                                />
                                 <Pressable onPress={()=>dataBottomSheet.current.show()}>
                                     <AntDesign name="calendar" size={24} color="#a330d0" />
                                 </Pressable>
@@ -213,7 +218,9 @@ export default function EditProfile({navigation}){
                                 </View>
                             <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>Bio</Text>
-                                <TextInput style={[editprofilestyles.frminput,{height:100}]} multiline={true} value={bio} onChangeText={(text)=>setBio(text)}/>
+                                <TextInput style={[editprofilestyles.frminput,{height:100,borderColor:color_scheme(colorMode,'grey'),color:color_scheme(colorMode,'black') }]} 
+                                placeholderTextColor={color_scheme(colorMode,'grey')}
+                                multiline={true} value={bio} onChangeText={(text)=>setBio(text)}/>
                             </View>
                             <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>Pinned Orgs</Text>
@@ -258,24 +265,26 @@ const editprofilestyles = StyleSheet.create({
         fontWeight:'700'
     },
     formgrp:{
-        flexDirection:'row',
+        flexDirection:'column',
         width:'100%',
-        alignItems:'center',
+  
         justifyContent:'space-between',
         marginBottom:15
         
     },
     frmttxt:{
+        marginBottom:10,
         color:"#aaa",
-        fontWeight:'600'
+        fontWeight:'300',
+        fontSize:15,
     },
     frminput:{
         borderWidth:1,
-        borderColor:'#ccc',
+ 
         borderRadius:5,
         padding:10,
         marginLeft:4,
-        width:'80%'
+        width:'100%'
     },
     
 })

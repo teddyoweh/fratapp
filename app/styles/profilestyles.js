@@ -67,7 +67,8 @@ const profilestyles = StyleSheet.create({
         paddingHorizontal:10,
         borderRadius:30,
         width:'84%',
-        backgroundColor:'#a330d0'
+     
+        backgroundColor:'#a330d0',
     },
     profilebtnu:{
         paddingVertical:15,
@@ -75,21 +76,26 @@ const profilestyles = StyleSheet.create({
         borderRadius:30,
         width:'84%',
         //backgroundColor:'#f9e9ff',
-        backgroundColor:'#f9e9ff',
-        borderColor:'#a330d0',
+   
+    
+        backgroundColor:'#222',
+        borderColor:'#111',
+     
         borderStyle:'solid',
         borderWidth:1,
     },
     profilebtntxt:{
         fontSize:19,
+ 
         color:'#fff',
         fontWeight:'500',
         textAlign:'center'
     },
     profilebtntxtu:{
         fontSize:19,
-        color:    '#a330d0',
-        fontWeight:'500',
+  
+        color:    'grey',
+        fontWeight:'300',
         textAlign:'center'
     },
 
@@ -97,8 +103,8 @@ const profilestyles = StyleSheet.create({
         paddingVertical:15,
         paddingHorizontal:15,
         // borderColor:'#a330d0',
-        backgroundColor:'#f9e9ff',
-        borderColor:'#a330d0',
+        backgroundColor:'#222',
+        borderColor:'#333',
         borderStyle:'solid',
         borderWidth:1,
         borderRadius:100

@@ -1,5 +1,5 @@
 import React,{useState,useContext,useRef,useEffect,useCallback}from "react";
-import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,  RefreshControl, Dimensions} from "react-native";
+import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,  RefreshControl, Dimensions, Animated} from "react-native";
 import { homestyles } from "../../../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
@@ -13,6 +13,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Loading from "../../../components/Loading";
 import { color_scheme } from "../../../config/color_scheme";
 import { useFocusEffect } from '@react-navigation/native';
+import api from "../../../config/api";
 
 function LoadingScreen(){
     return(
@@ -126,7 +127,7 @@ function AllFeed({navigation,route,type,postBottomSheet}){
 
 async function loadPosts(){
  
-    await axios.post(endpoints['getposts'],{cursor:null}).then(res=>{
+    await api.post(endpoints['getposts'],{cursor:null}).then(res=>{
         setPostData(res.data)
    
         
@@ -139,7 +140,7 @@ async function loadPosts(){
 const MemoizedMapOutPosts = React.memo(MapOutPosts);
 
 const memoizedLoadPosts = useCallback(async () => {
-    const res = await axios.post(endpoints['getposts'], { cursor: null });
+    const res = await api.post(endpoints['getposts'], { cursor: null });
  
     setPostData(res.data);
 }, []);
@@ -218,7 +219,7 @@ function AllFeedM({navigation,route,type}){
 
 async function loadPosts(){
  
-    await axios.post(endpoints['getposts'],{cursor:null}).then(res=>{
+    await api.post(endpoints['getposts'],{cursor:null}).then(res=>{
         setPostData(res.data)
    
         
@@ -231,7 +232,7 @@ async function loadPosts(){
 const MemoizedMapOutPosts = React.memo(MapOutPosts);
 
 const memoizedLoadPosts = useCallback(async () => {
-    const res = await axios.post(endpoints['getposts'], { cursor: null });
+    const res = await api.post(endpoints['getposts'], { cursor: null });
  
     setPostData(res.data);
 }, []);
@@ -247,7 +248,18 @@ const memoizedLoadPosts = useCallback(async () => {
   );
 
   const {colorMode} = useContext(AppContext)
-  
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const headerOpacity = scrollY.interpolate({
+    inputRange: [0, 100],
+    outputRange: [1, 0],
+    extrapolate: 'clamp',
+  });
+  const imageTranslateX = scrollX.interpolate({
+    inputRange: [0, 100], // Change the range as per your requirement
+    outputRange: [0, 200], // Change the output as per your requirement
+    extrapolate: 'clamp',
+  });
 return (
   
 
@@ -257,18 +269,20 @@ return (
     flex:1,
     height:'100%'
   }}
-  >
-
+    >
 
     <ScrollView  contentContainerStyle={[homestyles.postcontainer,{
         backgroundColor:color_scheme(colorMode,'white')
+        
     }]}
+    
        scrollsToTop={true} 
        showsVerticalScrollIndicator={false}    
        //alwaysBounceVertical={true}
     refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={()=>loadPosts()} />
       }>
+          
  
 {
 postData ?

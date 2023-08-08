@@ -11,7 +11,7 @@ import { color_scheme } from "../../../config/color_scheme";
 
 function LandingPage({navigation}){
     const {colorMode} = useContext(AppContext)
-    const applogo = colorMode=='dark'?require('../../../assets/union-black.png'):require('../../../assets/union.png')
+    const applogo = colorMode=='dark'?require('../../../assets/HERDS.png'):require('../../../assets/HERDS.png')
     const logostyle  = colorMode=='dark'?{      width: 200,
         height:200}:{
             width:500,

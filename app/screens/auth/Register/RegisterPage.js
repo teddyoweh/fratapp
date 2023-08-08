@@ -34,6 +34,7 @@ import { AuthContext } from "../../../context/authContext";
 import { AppContext } from "../../../context/appContext";
 import  { getData,getJSONData,storeData,storeJSONData } from "../../../utils/storage";
 import { color_scheme } from "../../../config/color_scheme";
+import * as Haptics from 'expo-haptics'
 function borderError(error){
 if(error==false){
   return {borderColor:'#FF4136'}
@@ -194,7 +195,7 @@ function RegisterPage({navigation}) {
   }
 
   const {colorMode} = useContext(AppContext)
-  const applogo = colorMode=='dark'?require('../../../assets/union-black.png'):require('../../../assets/union.png')
+  const applogo = colorMode=='dark'?require('../../../assets/HERDS.png'):require('../../../assets/union.png')
   const logostyle  = colorMode=='dark'?{      width: 150,
       height:150}:{
           width:500,
@@ -208,9 +209,22 @@ function RegisterPage({navigation}) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View style={{ paddingHorizontal: 10 }}>
-        <TouchableOpacity onPress={() => { navigation.goBack() }}>
-          <Ionicons name="chevron-back" size={24} color="#666" />
-        </TouchableOpacity>
+      <TouchableOpacity onPress={()=>{
+                       Haptics.impactAsync('medium')
+                        navigation.goBack()}}
+                    style={{
+                        flexDirection:"row",
+                        alignItems:'center',
+                        justifyContent:'center',
+                        height:33,
+                        width:33,
+                        backgroundColor:'#222',
+                        borderRadius:100,
+                        marginRight:10
+                    }}
+                    >
+            <Ionicons name="chevron-back-outline" size={24} color={color_scheme(colorMode,'black')} />
+            </TouchableOpacity>
       </View>
       <ScrollView>
         <View style={authstyles.authlogobx}>
@@ -224,8 +238,8 @@ function RegisterPage({navigation}) {
               color:color_scheme(colorMode,"#222")
             }
             ]}>First Name</Text>
-            <View style={[authstyles.forminput,{borderColor:color_scheme(colorMode,'#eee'),flexDirection:'row',alignItems:'center'},borderError(firstnameerror)]}>
-            <TextInput  style={{width:'95%',color:color_scheme(colorMode,'black')}}
+            <View style={[authstyles.forminput,{flexDirection:'row',alignItems:'center'},borderError(firstnameerror)]}>
+            <TextInput  style={[authstyles.forminputbx,{width:'95%',color:color_scheme(colorMode,'black')}]}
                   keyboardAppearance={colorMode}
                autoCapitalize='none'
                autoComplete="given-name"
@@ -251,8 +265,8 @@ function RegisterPage({navigation}) {
               color:color_scheme(colorMode,"#222")
             }
             ]}>Last Name</Text>
-            <View style={[authstyles.forminput,{borderColor:color_scheme(colorMode,'#eee'), flexDirection:'row',alignItems:'center'},borderError(lastnameerror)]}>
-            <TextInput style={{width:'95%',color:color_scheme(colorMode,'black')}}
+            <View style={[authstyles.forminput,{ flexDirection:'row',alignItems:'center'},borderError(lastnameerror)]}>
+            <TextInput style={[authstyles.forminputbx,{width:'95%',color:color_scheme(colorMode,'black')}]}
                   keyboardAppearance={colorMode}
             autoCapitalize="none"
             autoCorrect={false}
@@ -277,8 +291,8 @@ function RegisterPage({navigation}) {
               color:color_scheme(colorMode,"#222")
             }
             ]}>Username</Text>
-            <View style={[authstyles.forminput,{borderColor:color_scheme(colorMode,'#eee'),flexDirection:'row',alignItems:'center'},borderError(usernameerror)]}>
-            <TextInput  style={{width:'95%',color:color_scheme(colorMode,'black')}}
+            <View style={[authstyles.forminput,{flexDirection:'row',alignItems:'center'},borderError(usernameerror)]}>
+            <TextInput  style={[authstyles.forminputbx,{width:'95%',color:color_scheme(colorMode,'black')}]}
                   keyboardAppearance={colorMode}
             autoCapitalize="none"
             autoCorrect={false}
@@ -307,8 +321,8 @@ function RegisterPage({navigation}) {
             }
             ]}
             >Email</Text>
-                        <View style={[authstyles.forminput,{borderColor:color_scheme(colorMode,'#eee'),flexDirection:'row',alignItems:'center',}, borderError(emailerror)]}>
-            <TextInput   style={{width:'95%',color:color_scheme(colorMode,'black')}}
+                        <View style={[authstyles.forminput,{flexDirection:'row',alignItems:'center',}, borderError(emailerror)]}>
+            <TextInput   style={[authstyles.forminputbx,{width:'95%',color:color_scheme(colorMode,'black')}]}
                   keyboardAppearance={colorMode}
             autoCapitalize="none"
             autoCorrect={false}
@@ -334,10 +348,10 @@ function RegisterPage({navigation}) {
             }
             ]}>Password</Text>
             
-            <View style={[authstyles.forminput,{borderColor:color_scheme(colorMode,'#eee'),flexDirection:'row',alignItems:'center',},borderError(passworderror)]}>
+            <View style={[authstyles.forminput,{flexDirection:'row',alignItems:'center',},borderError(passworderror)]}>
 
     
-            <TextInput style={{width:passworderror!=null?'85%':'95%'}}
+            <TextInput style={[authstyles.forminputbx,{width:passworderror!=null?'85%':'95%'}]}
              autoCapitalize="none"
              autoCorrect={false}
              secureTextEntry={!viewpass}
@@ -345,7 +359,7 @@ function RegisterPage({navigation}) {
             placeholder="" />
 
             <TouchableOpacity style={{marginRight:10}}onPress={()=>setViewPass(!viewpass)}>
-            {viewpass?<Entypo name="eye" size={24} color="black" />:<Entypo name="eye-with-line" size={24} color="black" />}
+            {viewpass?<Entypo name="eye" size={22} color={color_scheme(colorMode,'black')} />:<Entypo name="eye-with-line" size={22} color={color_scheme(colorMode,'black')} />}
             </TouchableOpacity>
             {passworderror!=null
             
@@ -362,7 +376,7 @@ function RegisterPage({navigation}) {
               <BouncyCheckbox
                 size={25}
                 fillColor="#a330d0"
-                unfillColor="#FFFFFF"
+                unfillColor={color_scheme(colorMode,'white')}
                 iconStyle={{ borderColor: "red", borderRadius: 10 }}
                 innerIconStyle={{ borderWidth: 1, borderRadius: 10 }}
               />

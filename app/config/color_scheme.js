@@ -1,5 +1,5 @@
 const color_hashmap = {
-    'white':'black',
+    'white':'#111',
     'black':'white',
     '#333':"white",
     '#ccc':"#222",

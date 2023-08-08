@@ -93,8 +93,6 @@ export default function StudyHours({route,navigation}){
     const [activePeopleFilter,setActivePeopleFilter]=useState(peoplefilters[0])
     const [search,setSearch] = useState('')
     
-      
-      
 
     function swapFeed(item) {
         Haptics.impactAsync('medium')
