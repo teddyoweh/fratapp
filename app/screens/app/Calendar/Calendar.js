@@ -12,6 +12,7 @@ import MapView,{Marker} from 'react-native-maps';
 import { wrapUIMG } from '../../../utils/utils';
 import { endpoints } from '../../../config/endpoints';
 import { AppContext } from '../../../context/appContext';
+import { color_scheme } from '../../../config/color_scheme';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const RenderDateStatus = ({ calendardata, month, currentDay }) => {
   const hasStarts = calendardata[month] && calendardata[month][currentDay] && calendardata[month][currentDay].no_starts > 0;
@@ -157,7 +158,7 @@ const monthsvar = {
 
     const monthscrollRef = useRef();
  
-    const {user}= useContext(AppContext)
+    const {user,colorMode}= useContext(AppContext)
     const scrollToCurrentMonth = () => {
       const currentMonthIndex = Object.keys(monthsvar).indexOf(activeMonth);
       monthscrollRef.current.scrollToIndex({ index: currentMonthIndex });
@@ -246,13 +247,15 @@ const monthsvar = {
     return (
       calendardata &&
       <View
-      style={calendarstyles.container}
+      style={[calendarstyles.container,{
+        backgroundColor:color_scheme(colorMode,'white')
+      }]}
     >
   
         <View style={calendarstyles.top}>
           <View style={{flexDirection:'row',justifyContent:'space-between',paddingBottom:30,alignItems:'center'}}>
             <View style={{flexDirection:'row',alignItems:'center',alignContent:'center',justifyContent:'center',alignSelf:'center'}}>
-              <Text style={{fontSize:26,fontWeight:'bold'}}>{activeMonth}</Text>
+              <Text style={{fontSize:26,fontWeight:'bold',color:color_scheme(colorMode,'black')}}>{activeMonth}</Text>
               <Text style={{marginLeft:3, fontSize:24,color:'grey',fontWeight:'bold'}}>{activeDates['year']}</Text>
             </View>
             <TouchableOpacity onPress={()=>showEventMaker()}>
@@ -283,12 +286,12 @@ const monthsvar = {
  
     return (
       <TouchableOpacity>
-        <View style={{ marginHorizontal: 10, flexDirection: 'column', alignItems: 'center' }}>
-          <Text style={{ fontSize: 13, fontWeight: 500 }}>
-            {dayOfWeek}
+        <View style={[dayStyle,{ marginHorizontal: 10, flexDirection: 'column', alignItems: 'center' }]}>
+          <Text style={{ fontSize: 12, fontWeight: 500,color:color_scheme(colorMode,'gray') }}>
+            {dayOfWeek[0]}
           </Text>
           <Pressable
-            style={dayStyle}
+            // style={dayStyle}
             onPress={() => {
               changeDay(currentDay,month,dayOfWeek,activeDates['year'])
           
@@ -318,13 +321,13 @@ const monthsvar = {
 
   
         <ScrollView
-      contentContainerStyle={{paddingVertical:35,backgroundColor:'#fff'}}
+      contentContainerStyle={{paddingVertical:35,backgroundColor:color_scheme(colorMode,'white')}}
       
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
         <View style={{paddingHorizontal:10,paddingBottom:15}}>
-          <Text style={{fontSize:16,fontWeight:600, color:'#333'}}>
+          <Text style={{fontSize:16,fontWeight:600, color:color_scheme(colorMode,'#333')}}>
           {getDayOfWeekfull(Object.keys(monthsvar).indexOf(activeMonth) + 1,2023,activeDay) } {activeDay}<Text style={{fontSize:13}}>
           {getNumberSuffix(activeDay)}
             </Text> {activeMonth} {activeYear}

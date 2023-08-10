@@ -30,9 +30,9 @@ const userSchema = new Schema({
     orgs:{
         type:Array
     },
-    pinnedorgs:{
-        type:Array,
-        default:[]
+    pinnedorg:{
+        type:String,
+ 
     },
     isverified: {
         type: Boolean,
@@ -45,6 +45,7 @@ const userSchema = new Schema({
     password:{
         type: String,
     },
+
      
 
     uimg:{

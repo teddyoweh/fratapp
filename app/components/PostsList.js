@@ -199,7 +199,7 @@ function CommentInput({postid,setPost}){
         keyboardAppearance={colorMode}
         onChangeText={(text)=>setComment(text)}
         placeholder="Add Comment"
-        placeholderTextColor={color_scheme(colorMode,'#222')}
+        placeholderTextColor={color_scheme(colorMode,'s3')}
         
         multiline={true}
         />
@@ -335,7 +335,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
     },
   );
   const inputcommentid = 'uniqueID';
-
+ 
     return (
         userdetails && 
         <View style={[homestyles.post,{borderColor:color_scheme(colorMode,'#dddd')}]} key={index} 
@@ -356,6 +356,11 @@ function scaleImageToScreen(imageWidth, imageHeight) {
                             
                             <Verify size="18" color="#1d9bf0" variant="Bold"/>
                         }
+                        {
+                            userdetails.pinnedorg &&
+                            <Image source={{uri:wrapUIMG(userdetails.pinnedorg.org_logo)}} style={{marginLeft:1,width:13,height:13,borderRadius:4}}/>
+                        }
+                     
                         </View>
 
         

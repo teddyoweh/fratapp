@@ -19,7 +19,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.teddyoweh.union"
+      "bundleIdentifier": "com.teddyoweh.herds"
     },
     "android": {
       "adaptiveIcon": {

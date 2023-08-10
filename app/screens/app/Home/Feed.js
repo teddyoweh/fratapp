@@ -33,6 +33,7 @@ height:'100%'
 }}
 >
 {
+    posts&&
 posts.length>0?
 
 

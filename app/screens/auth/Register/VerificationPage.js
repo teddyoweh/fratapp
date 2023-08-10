@@ -33,6 +33,9 @@ import { endpoints } from "../../../config/endpoints";
 import { AuthContext } from "../../../context/authContext";
 import { AppContext } from "../../../context/appContext";
 import  { getData,getJSONData,storeData,storeJSONData } from "../../../utils/storage";
+import * as Haptics from 'expo-haptics';
+import { color_scheme } from "../../../config/color_scheme";
+
 function borderError(error){
     if(error==false){
       return {borderColor:'#FF4136'}
@@ -58,7 +61,7 @@ export default function VerificationPage({ navigation,route }) {
     const [code,setCode]= useState('')
     const [coderror,setCodeError] = useState(null)
     const [codeerrortxt,setCodeErrorText] = useState('')
-    const {user,setUser}=useContext(AppContext)
+    const {user,setUser,colorMode}=useContext(AppContext)
     const {isAuth,setIsAuth} = useContext(AuthContext)
 
     function onVerifySubmit(){
@@ -91,7 +94,7 @@ export default function VerificationPage({ navigation,route }) {
     }
 
     return (
-        <View style={{backgroundColor:'white',flex:1}}>
+        <View style={{backgroundColor:color_scheme(colorMode,'white'),flex:1}}>
             <View style={{flexDirection:'row',justifyContent:'flex-start',padding:10}}>
                 <Pressable onPress={()=>navigation.goBack()}>
                 <Entypo name="chevron-small-left" size={24} color="black" />
@@ -108,7 +111,7 @@ export default function VerificationPage({ navigation,route }) {
                     <View style={[authstyles.forminput,{flexDirection:'row',alignItems:'center',marginVertical:5,width:'90%'},borderError(coderror)]}>
 
     
-<TextInput style={{width:'95%'}}
+<TextInput style={{width:'95%',padding:10,color:color_scheme(colorMode,'black')}}
  autoCapitalize="none"
  autoCorrect={false}
  placeholder="Enter verification code"

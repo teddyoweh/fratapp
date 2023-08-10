@@ -124,7 +124,7 @@ export default function Screens(){
     const [colorMode,setColorMode]=useState(colorScheme)
   
       useEffect(() => {
-        setupNotifications()
+        // setupNotifications()
         VerifyAuth()
    
  

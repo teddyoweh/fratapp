@@ -13,6 +13,7 @@ const crypto = require('crypto');
 
 var fs = require('fs');
 const { response } = require('express');
+const Organization = require('../models/Organizations');
 function hashcode(data){
     
     const hash = crypto.createHash('sha256');
@@ -159,7 +160,11 @@ function findUser(req, res) {
       if(user){
 
     
-        res.json({firstname:user.firstname,lastname:user.lastname,username:user.username,uimg:user.uimg,userid:user.id,bio:user.bio,pinnedorgs:user.pinnedorgs})
+        Organization.findById(user.pinnedorg).then(rex =>{
+          const data = {firstname:user.firstname,lastname:user.lastname,username:user.username,uimg:user.uimg,userid:user.id,bio:user.bio,pinnedorg:user.pinnedorg,pinnedorgdetail:rex, isofficial:user.isofficial,email:user.email}
+
+          res.status(200).json(data);
+      })
 
       }else{
         res.json(null)

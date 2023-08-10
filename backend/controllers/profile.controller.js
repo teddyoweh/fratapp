@@ -18,7 +18,7 @@ function hashcode(data){
     
      }
 function editprofilecontroller(req,res){
-    const {firstname,lastname,username,dob,pinnedorgs,bio,uid,primg,uimg1} = req.body
+    const {firstname,lastname,username,dob,pinnedorgs,bio,uid,primg,uimg1,pinnedorg} = req.body
   
     var uimg =uimg1
     if(primg){
@@ -33,7 +33,9 @@ function editprofilecontroller(req,res){
             username:username,
             dob:dob,
             uimg:uimg,
-            bio:bio
+            bio:bio,
+            pinnedorg:pinnedorg
+        
         },
         {new: true, useFindAndModify: false},
         (err, updatedUser) => {

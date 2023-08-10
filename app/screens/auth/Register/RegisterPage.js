@@ -351,7 +351,7 @@ function RegisterPage({navigation}) {
             <View style={[authstyles.forminput,{flexDirection:'row',alignItems:'center',},borderError(passworderror)]}>
 
     
-            <TextInput style={[authstyles.forminputbx,{width:passworderror!=null?'85%':'95%'}]}
+            <TextInput style={[authstyles.forminputbx,{width:passworderror!=null?'85%':'95%',color:color_scheme(colorMode,'black')}]}
              autoCapitalize="none"
              autoCorrect={false}
              secureTextEntry={!viewpass}

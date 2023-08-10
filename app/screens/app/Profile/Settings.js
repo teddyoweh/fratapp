@@ -11,10 +11,11 @@ import ProfilePosts from "../../../components/ProfilePosts";
 import { wrapUIMG } from "../../../utils/utils";
 import { clearData } from "../../../utils/storage";
 import { AuthContext } from "../../../context/authContext";
+import { color_scheme } from "../../../config/color_scheme";
 
 
 export default function Settings({navigation}){
-    const {user} = useContext(AppContext)
+    const {user,colorMode} = useContext(AppContext)
     const {setIsAuth} = useContext(AuthContext)
     async function logtfout(){
 
@@ -38,19 +39,19 @@ export default function Settings({navigation}){
     }
     
     return (
-        <View style={{backgroundColor:'white',flex:1,height:'100%'}}>
+        <View style={{backgroundColor:color_scheme(colorMode,'white'),flex:1,height:'100%'}}>
             <View style={{flexDirection:'row',alignItems:'center',paddingHorizontal:10,
-        borderBottomWidth:1,borderColor:'#ddd',borderStyle:"solid",paddingBottom:10
+        borderBottomWidth:1,borderColor:color_scheme(colorMode,"#eee"),borderStyle:"solid",paddingBottom:10
         }}>
             <TouchableOpacity onPress={()=>navigation.goBack()}>
 
-            <Ionicons name="chevron-back" size={24} color="#333" />
+            <Ionicons name="chevron-back" size={24} color={color_scheme(colorMode,"#333")} />
         </TouchableOpacity>
             <Text style={{
                 marginLeft:5,
                 fontSize:23,
                 fontWeight:'bold',
-                color:'#333'
+                color:color_scheme(colorMode,"#333")
             }}>
                 Settings
             </Text>
@@ -68,53 +69,53 @@ export default function Settings({navigation}){
 
             <View style={{marginVertical:10,
              elevation: 10,
-             shadowColor: '#999',
+ 
              shadowOffset: { width: 3, height: 10 },
              shadowOpacity: 0.35,
              marginBottom:30,shadowRadius:4 ,
              width:'95%',
              borderStyle:'solid',
              borderWidth:1,
-             borderColor:'#eee',
+             borderColor:color_scheme(colorMode,"#eeee"),
              borderRadius:10,
              marginBottom:10,
              paddingVertical:10,
-             backgroundColor:'white'
+             backgroundColor:color_scheme(colorMode,"white")
              
             }}>
                 <ScrollView>
-                    <View  style={settingstyles.settingoptions}>
+                    <View  style={[settingstyles.settingoptions,{backgroundColor:color_scheme(colorMode,"white")}]}>
                
                             <Text
-                                          style={settingstyles.settingoptionstext}
+                                          style={[settingstyles.settingoptionstext,{color:color_scheme(colorMode,"#333")}]}
 
                             >
                                 Email
                             </Text>
-                            <Ionicons name="chevron-forward" size={24} color="#333" />
+                            <Ionicons name="chevron-forward" size={24} color={color_scheme(colorMode,"#333")} />
                 
                     </View>
-                    <View  style={settingstyles.settingoptions}>
+                    <View   style={[settingstyles.settingoptions,{backgroundColor:color_scheme(colorMode,"white")}]}>
                
                <Text
-                           style={settingstyles.settingoptionstext}
+              style={[settingstyles.settingoptionstext,{color:color_scheme(colorMode,"#333")}]}
 
                >
                   Password
                </Text>
-               <Ionicons name="chevron-forward" size={24} color="#333" />
+               <Ionicons name="chevron-forward" size={24} color={color_scheme(colorMode,"#333")} />
    
                     </View>
-                    <View  style={[settingstyles.settingoptions,{borderBottomWidth:0}]}>
+                    <View  style={[settingstyles.settingoptions,{borderBottomWidth:0,backgroundColor:color_scheme(colorMode,"white")}]}>
                <Text
-               style={settingstyles.settingoptionstext}
+    style={[settingstyles.settingoptionstext,{color:color_scheme(colorMode,"#333")}]}
                >
                   Logout
                </Text>
                <TouchableOpacity onPress={()=>logOuT()}>
 
 
-               <MaterialCommunityIcons name="logout" size={24} color="black" />
+               <MaterialCommunityIcons name="logout" size={24} color={color_scheme(colorMode,"#333")} />
    
                </TouchableOpacity>
                     </View>
@@ -132,7 +133,7 @@ const settingstyles = StyleSheet.create({
     backgroundColor:'white',
     justifyContent:'space-between',
     borderBottomWidth:0.5,
-    borderColor:'#ddd',
+ 
     borderStyle:"solid",
     paddingHorizontal:10,
     paddingVertical:10,                                

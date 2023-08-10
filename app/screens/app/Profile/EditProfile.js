@@ -1,7 +1,7 @@
-import React,{useState,useContext, useRef}from "react";
-import { View,Text,Image,TouchableOpacity, ScrollView, TextInput, Button,StyleSheet, Pressable} from "react-native";
-import { homestyles,profilestyles } from "../../../styles";
-import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Profile, MessageText1, CloudLightning, MessageAdd, MessageQuestion, UserEdit, Camera} from 'iconsax-react-native';
+import React,{useState,useContext, useRef, useEffect}from "react";
+import { View,Text,Image,TouchableOpacity, ScrollView, TextInput, Button,StyleSheet, Pressable, Dimensions} from "react-native";
+import { discoverstyles, homestyles,profilestyles } from "../../../styles";
+import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Profile, MessageText1, CloudLightning, MessageAdd, MessageQuestion, UserEdit, Camera, Bubble, SearchNormal, TickCircle} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons,EvilIcons,Entypo} from '@expo/vector-icons';
 import DatePicker from 'react-native-modern-datepicker';
 import BottomSheet from "react-native-gesture-bottom-sheet";
@@ -15,7 +15,125 @@ import axios from "axios";
 import { endpoints } from "../../../config/endpoints";
 import { wrapUIMG } from "../../../utils/utils";
 import { color_scheme } from "../../../config/color_scheme";
+import * as Haptics from 'expo-haptics'
+function arrayToHashMap(inputArray) {
+    const hashMap = {};
 
+    inputArray.forEach(item => {
+        const id = item._id;
+        hashMap[id] = item;
+    });
+
+    return hashMap;
+}
+function PinnedOrgsBottomsSheet({bottomSheet,setOrgid,orgs,orgid}){
+    const [search,setSearch] = useState('')
+    const {colorMode,user} = useContext(AppContext)
+    // const [orgs,setOrgs] = useState(null)
+    // async function getMyOrgs(){
+    //     await axios.post(endpoints['get_my_orgs'],{userId:user.userid}).then(res=>{
+    //         console.log(res.data)
+    //         setOrgs(res.data)
+    //     })
+    // }
+    // useEffect(()=>{
+    //     getMyOrgs()
+    // },[])
+    return (
+        <BottomSheet hasDraggableIcon={false} ref={bottomSheet} height={Dimensions.get('screen').height-100} >
+        <View style={{backgroundColor:color_scheme(colorMode,'white'),flex:1,paddingHorizontal:10,paddingVertical:20}}>
+        {/* <View></View>
+        <TouchableOpacity onPress={()=>{
+                       Haptics.impactAsync('medium')
+                        navigation.goBack()}}
+                    style={{
+                        flexDirection:"row",
+                        alignItems:'center',
+                        justifyContent:'center',
+                        height:33,
+                        width:33,
+                        backgroundColor:'#222',
+                        borderRadius:100,
+                        marginRight:10, marginBottom:10
+                    }}
+                    >
+            <Ionicons name="chevron-back-outline" size={24} color={color_scheme(colorMode,'black')} />
+            </TouchableOpacity> */}
+        
+        <View style={[discoverstyles.searchbox,{backgroundColor:color_scheme(colorMode,'#eee')}]}>
+                    <SearchNormal variant="Broken" color="grey" />
+                    <TextInput style={[discoverstyles.search,{color:color_scheme(colorMode,'black')}]}placeholder="Search My Organizations"
+                    placeholderTextColor={color_scheme(colorMode,'gray')}
+                    value={search}
+                    keyboardAppearance={colorMode}
+                    onChangeText={(text)=>performSearch(text)}
+                    />
+                </View>
+       
+       <ScrollView
+       contentContainerStyle={{
+        paddingVertical:10
+       }}
+       >
+        {
+            orgs&&
+         
+         orgs.map((org,index)=>{
+
+            return (
+                <TouchableOpacity key={index}
+
+                onPress={()=>{
+                    Haptics.impactAsync('medium')
+                    setOrgid(org._id)
+                    bottomSheet.current.close()
+                }}
+                style={{
+                    flexDirection:"row",
+                    alignItems:'center',
+                    justifyContent:'space-between'
+                }}
+                >
+                    <View
+                    style={{
+                        flexDirection:'row',
+                        alignItems:'center',
+                        paddingVertical:10,
+                        
+                    }}
+                    >
+                        <Image source={{uri:wrapUIMG(org.org_logo)}} style={{
+                            height:40,
+                            width:40,
+                            borderRadius:100,
+                            marginRight:10
+                        }}/>
+                        <Text
+                        style={{
+                            color:color_scheme(colorMode,'black'),
+                        }}
+                        >{org.org_name}</Text>
+                    </View>
+                    {
+                        org._id==orgid&&
+          
+                    <View>
+                        <TickCircle
+                        color="white"
+                        variant="Bold"
+                        />
+                    </View>
+                              }
+                </TouchableOpacity>
+            )
+         })
+        }
+       </ScrollView>
+        </View>
+</BottomSheet>
+
+    )
+}
 export default function EditProfile({navigation}){
     async function saveProfile(){
 
@@ -23,6 +141,7 @@ export default function EditProfile({navigation}){
     }
     const {user,setUser,colorMode} = useContext(AppContext)
     const dataBottomSheet= useRef()
+    const pinnedOrgsBottomSheet= useRef()
     const [selectedDate, setSelectedDate] = useState('');
     const [medata,setMeData]  = useState(user)
     const [firstname,setFirstname] = useState(user.firstname)
@@ -39,10 +158,6 @@ export default function EditProfile({navigation}){
         var randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
         return randomNumber.toString();
       }
-
-    function toggleDateBtm(){
-        
-    }
     async function getMeData(){
         axios.post(endpoints['finduser',{user:user.id}]).then(res=>{
             setMeData(res.data)
@@ -61,7 +176,7 @@ export default function EditProfile({navigation}){
     
             }
         }
-        await axios.post(endpoints['editprofile'],{uid:user.userid,firstname:firstname,lastname:lastname,username:username,bio:bio,dob:dob,primg,uimg1:profileimg}).then(async (res)=>{
+        await axios.post(endpoints['editprofile'],{uid:user.userid,firstname:firstname,lastname:lastname,username:username,bio:bio,dob:dob,primg,uimg1:profileimg,pinnedorg:pinnedorgid}).then(async (res)=>{
             if(initialImg==false){
                 await uploadImages(random);
             }
@@ -108,6 +223,17 @@ export default function EditProfile({navigation}){
             navigation.goBack()
         })
     }
+    const [orgs,setOrgs] = useState(null)
+    async function getMyOrgs(){
+        await axios.post(endpoints['get_my_orgs'],{userId:user.userid}).then(res=>{
+            console.log(res.data)
+            setOrgs(res.data)
+        })
+    }
+    useEffect(()=>{
+        getMyOrgs()
+  
+    },[])
     // React.useEffect(
     //     () =>
     //       navigation.addListener('beforeRemove', (e) => {
@@ -137,7 +263,9 @@ export default function EditProfile({navigation}){
     //       }),
     //     [navigation, hasUnsavedChanges]
     //   );
-    
+    const [pinnedorgid,setPinnedOrgId] = useState(medata.pinnedorg)
+
+    console.log(medata,'medata')
     return (
         <View style={{backgroundColor:color_scheme(colorMode,'white'),flex:1}}>
             <View style={{flexDirection:'row',justifyContent:'space-between'}}>
@@ -188,19 +316,19 @@ export default function EditProfile({navigation}){
                                 </View>
                             <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>First Name</Text>
-                                <TextInput style={[editprofilestyles.frminput,{borderColor:color_scheme(colorMode,'grey'),color:color_scheme(colorMode,'black') }]} value={firstname} onChangeText={(text)=>setFirstname(text)}/>
+                                <TextInput style={[editprofilestyles.frminput,{color:color_scheme(colorMode,'black') }]} value={firstname} onChangeText={(text)=>setFirstname(text)}/>
                             </View>
                             <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>Last Name</Text>
-                                <TextInput style={[editprofilestyles.frminput,{borderColor:color_scheme(colorMode,'grey'),color:color_scheme(colorMode,'black') }]} value={lastname} onChangeText={(text)=>setLastname(text)}/>
+                                <TextInput style={[editprofilestyles.frminput,{color:color_scheme(colorMode,'black') }]} value={lastname} onChangeText={(text)=>setLastname(text)}/>
                             </View>
                             <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>UserName</Text>
-                                <TextInput style={[editprofilestyles.frminput,{borderColor:color_scheme(colorMode,'grey'),color:color_scheme(colorMode,'black') }]} value={username} onChangeText={(text)=>setUsername(text)}/>
+                                <TextInput style={[editprofilestyles.frminput,{color:color_scheme(colorMode,'black') }]} value={username} onChangeText={(text)=>setUsername(text)}/>
                             </View>
                             <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>DOB</Text>
-                                <View  style={[editprofilestyles.frminput,{flexDirection:'row',borderColor:color_scheme(colorMode,'grey'),color:color_scheme(colorMode,'black') }]}>
+                                <View  style={[editprofilestyles.frminput,{flexDirection:'row',color:color_scheme(colorMode,'black') }]}>
                                 <TextInput value={selectedDate}style={{width:'90%'}}
                                                                 placeholderTextColor={color_scheme(colorMode,'grey')}
                                 />
@@ -214,18 +342,52 @@ export default function EditProfile({navigation}){
                             </View>
                             <View style={editprofilestyles.frm1}>
                                 <View style={editprofilestyles.formheadbx}>
-                                    <Text style={editprofilestyles.formhead}>Profile Information</Text>
+                                    <Text style={[editprofilestyles.formhead,{color:color_scheme(colorMode,'black')}]}>Profile Information</Text>
                                 </View>
                             <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>Bio</Text>
-                                <TextInput style={[editprofilestyles.frminput,{height:100,borderColor:color_scheme(colorMode,'grey'),color:color_scheme(colorMode,'black') }]} 
+                                <TextInput style={[editprofilestyles.frminput,{height:100,color:color_scheme(colorMode,'black') }]} 
                                 placeholderTextColor={color_scheme(colorMode,'grey')}
                                 multiline={true} value={bio} onChangeText={(text)=>setBio(text)}/>
                             </View>
                             <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>Pinned Orgs</Text>
-                                <View>
-                                    
+                                <View
+                                style={[editprofilestyles.frminput,{
+                                    flexDirection:'row',
+                                    justifyContent:'space-between',
+                                    alignItems:'center',
+                                }]}
+                                >
+                                <View
+                                style={{
+                                    flexDirection:'row',
+                                    justifyContent:'flex-start',
+                                    alignItems:'center',
+                                    width:'90%'
+                                }}
+                                >
+                                    {
+                                       orgs && pinnedorgid&&
+                          <>
+                                <Image source={{uri:wrapUIMG(arrayToHashMap(orgs)[pinnedorgid].org_logo)}} style={{
+                                    width:30,
+                                    height:30,
+                                    borderRadius:5,
+                                    marginRight:5
+                                }}/>
+                                <Text style={{color:color_scheme(colorMode,'black')}}>{arrayToHashMap(orgs)[pinnedorgid].org_name}</Text>
+                                </>
+                            }
+                                </View>
+                                <TouchableOpacity
+                                onPress={()=>{
+                                    Haptics.impactAsync("medium")
+                                    pinnedOrgsBottomSheet.current.show()
+                                }}
+                                >
+                                <Bubble size={24} color="#a330d0"/>
+                                </TouchableOpacity>
                                 </View>
                             </View>
                             </View>
@@ -236,6 +398,7 @@ export default function EditProfile({navigation}){
 
                 </ScrollView>
             </View>
+            <PinnedOrgsBottomsSheet orgid={pinnedorgid} setOrgid={setPinnedOrgId} bottomSheet={pinnedOrgsBottomSheet} orgs={orgs}/>
             <BottomSheet hasDraggableIcon={false} ref={dataBottomSheet} height={450} >
                 <View style={{backgroundColor:'white',flex:1}}>
 
@@ -284,7 +447,9 @@ const editprofilestyles = StyleSheet.create({
         borderRadius:5,
         padding:10,
         marginLeft:4,
-        width:'100%'
+        width:'100%',
+        backgroundColor:'#222',
+        borderColor:'#333'
     },
     
 })

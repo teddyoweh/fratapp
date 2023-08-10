@@ -254,8 +254,21 @@ async function getOrgPost(req, res) {
     res.json({ status: false, data: err });
   }
 }
+
+async function getMyOrgs(req,res){
+  const { userId } = req.body;
+ 
+  const orgMemberships = await OrgMembership.find({ user_id: userId });
+
+  const orgIds = orgMemberships.map(membership => membership.org_id);
+
+  const orgDetails = await Organizations.find({ _id: { $in: orgIds } });
+ 
+  res.json(orgDetails);
+  
+}
 async function createCohort(req,res){
-  console.log(req.body)
+ 
   const newChannel = new Channels({
   
     org_id:req.body.orgid,
@@ -273,6 +286,7 @@ async function createCohort(req,res){
   )
 
 }
+
 module.exports =  {
     createOrg,
     getOrgs,
@@ -280,5 +294,6 @@ module.exports =  {
     addToOrg,
     MakeOrgPost,
     getOrgPost,
-    createCohort
+    createCohort,
+    getMyOrgs
 }

@@ -7,7 +7,7 @@ const color_hashmap = {
     '#eeee':'#111',
     '#aaa':'#555',
     '#222':'#323232',
-    "#ddd":'#111',
+    "#ddd":'#222',
     '#dddd':'#111',
     'grey':"#444",
     'gray':'#bbb',
@@ -19,7 +19,8 @@ const color_hashmap = {
     'eee':'#1c1d1f',
     'eeee':'#323335',
     '#939496':'#939496',
-    '#222':'#eee'
+    '#222':'#eee',
+    's3':"#333"
 }
 const color_scheme = (mode,color)=>{
     if(mode=='light'){

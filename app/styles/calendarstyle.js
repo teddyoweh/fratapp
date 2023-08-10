@@ -13,7 +13,6 @@ const calendarstyles = StyleSheet.create({
       borderBottomWidth:1,
       borderColor:'#eee',
  
-        backgroundColor: 'white',
         width:'100%',
         elevation: 10,
                  shadowColor: '#777',
@@ -41,8 +40,9 @@ const calendarstyles = StyleSheet.create({
     },
     day:{
         marginVertical:10,
-        height:40,
-        width:40,
+        height:60,
+
+        width:45,
         borderRadius:100,
         flexDirection:'row',
         alignItems:'center',
@@ -54,27 +54,31 @@ const calendarstyles = StyleSheet.create({
     daytext:{
         fontSize:14,
         color:'white',
-        fontWeight:700
+        fontWeight:700,
+        marginVertical:5,
       
     },
     day1:{
         marginTop:10,
-        height:40,
+        height:60,
+
+        width:45,
         marginVertical:10,
-        width:40,
+        backgroundColor:'#333',
         borderRadius:100,
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'center',
         borderStyle:'solid',
-        borderColor:'#ccc',
+        borderColor:'#444',
         borderWidth:1
 
     },
     daytext1:{
-        fontSize:14,
-        color:'#a330d0',
-        fontWeight:700
+        fontSize:15,
+        color:'white',
+        fontWeight:700,
+        marginVertical:5,
     },
     dayname:{
         fontSize:17,

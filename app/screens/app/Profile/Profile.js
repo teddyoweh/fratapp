@@ -10,6 +10,7 @@ import { AppContext } from "../../../context/appContext";
 import ProfilePosts from "../../../components/ProfilePosts";
 import { wrapUIMG } from "../../../utils/utils";
 import { color_scheme } from "../../../config/color_scheme";
+import * as Haptics from 'expo-haptics'
 export default function ProfileScreen({navigation}){
     const {user,colorMode} = useContext(AppContext)
     const [filters,setFilters]=useState(['All','Posts','Polls','Media','Info','Tagged'])
@@ -19,8 +20,10 @@ export default function ProfileScreen({navigation}){
             backgroundColor:color_scheme(colorMode,'white')
         }]}>
             <View style={profilestyles.settingstop}>
-                <TouchableOpacity style={profilestyles.settingstopitem} onPress={()=>navigation.navigate('Settings')} >
-                <EvilIcons name="gear" size={30} color="black" />
+                <TouchableOpacity style={profilestyles.settingstopitem} onPress={()=>{
+                    Haptics.impactAsync('medium')
+                    navigation.navigate('Settings')}} >
+                <EvilIcons name="gear" size={30} color={color_scheme(colorMode,'black')} />
                 </TouchableOpacity>
             </View>
             <ScrollView>
@@ -104,7 +107,7 @@ export default function ProfileScreen({navigation}){
                     {
                         filters.map((filter,index)=>{
                             return(
-                                <TouchableOpacity key={index} style={activeFilter==filter?profilestyles.postfiltera:profilestyles.postfilter} onPress={()=>setActiveFilter(filter)}>
+                                <TouchableOpacity key={index}style={activeFilter==filter?[profilestyles.postfiltera,{borderColor:color_scheme(colorMode,'black')}]:profilestyles.postfilter} onPress={()=>setActiveFilter(filter)}>
                                 <Text style={activeFilter==filter?[profilestyles.postfiltertxta,{
                                     color:color_scheme(colorMode,'black')
                                 }]:[profilestyles.postfiltertxt]}>

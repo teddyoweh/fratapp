@@ -81,7 +81,7 @@ function RenderGroupInput({group,setGroup,name}){
               
      
         </View>
-                 <View style={[makeeventstyles.forminput,{justifyContent:'space-between', backgroundColor:color_scheme(colorMode,'#eeee')}]} >
+                 <View style={[makeeventstyles.forminput,{justifyContent:'space-between', backgroundColor:color_scheme(colorMode,'#eeee'),borderColor:color_scheme(colorMode,'#ccc')}]} >
                  <TextInput placeholder={`Add ${name}`}  value={text} onChangeText={(tex)=>setText(tex)}
                             placeholderTextColor={color_scheme(colorMode,'gray')}  style={{color:color_scheme(colorMode,'black'),   }}  keyboardAppearance={colorMode}
                  />
@@ -412,13 +412,13 @@ export default function CreateOrgs({navigation}){
                             <Text style={[makeeventstyles.formtext,{color:color_scheme(colorMode,'#333')}]}>Organization School</Text>
                             <TextInput
                                        placeholderTextColor={color_scheme(colorMode,'gray')} keyboardAppearance={colorMode}
-                            style={[makeeventstyles.forminput,{ color:color_scheme(colorMode,'black'),          backgroundColor:color_scheme(colorMode,'#eeee'),borderColor:color_scheme(colorMode,'#ccc')}]} placeholder="Organization Name" value={orgSchool} onChangeText={(text)=>setOrgSchool(text)}/>
+                            style={[makeeventstyles.forminput,{ color:color_scheme(colorMode,'black'),          backgroundColor:color_scheme(colorMode,'#eeee'),borderColor:color_scheme(colorMode,'#ccc')}]} placeholder="Organization School" value={orgSchool} onChangeText={(text)=>setOrgSchool(text)}/>
                         </View>
                         <RenderGroupInput group={positions} setGroup={setPositions} name={'Positions'}/>
                         <RenderGroupInput group={teams} setGroup={setTeams} name={'Cohorts'}/>
                         <View style={makeeventstyles.formgrp}>
         <Text style={[makeeventstyles.formtext,{color:color_scheme(colorMode,'#333')}]}>Organization Description</Text>
-        <TextInput style={[makeeventstyles.forminput,{height:200, backgroundColor:color_scheme(colorMode,'#eeee'),color:color_scheme(colorMode,'black'),    }]}
+        <TextInput style={[makeeventstyles.forminput,{height:200, backgroundColor:color_scheme(colorMode,'#eeee'),color:color_scheme(colorMode,'black'), borderColor:color_scheme(colorMode,'#ccc')   }]}
                    placeholderTextColor={color_scheme(colorMode,'gray')}    keyboardAppearance={colorMode}
         multiline={true} placeholder="Organization Description" value={orgDescription} onChangeText={(text)=>setOrgDescription(text)}/>
     </View>

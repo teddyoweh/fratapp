@@ -52,6 +52,7 @@ const endpoints = {
     'make_org_post':`${serverip}/api/orgs/make_post`,
     'get_org_posts':`${serverip}/api/orgs/get_posts`,
     'create_cohort':`${serverip}/api/orgs/create_cohort`,
+    'get_my_orgs':`${serverip}/api/orgs/get_my_org`,
 
     'create_studyhours':`${serverip}/api/studyhours/create`
 
