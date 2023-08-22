@@ -23,6 +23,9 @@ teams:{
 positions:{
     type:Array,
 },
+status:{
+    type:String,
+},
 date: {
     type: Date,
     default: Date.now

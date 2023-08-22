@@ -4,7 +4,7 @@ const OrgMembership = require('../models/OrgMemberships');
 const OrgPosts = require('../models/OrgPosts');
 const User = require('../models/User')
 const crypto = require('crypto');
-
+const Links = require('../models/Links');
 var fs = require('fs');
 function hashcode(data){
     
@@ -43,6 +43,7 @@ async function createOrg(req, res) {
         org_positions: positions,
         org_teams: ['General',...teams],
         createdby: uid,
+      
       });
       
       const org = await newOrg.save();
@@ -53,6 +54,7 @@ async function createOrg(req, res) {
         user_id: uid,
         role: 'admin',
         teams: [],
+        status: 'active',
         positions: [],
       });
   
@@ -82,7 +84,7 @@ async function createOrg(req, res) {
     try {
       const { user_id } = req.body;
         
-      const orgMemberships = await OrgMembership.find({ user_id }).sort({ date: -1 }).exec();
+      const orgMemberships = await OrgMembership.find({ user_id:user_id,status:"active" }).sort({ date: -1 }).exec();
   
       const orgs = await Promise.all(
         orgMemberships.map(async (membership) => {
@@ -104,7 +106,7 @@ async function createOrg(req, res) {
       res.status(500).json({ status: false, error: error.message });
     }
   }
-  
+
 
   async function getOrg(req, res) {
     try {
@@ -287,6 +289,83 @@ async function createCohort(req,res){
 
 }
 
+async function manageFollowOrg(req,res) {
+  console.log(req.body)
+  const {orgid, userid} = req.body
+  
+  try {
+    const existingFollow = await Links.findOneAndDelete({ partyid: orgid, userid: userid });
+
+    if (!existingFollow) {
+      const newFollow = new Links({
+        partyid: orgid,
+        userid: userid,
+      });
+      await newFollow.save();
+      res.json({ success: true, message: 'Follow record created successfully', data: newFollow })
+    }
+    res.json({ success: true, message: 'Follow record created successfully' })
+  } catch (error) {
+    console.error(error);
+    res.json({ success: true, message: 'Follow record created successfully' })
+  }
+}
+async function getOrgStat(orgid, userid ) {
+ 
+  
+  try {
+    const org = await OrgMembership.findOne({ org_id: orgid, user_id: userid });
+    const lnk = await Links.findOne({ partyid: orgid, userid: userid });
+
+    const data = {
+      orgstat: org ? org.status : false,   
+      orglink: lnk ? true : false,      
+    }
+    
+   return { orgstat: org ? org.status : false, orglink: lnk ? true : false}
+  } catch (error) {
+    console.error(error);
+    return { orgstat: 'Not a member', orglink: 'Not linked'}
+  }
+}
+
+async function getOrgProfile(req,res){
+  console.log(req.body)
+  const { orgid, userid } = req.body;
+ 
+  const orgl = await OrgMembership.findOne({ org_id: orgid, user_id: userid });
+  const lnk = await Links.findOne({ partyid: orgid, userid: userid });
+  const org = await OrgMembership.find({ org_id: orgid });
+  const links = await Links.find({ partyid: orgid });
+const data = {  orgstat: orgl ? orgl.status : false,   
+  orglink: lnk ? true : false,members:org,links:links}
+
+  console.log(data)
+  res.json(data)
+
+
+}
+async function manageOrgMember(req,res){
+  const {orgid,userid} = req.body;
+  console.log(req.body)
+  const member = await OrgMembership.findOne({ org_id: orgid, user_id: userid });
+  console.log(member)
+  if(member){
+    OrgMembership.deleteOne({ org_id: orgid, user_id: userid });
+  }else{
+    const newmmeber = new OrgMembership({
+      org_id:orgid,
+      user_id:userid,
+      status:'pending'
+    })
+    await newmmeber.save()
+  }
+} 
+async function fetchOrgs(req,res){
+  const orgs = await Organizations.find({}).sort({ org_name: 1 }).exec();
+  res.json(orgs)
+
+}
 module.exports =  {
     createOrg,
     getOrgs,
@@ -295,5 +374,11 @@ module.exports =  {
     MakeOrgPost,
     getOrgPost,
     createCohort,
-    getMyOrgs
+    getMyOrgs,
+    getOrgStat,
+    manageFollowOrg,
+    getOrgProfile,
+    manageOrgMember,
+    fetchOrgs
+    
 }

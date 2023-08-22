@@ -21,8 +21,9 @@ function chatSocket(app){
       changeStream.on('change', (change) => {
         const { sender_id, receiver_id } = change.fullDocument;
         const { userId } = socket;
-    
+        
         if (userId === sender_id || userId === receiver_id) {
+          console.log('emitting');
           socket.emit('message', change.fullDocument);
         }
       });

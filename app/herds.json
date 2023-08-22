@@ -1,0 +1,54 @@
+{
+  "expo": {
+    "name": "HERDS",
+    "slug": "herds",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/HERDS-icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/HERDS-SPLASH.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#111111"
+   
+      
+      
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.teddyoweh.herds"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#000000"
+      }
+    },
+    "web": {
+      "favicon": "./assets/HERDS.png"
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/HERDS-icon.png",
+          "color": "#000000"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "956a2e0d-852f-4ac7-b345-5f0bfaee86a8"
+      }
+    }
+  }
+}

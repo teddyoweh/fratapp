@@ -44,7 +44,7 @@ export default function ProfilePosts({navigation,userid}){
             return(
                 <>
                 { postData.posts.length>0?
-                <PostsList key={index }index={index} posti={post} navigation={navigation} move={false} userdetails ={postData.users[post.userid]}/>
+                <PostsList key={index}index={index} posti={post} navigation={navigation} move={false} userdetails ={postData.users[post.userid]}/>
                 :
               <View
         style={{

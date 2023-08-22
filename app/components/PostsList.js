@@ -12,7 +12,8 @@ import { getTimeDifference, wrapPostImg, wrapUIMG } from "../utils/utils";
 import { AppContext } from "../context/appContext";
 import { color_scheme } from "../config/color_scheme";
 import PagerView from 'react-native-pager-view';
-
+import PostLikes from "./PostLikes";
+import * as Haptics from 'expo-haptics'
 function RenderImages({images}){
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
@@ -316,10 +317,12 @@ function scaleImageToScreen(imageWidth, imageHeight) {
  
     
   }
+  const morepostoptions = post.userid ==user.userid? ['Cancel', 'Report', 'Delete']:['Cancel', 'Report', ]
   const onMore = () =>
+  
   ActionSheetIOS.showActionSheetWithOptions(
     {
-      options: ['Cancel', 'Generate number', 'Reset'],
+      options: morepostoptions ,
       destructiveButtonIndex: 2,
       cancelButtonIndex: 0,
       userInterfaceStyle: 'dark',
@@ -335,9 +338,11 @@ function scaleImageToScreen(imageWidth, imageHeight) {
     },
   );
   const inputcommentid = 'uniqueID';
- 
+const likeBottomSheet = useRef(null);
     return (
         userdetails && 
+        <>
+
         <View style={[homestyles.post,{borderColor:color_scheme(colorMode,'#dddd')}]} key={index} 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 
@@ -499,7 +504,10 @@ function scaleImageToScreen(imageWidth, imageHeight) {
                 paddingBottom:10
             }}
             >
-            <View
+            <TouchableOpacity
+            onPress={()=>{
+                Haptics.impactAsync("medium")
+                likeBottomSheet.current.show()}}
             style={{
                 flexDirection:'row',
                 alignItems:'center',
@@ -529,7 +537,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
                     likes
                 </Text>
                 
-                </View>
+                </TouchableOpacity>
                 <Text
                 
                 style={{
@@ -580,5 +588,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
          
             
         </View>
+        <PostLikes likeBottomSheet={likeBottomSheet} post={post} navigation={navigation}/>
+        </>
         )
 }

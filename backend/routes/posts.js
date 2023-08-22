@@ -4,7 +4,7 @@ const router = express.Router();
 const{ fetchannouncementposts,fetcheventposts,fetchpinnedposts,newsfeed} = require('../controllers/queryposts.controller')
 const postscontoller = require('../controllers/posts.controller');
 const findpostcontroller = require('../controllers/findpost.controller');
-const  {fetchpostscontroller,getOnePost,fetchmypostscontroller} = require('../controllers/fetchposts.controller')
+const  {fetchpostscontroller,getOnePost,fetchmypostscontroller, fetchPostUserLikes} = require('../controllers/fetchposts.controller')
 const fetchhotposts = require('../controllers/fetchhotposts.controller');
 const searchpostscontroller = require('../controllers/searchposts.controller');
 const likespostscontoller = require('../controllers/likesposts.controller')
@@ -48,6 +48,7 @@ router.post('/find', (req, res) => { findpostcontroller(req, res) })
  
 router.post('/getonepost', (req, res) => { getOnePost(req, res) })
 router.post('/fetchmyposts', (req, res) => { fetchmypostscontroller(req, res) })
+router.post('/fetchlikeusers', (req, res) => { fetchPostUserLikes(req, res) })
 router.post('/fetch', (req, res) => { fetchpostscontroller(req, res) })
 router.post('/fetchhot', (req, res) => { fetchhotposts(req,res) })
 router.post('/fetchevents', (req, res) => { fetcheventposts(req, res) })

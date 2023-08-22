@@ -18,15 +18,16 @@ const discoverstyles = StyleSheet.create({
     },
     searchbox:{
      
-        borderRadius:30,
+        borderRadius:12,
         paddingHorizontal:10,
-        paddingVertical:10,
+
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'flex-start'
         }
     ,search:{
-        paddingHorizontal:10
+        paddingHorizontal:10,
+        paddingVertical:15,
         
     },
     resultlogo:{

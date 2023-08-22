@@ -622,9 +622,23 @@ export default function OrgPage({navigation,route}){
 
         }}
         >
-              <TouchableOpacity onPress={()=>navigation.goBack()}>
-                <Ionicons name="chevron-back" size={24} color={color_scheme(colorMode,'black')} />
-                </TouchableOpacity>
+       
+<TouchableOpacity onPress={()=>{
+                       Haptics.impactAsync('medium')
+                        navigation.goBack()}}
+                    style={{
+                        flexDirection:"row",
+                        alignItems:'center',
+                        justifyContent:'center',
+                        height:33,
+                        width:33,
+                        backgroundColor:'#222',
+                        borderRadius:100,
+                        marginRight:10
+                    }}
+                    >
+            <Ionicons name="chevron-back-outline" size={24} color={color_scheme(colorMode,'black')} />
+            </TouchableOpacity>
 
             <TouchableOpacity
             onPress={()=>onSettingsPress()}

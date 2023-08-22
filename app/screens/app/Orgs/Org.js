@@ -134,7 +134,7 @@ function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
                         </Text>
                         </View>
                         <View>
-                        <Ionicons name="ios-chevron-forward" size={22} color={color_scheme(colorMode,'#eee')} />
+                        <Ionicons name="ios-chevron-forward" size={22} color={color_scheme(colorMode,'#aaa')} />
                         </View>
                         </TouchableOpacity>
                     </View>

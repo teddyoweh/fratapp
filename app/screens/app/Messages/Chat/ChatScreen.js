@@ -1,4 +1,4 @@
-import { View,Text,Image,TouchableOpacity, ScrollView, TextInput, Animated,    RefreshControl, Pressable, KeyboardAvoidingView, Dimensions, Keyboard, TouchableWithoutFeedback} from "react-native";
+import { View,Text,Image,TouchableOpacity, ScrollView, TextInput, Animated,    RefreshControl, Pressable, KeyboardAvoidingView, Dimensions, Keyboard, TouchableWithoutFeedback, Alert} from "react-native";
 import React,{ useState,useEffect,useLayoutEffect,useRef,  useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -226,13 +226,15 @@ const DismissKeyboard = ({ children }) => (
 export default function ChatScreen({navigation,route}){
     
     const {user,colorMode} =useContext(AppContext)
+    
     const {party_data} = route.params
+    
     const [data,setData] = useState(null)
     const [text,setText] = useState('')
     const [msgtype,setMsgType]  = useState('text')
     const scrollViewRef = useRef(null);
 
- 
+    const partyid = party_data._id?party_data._id:party_data.userid
     const scrollToBottom = () => {
       scrollViewRef.current.scrollToEnd({ animated: true });
     };
@@ -244,7 +246,7 @@ export default function ChatScreen({navigation,route}){
         Haptics.impactAsync('medium')
         await axios.post(endpoints['sendmsg'],{
             user_id:user.userid,
-            receiver_id:party_data._id,
+            receiver_id:partyid,
             text: removeExcessWhitespace(text),
             msg_type:msgtype,
             receiver_type:'user',
@@ -393,6 +395,28 @@ const uploadImages = async (random) =>{
    })
   
 }
+
+function UpdateMessageViewed() {
+    const lastMessage = data[data.length - 1];
+    
+    if (!lastMessage.viewedby.includes(user.userid)) {
+      axios
+        .post(endpoints['updateviewed'], { messageId: lastMessage._id,viewerId:user.userid })
+        .then(response => console.log('Message viewed status updated:', response.data.message))
+        .catch(error => console.error('Error updating message viewed status:', error));
+    } else {
+      console.log('User has already viewed the message.');
+    }
+  }
+
+  useEffect(() => {
+    if (data){
+
+        
+    if(data.length > 0) {
+        UpdateMessageViewed();
+    }}
+    }, [data]);
     return (
      
         <KeyboardAvoidingView
@@ -637,7 +661,7 @@ onPress={()=>{
 
     }}
     >
-        <PictureFrame color="#aaa" variant="Bulk" size={33}/>
+        <PictureFrame color="#444" variant="Bold" size={33}/>
 
         </Pressable>
         <View

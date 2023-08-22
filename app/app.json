@@ -1,14 +1,14 @@
 {
   "expo": {
     "name": "HERDS",
-    "slug": "unionapp",
-    "version": "1.0.0",
+    "slug": "herds",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/HERDS-icon.png",
     "userInterfaceStyle": "dark",
     "splash": {
-      "image": "./assets/HERDS-SPLASH.png",
-      "resizeMode": "contain",
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
       "backgroundColor": "#111111"
    
       
@@ -16,6 +16,9 @@
     },
     "assetBundlePatterns": [
       "**/*"
+    ],
+    "platforms": [
+      "ios"
     ],
     "ios": {
       "supportsTablet": true,
@@ -47,7 +50,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "956a2e0d-852f-4ac7-b345-5f0bfaee86a8"
+        "projectId": "c962b3bb-afa1-42df-94c2-b8461f2d6019"
       }
     }
   }

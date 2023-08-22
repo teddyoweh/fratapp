@@ -7,7 +7,7 @@ import { AppContext } from "../../../context/appContext";
 import LikeBtn from "../../../components/LikeBtn";
 import PostsList from "../../../components/PostsList";
 import BottomSheet from "react-native-gesture-bottom-sheet";
-import { isLink } from "../../../utils/utils";
+import { isLink, wrapUIMG } from "../../../utils/utils";
 import axios from "axios";
 import { endpoints } from "../../../config/endpoints";
 import * as ImagePicker from 'expo-image-picker';
@@ -58,7 +58,7 @@ function LinkBox({links,removeLinks}){
         {
             links.map((link,index)=>{
                 return(
-                    <View style={{flexDirection:'row',justifyContent
+                    <View key={index}style={{flexDirection:'row',justifyContent
                     :'space-between',alignItems:'center'}}>
                     
                     <View key={index}style={{flexDirection:'row',alignItems:'center'}}>
@@ -136,6 +136,14 @@ function RenderImages({images,setImages}){
                     )
                 }
             </ScrollView>
+        </View>
+    )
+}
+
+function RenderMakeEvent({}){
+    return (
+        <View>
+
         </View>
     )
 }
@@ -311,7 +319,7 @@ const addImage = async () => {
 //     checkForCameraRollPermission()
 //   }, []);
 const {colorMode} = useContext(AppContext)
-console.log(postBottomSheet)
+ 
 return (
     <BottomSheet   ref={postBottomSheet} height={Dimensions.get('screen').height-150}
     >
@@ -344,7 +352,15 @@ return (
 
         <View style={{flexDirection:'column',paddingBottom:0}}>
       
-            <View style={{paddingHorizontal:10}}>
+            <View style={{paddingHorizontal:10,flexDirection:'row',paddingVertical:10,
+        alignItems:"flex-start"}}>
+                <View style={{flexDirection:'row',alignItems:"center",paddingTop:10}}>
+                    <Image source={{uri:wrapUIMG(user.uimg)}} style={{
+                        height:40,
+                        width:40,
+                        borderRadius:100
+                    }}/>
+                </View>
                 <TextInput placeholder="Share your thoughts"
                 multiline={true}
                 autoFocus={true}
@@ -363,6 +379,7 @@ return (
              
                 }}
                 />
+                <RenderMakeEvent/>
 
                 {linkStore.length>0&& 
                 <LinkBox links={linkStore} removeLinks={removeLinks}/>

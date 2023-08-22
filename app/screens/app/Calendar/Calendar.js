@@ -477,7 +477,7 @@ const monthsvar = {
                     <View style= {{paddingTop:10,flexDirection:'row'}}>
                         {[1,4,3].map((keys,index)=>{
                           return (
-                            <Image source={{uri:wrapUIMG(user.uimg)}} style={{height:20,width:20,borderRadius:100,position:'relative',right:9*index}}/>
+                            <Image key={index} source={{uri:wrapUIMG(user.uimg)}} style={{height:20,width:20,borderRadius:100,position:'relative',right:9*index}}/>
 
                           )
                         }) }

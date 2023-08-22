@@ -23,7 +23,8 @@ sender_id:{
    type:Array
  },
  viewedby:{
-type:Array
+type:Array,
+default:[]
  },
  
  receiver_type:{},

@@ -207,7 +207,8 @@ style={{
                     </Text>
                     </View>
                     {
-                        data.contacts.map((item,index)=>{
+                        data.contacts.latestMessages.map((item,index)=>{
+                            
                             return (
                                     <TouchableOpacity
                                 
@@ -271,11 +272,12 @@ style={{
                                         </Text>
                                         <Text
                                         style={{
-                                            color:color_scheme(colorMode,'#777777'),
+                                            color:item.viewedby.includes(user.userid)?'white':color_scheme(colorMode,'#777777'),
                                             marginTop:5,
-                                            fontWeight:'400',
+                                            fontWeight:item.viewedby.includes(user.userid)?'600':'400',
                                             paddingLeft:4,
-                                            fontSize:16
+                                            fontSize:16,
+
                                         }}
                                         >
                                      {removeExcessWhitespace(item.content)}
@@ -299,18 +301,13 @@ style={{
                                         >
                                             {formatMsgDate(item.date)}
                                         </Text>
-                                        <View
-                                            style={{
-                                                marginTop:10,
-                                                height:7,
-                                                backgroundColor:'#333',
-                                                width:7,
-                                                borderRadius:100
-                                            }}
-                                        >
-
-                                        </View>
-                                        
+                                        {
+                                            !item.viewedby.includes(user.userid)&&
+                                            <Ionicons name="checkmark-done" size={17} color="#555" style={{
+                                         
+                                            }} />
+                                           
+                                             }
                                     </View>
                                     </TouchableOpacity>
                             )

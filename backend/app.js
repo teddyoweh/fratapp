@@ -15,6 +15,7 @@ const calendar = require('./routes/calendar');
 const orgs = require('./routes/orgs');
 const discover = require('./routes/discover');
 const studyhours = require('./routes/studyhours')
+const schools = require('./routes/school')
 const ModDB = require('./services/db-mod');
 
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
@@ -29,7 +30,7 @@ mongoose.connect(config.DB, { useNewUrlParser: true }).then(
 if (cluster.isMaster) {
   const numCPUs = os.cpus().length;
 
-  // Fork worker processes
+  
   for (let i = 0; i < numCPUs; i++) {
     cluster.fork();
   }
@@ -53,7 +54,7 @@ if (cluster.isMaster) {
   app.use('/api/orgs', orgs);
   app.use('/api/messages', messages);
   app.use('/api/studyhours',studyhours)
-
+  app.use('/api/school',schools)
   app.use('/images', express.static(__dirname + '/uploads'));
   app.use('/images/assets', express.static(__dirname + '/assets/imgs'));
   app.use('/profileimg', express.static(__dirname + '/assets/profiles'));
@@ -63,6 +64,7 @@ if (cluster.isMaster) {
   const { chatSocket } = require('./sockets/messages.socket');
 
   orgStream(app);
+  ModDB()
   chatSocket();
 
   app.get('/', function (req, res) {

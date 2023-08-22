@@ -126,5 +126,11 @@ async function deletePost(req,res){
     
 
 }
-
-module.exports = {fetchpostscontroller,getOnePost,fetchmypostscontroller}
+async function fetchPostUserLikes(req,res){
+   const { userIds} = req.body;  
+  console.log(req.body)
+  const usersInfo = await User.find({ _id: { $in: userIds } });
+  console.log(usersInfo)
+  res.json(usersInfo);
+}
+module.exports = {fetchpostscontroller,getOnePost,fetchmypostscontroller,fetchPostUserLikes}

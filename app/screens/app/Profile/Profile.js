@@ -37,12 +37,26 @@ export default function ProfileScreen({navigation}){
 
                         </View>
                         <View style={profilestyles.profiledetailssec}>
+                            <View
+                            style={{
+                                flexDirection:'column',
+                       
+                            }}
+                            >
+
+                            
                             <View style={{flexDirection:'row',alignItems:'center'}}><Text style={[profilestyles.profilename,{
                                 color:color_scheme(colorMode,'black')
                             }]}>{`${user.firstname} ${user.lastname}`}</Text>
                         <Text style={profilestyles.profileusername}>{`@${user.username}`}</Text></View>
-                
-                       
+                        <View style={profilestyles.profilebio}>
+                        <Text style={[profilestyles.profilebiotxt,{
+                            color:color_scheme(colorMode,'black')
+                        }]}>
+                          {user.bio}
+                        </Text>
+                    </View>
+                        </View>
                         
                             {/* <View style={profilestyles.profilefollowers}>
                                 <Text style={profilestyles.profilefollowersno}>
@@ -56,13 +70,7 @@ export default function ProfileScreen({navigation}){
 
 
                     </View>
-                    <View style={profilestyles.profilebio}>
-                        <Text style={[profilestyles.profilebiotxt,{
-                            color:color_scheme(colorMode,'black')
-                        }]}>
-                          {user.bio}
-                        </Text>
-                    </View>
+               
                  
                     
                     

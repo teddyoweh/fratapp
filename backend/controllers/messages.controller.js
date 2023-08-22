@@ -68,69 +68,183 @@ async function sendmessagescontroller(req,res){
      res.json(mes)
 }
 
-async function getSuggested(userid){
-  const links = await Links.find({userid})
-      .sort({ date: -1 })  
-      .limit(10); 
 
-    return links;
 
-}
- 
-async function getContactList(userId) {
-  const messages = await Message.find({
-  $or: [{ sender_id: userId }, { receiver_id: userId }]
-  }).sort({ date: -1 });
-  
-  const latestMessages = [];
-  const processedUsers = [];
-  
-  for (let i = 0; i < messages.length; i++) {
-  const message = messages[i];
-  const counterpartId = message.sender_id === userId ? message.receiver_id : message.sender_id;
-  if(counterpartId){
 
-  
-  if (!processedUsers.includes(counterpartId)) {
-    const userInfo = await User.findById(counterpartId);
+async function getLatestMessagesAndPartyInfo(userId) {
+  try {
+      
+      const user = await User.findById(userId);
 
-    
-    const { firstname, lastname, isofficial, uimg, username } = userInfo;
-  
-    latestMessages.push({
-      ...message.toObject(),
-      user_info: {
-        _id: userInfo._id,
-        firstname,
-        lastname,
-        isofficial,
-        uimg,
-        username
+      if (!user) {
+          return { error: 'User not found' };
       }
-    });
-  
-    processedUsers.push(counterpartId);
-  }}
+
+      
+      const latestMessages = await Message.aggregate([
+          {
+              $match: {
+                  $or: [
+                      { sender_id: userId },
+                      { receiver_id: userId }
+                  ],
+                  $and: [
+                      { sender_id: { $ne: null } },
+                      { receiver_id: { $ne: null } }
+                  ]
+              }
+          },
+          {
+              $sort: { date: -1 }
+          },
+          {
+              $group: {
+                  _id: {
+                      $cond: [
+                          { $eq: ['$sender_id', userId] },
+                          '$receiver_id',
+                          '$sender_id'
+                      ]
+                  },
+                  latestMessage: { $first: '$$ROOT' }
+              }
+          },
+          {
+              $replaceRoot: { newRoot: '$latestMessage' }
+          }
+      ]);
+
+      
+      const partyIdsSet = new Set();
+      latestMessages.forEach(message => {
+          if (message.sender_id !== userId) {
+              partyIdsSet.add(message.sender_id.toString());
+          }
+          if (message.receiver_id !== userId) {
+              partyIdsSet.add(message.receiver_id.toString());
+          }
+      });
+      const partyIdsArray = Array.from(partyIdsSet);
+
+      
+      const partyUsers = await User.find({ _id: { $in: partyIdsArray } });
+
+      
+      const partyUsersLookup = {};
+      partyUsers.forEach(partyUser => {
+          partyUsersLookup[partyUser._id.toString()] = partyUser;
+      });
+
+      
+      latestMessages.forEach(message => {
+          const partyId = message.sender_id !== userId ? message.sender_id : message.receiver_id;
+          message.user_info = partyUsersLookup[partyId.toString()];
+      });
+
+      return {
+          user,
+          latestMessages
+      };
+  } catch (error) {
+      return { error: 'An error occurred' };
   }
-  return latestMessages;
-
-}  
-async function messageListController(req,res){
-  const {user_id} = req.body
-  
-    const contactLict = await getContactList(user_id)
-  const suggested = await getSuggested(user_id)
-
-  const suggestedUsers = await Promise.all(suggested.map(async (sug) => {
-    const user = await User.findById(sug.partyid).select('firstname lastname uimg username isofficial _id');
-    return user;
-  }));
-  
- 
-  res.json(
-    {suggested:suggestedUsers,contacts:contactLict})
-  
 }
+
+
+
+async function getContactList(userId) {
+  try {
+    const messages = await Message.find({
+      $or: [{ sender_id: userId }, { receiver_id: userId }]
+    })
+    .sort({ date: -1 })
+    .limit(10) 
+    
+    const processedUserIds = new Set();
+    const latestMessages = [];
+
+    const userIdsToFetch = [];
+
+    for (const message of messages) {
+      const counterpartId = message.sender_id === userId ? message.receiver_id : message.sender_id;
+      
+      if (counterpartId && !processedUserIds.has(counterpartId)) {
+        userIdsToFetch.push(counterpartId);
+        processedUserIds.add(counterpartId);
+      }
+
+      latestMessages.push({
+        ...message.toObject()
+      });
+
+      if (userIdsToFetch.length >= 10) { 
+        const usersInfo = await User.find({ _id: { $in: userIdsToFetch } }, '_id firstname lastname isofficial uimg username');
+
+        for (const userInfo of usersInfo) {
+          const messageIndex = latestMessages.findIndex(msg => (msg.sender_id === userInfo._id.toString() || msg.receiver_id === userInfo._id.toString()));
+          if (messageIndex !== -1) {
+            latestMessages[messageIndex].user_info = userInfo;
+          }
+        }
+
+        userIdsToFetch.length = 0; 
+      }
+    }
+
+    if (userIdsToFetch.length > 0) {
+      const usersInfo = await User.find({ _id: { $in: userIdsToFetch } }, '_id firstname lastname isofficial uimg username');
+
+      for (const userInfo of usersInfo) {
+        const messageIndex = latestMessages.findIndex(msg => (msg.sender_id === userInfo._id.toString() || msg.receiver_id === userInfo._id.toString()));
+        if (messageIndex !== -1) {
+          latestMessages[messageIndex].user_info = userInfo;
+        }
+      }
+    }
+
+    return latestMessages;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+async function getSuggestedUsers(userId) {
+  try {
+    const suggested = await getSuggested(userId);
+
+    const suggestedUsers = await User.find(
+      { _id: { $in: suggested.map(sug => sug.partyid) } },
+      'firstname lastname uimg username isofficial _id'
+    );
+
+    return suggestedUsers;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+async function messageListController(req, res) {
+  try {
+    const { user_id } = req.body;
+
+    const [ contactList] = await Promise.all([
+   
+      getLatestMessagesAndPartyInfo(user_id)
+    ]);
+    console.log('start contact',contactList,'contactList')
+    res.json({
+      
+      contacts: contactList
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+ 
+
 
 function messagesViewedByController(req, res) {
     const { message_id, user_id } = req.body;
@@ -150,6 +264,64 @@ function messagesViewedByController(req, res) {
    
  
   
+  async function updateMessageViewed(req, res) {
  
+    const {viewerId,messageId} = req.body
   
-module.exports ={fetchmessagescontroller,messageListController,sendmessagescontroller,messagesViewedByController}
+    try {
+      const message = await Message.findById(messageId);
+  
+      if (!message) {
+        return res.status(404).json({ error: 'Message not found' });
+      }
+  
+      
+      if (!message.viewedby.includes(viewerId)) {
+        message.viewedby.push(viewerId);
+        console.log(message,'lol new view')
+        await message.save();
+      }
+  
+      return res.json({ message: 'Message viewed status updated' });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
+  async function getUnreadCount(req,res) {
+    const {userId} = req.body
+    try {
+      const unreadCounts = await Message.aggregate([
+        {
+          $match: {
+            receiver_id: userId,
+            viewedby: { $ne: userId },
+          },
+        },
+        {
+          $group: {
+            _id: { sender_id: "$sender_id", receiver_id: "$receiver_id" },
+            latestMessage: { $last: "$$ROOT" },
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            unreadCount: { $sum: 1 },
+          },
+        },
+      ]);
+  
+      if (unreadCounts.length > 0) {
+        res.json(unreadCounts[0].unreadCount);
+      } else {
+        res.json(0);
+      }
+    } catch (error) {
+      console.error(error);
+      throw new Error('Error while fetching unread messages');
+    }
+  }
+  
+module.exports ={fetchmessagescontroller,messageListController,sendmessagescontroller,messagesViewedByController,updateMessageViewed,getContactList,getSuggestedUsers,getUnreadCount}

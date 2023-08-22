@@ -7,43 +7,18 @@ const SchoolsSchema = new Schema({
     name:{
         type:String
     },
-    email: {
-        type: String,
-        required: true,
- 
- 
-        minlength: 3
-    },
-    bio:{
-        type:String,
-        
-    },
-    schools:{
-        type:Array
-    },
-    orgs:{
-        type:Array
-    },
-    pinnedorgs:{
-        type:Array,
-        default:[]
-    },
-    isverified: {
-        type: Boolean,
-        default: false
-    },
-    isofficial: {
-        type: Boolean,
-        default: false
-    },
-    password:{
-        type: String,
-    },
-     
+    shortname:{
 
-    uimg:{
+    },
+    location:{
+
+    },
+    address:{},
+   
+
+    logo:{
         type:String,
-        default:'/profileimg/profile.png'
+      
     },
     date: {
         type: Date,

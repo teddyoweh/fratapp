@@ -183,13 +183,13 @@ const homestyles = StyleSheet.create({
         color:'white',
         flexDirection:'row',
         alignItems:'center',
-        justifyContent:'center'
+        justifyContent:'center',
         
     },
     filtertext:{
         fontSize:15,
         fontWeight:'300',
-        color:'#bbb',
+        color:'#555',
     },
     filtertexta:{
         fontSize:15,

@@ -1,6 +1,6 @@
 import { View,Text,Animated, Image,TouchableOpacity,Keyboard, ScrollView, TextInput,  RefreshControl,KeyboardAvoidingView, Button, Pressable, Vibration, StyleSheet} from "react-native";
 import { homestyles,discoverstyles } from "../../../../styles";
-import { Message, Messages1,Message2, Messages2, SearchNormal, PictureFrame,Chart,Link21,VoiceCricle,Calendar,VolumeHigh,Briefcase,Send2, Messages3, MessageSquare,More,Like, Like1,AddCircle, ElementPlus, UserCirlceAdd, Add, DirectUp, ArrowUp, Microphone, Microphone2, Hashtag, ArrowRight2, Box2, Celo, Command, Notepad2, People, Back, Setting2} from 'iconsax-react-native';
+import { Message, Messages1,Message2, Messages2, SearchNormal, PictureFrame,Chart,Link21,VoiceCricle,Calendar,VolumeHigh,Briefcase,Send2, Messages3, MessageSquare,More,Like, Like1,AddCircle, ElementPlus, UserCirlceAdd, Add, DirectUp, ArrowUp, Microphone, Microphone2, Hashtag, ArrowRight2, Box2, Celo, Command, Notepad2, People, Back, Setting2, Notification1, Clock, Key, ArrowCircleUp, ArrowCircleDown, DirectInbox, Save2} from 'iconsax-react-native';
 import { FontAwesome5,Feather, Ionicons,AntDesign, MaterialIcons,Entypo} from '@expo/vector-icons';
 import { useContext, useEffect,useRef, useState,useCallback, useLayoutEffect } from "react";
 import { AppContext } from "../../../../context/appContext";
@@ -27,10 +27,12 @@ function RenderOrgChannelPost(){
         style={{
             flexDirection:'column',
             paddingHorizontal:18,
-            paddingVertical:10,
+            paddingVertical:20,
             marginVertical:6,
+            marginHorizontal:10,
+            borderRadius:10,
      
-          
+            backgroundColor:'#2228',
             // borderBottomWidth:0.5,
             // borderStyle:'solid',
             // borderColor:color_scheme(colorMode,'eeee'),
@@ -40,10 +42,12 @@ function RenderOrgChannelPost(){
         <View
         style={{
             flexDirection:'row',
-            alignItems:'flex-start',
-            justifyContent:"space-between"
+            alignItems:'center',
+            justifyContent:"flex-start",
+
         }}
         >
+        
             <Image
             source={{uri:wrapUIMG(user.uimg)}}
             style={{
@@ -52,23 +56,17 @@ function RenderOrgChannelPost(){
                 borderRadius:100
             }}
             />
-            <View
-            style={{
-                flexDirection:'column',
-                width:'88%'
-            }}
-            >
-            
-            <View
+                <View
             style={{
                 flexDirection:'row',
                 alignItems:'center',
+                marginLeft:10
              
             }}
             >
                 <Text
                 style={{
-                    fontSize:15,
+                    fontSize:18,
                     color:color_scheme(colorMode,'black'),
                     fontWeight:'600'
                 }}
@@ -78,14 +76,26 @@ function RenderOrgChannelPost(){
                 <Text
                 style={{
                     marginLeft:5,
-                    fontSize:14,
+                    fontSize:16,
                     color:color_scheme(colorMode,'grayy'),
                     fontWeight:'600'
                 }}
                 >
                     @{user.username}
                 </Text>
+                <Text>
+                    
+                </Text>
             </View>
+                 </View>
+            <View
+            style={{
+                flexDirection:'column',
+                width:'100%',
+            }}
+            >
+            
+        
             <View
         style={{
             paddingVertical:10
@@ -94,7 +104,7 @@ function RenderOrgChannelPost(){
                 <Text
                 style={{
                     color:color_scheme(colorMode,'black'),
-                    fontWeight:'300',
+                    fontWeight:'500',
                     fontSize:15
                 }}
                 >
@@ -113,7 +123,8 @@ This dataset consists of synthetically generated images of clocks with the clock
                     <View
                       style={{
                         flexDirection:'row',
-                        alignItems:'center' 
+                        alignItems:'center',
+                        justifyContent:'space-between',width:'100%'
                     }}
                     >
                         <View
@@ -122,86 +133,111 @@ This dataset consists of synthetically generated images of clocks with the clock
                             alignItems:'center'
                         }}
                         >
+                            <TouchableOpacity
+                            style={{
+                                marginRight:10
+                            }}
+                            >
+
+                        
+                            <ArrowCircleUp size="25" color="#a330d0"/>
+                            </TouchableOpacity>
+
                             <Text
                             style={{
-                                color:color_scheme(colorMode,'black'),
-                                fontWeight:'800'
+                                color:'#a330d0',
+                                fontWeight:'800',
+                                fontSize:17
                             }}
                             >
                                 1
                             </Text>
-                            <Text
+                            <TouchableOpacity
                             style={{
-                                color:color_scheme(colorMode,'grayy'),
-                                marginLeft:6
+                                marginLeft:10
                             }}
                             >
-                                Likes
-                            </Text>
+
+                        
+                            <ArrowCircleDown size="25" color="#555"/>
+                            </TouchableOpacity>
+                      
                         </View>
+
                         <View
                         style={{
                             flexDirection:'row',
                             alignItems:'center',
-                            marginHorizontal:10
+                  
                         }}
                         >
+                            <TouchableOpacity
+                            style={{
+                                marginRight:10
+                            }}
+                            >
+
+                        
+                            <Messages1 size="25" color="#555"/>
+                            </TouchableOpacity>
                             <Text
                             style={{
                                 color:color_scheme(colorMode,'grayy')
+                                
                             }}
                             >
-                                •
+                              1
                             </Text>
                           
                         </View>
+
                         <View
                         style={{
                             flexDirection:'row',
-                            alignItems:'center' 
+                            alignItems:'center',
+             
                         }}
                         >
-                            <Text
+                            <TouchableOpacity
                             style={{
-                                color:color_scheme(colorMode,'black'),               fontWeight:'800'
+                                marginRight:10
                             }}
                             >
-                                1
-                            </Text>
-                            <Text
+
+                        
+                            <DirectInbox size="25" color="#555"/>
+                            </TouchableOpacity>
+                          
+                          
+                        </View>
+                   
+                        <View
+                        style={{
+                            flexDirection:'row',
+                            alignItems:'center',
+                    
+                        }}
+                        >
+                            <TouchableOpacity
                             style={{
-                                color:color_scheme(colorMode,'grayy'),
-                                marginLeft:6
+                                marginRight:10
                             }}
                             >
-                                Replies
-                            </Text>
+
+                        
+                            <Save2 size="25" color="#555"/>
+                            </TouchableOpacity>
+                        
+                          
                         </View>
                     </View>
-                    <View
-                    style={{
-                        flexDirection:'row',
-                        alignItems:'center'
-                    }}
-                    >
-                        <TouchableOpacity>
-                        <Like1 size="24" color={isLiked?'#FF7575':color_scheme(colorMode,'grayy')} variant={isLiked?'Bulk':'Linear'} onPress={()=>LikeBtn()}/>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                        style={{
-                            marginLeft:10
-                        }}
-                        >
-                        <More size="24" color={color_scheme(colorMode,'grayy')}/>
-                        </TouchableOpacity>
-                        
-                    </View>
+               
                 </View>
              
             </View>
             </View>
         
-        </View>
+ 
       
 
 
@@ -213,7 +249,39 @@ export default function OrgChannel({route,navigation}){
     const {user,colorMode} = useContext(AppContext)
     console.log(org)
     const [message,setMessage] = useState('')
-    
+    const filters = ['Recents','Pinned','Announments','Events','Polls','Opportunities']
+    const [activeFilter,setActiveFilter]=useState(filters[0])
+    function filtericons(name,color){
+        const filtericonhash ={
+            'Recents':<Clock color={color} size={17} style={{
+                marginRight:5,
+                
+            }}/>,
+            'Announments':<Notification1 color={color} size={17} style={{
+                marginRight:5,
+                
+            }}/>,
+            'Events':<Calendar color={color} size={17} style={{
+                marginRight:5,
+                
+            }}/>,
+            'Polls':<Chart color={color} size={17} style={{
+                marginRight:5,
+                
+            }}/>,
+            'Opportunities':<Key color={color} size={17} style={{
+                marginRight:5,
+                
+            }}/>,
+        }
+        return filtericonhash[name]
+    }
+
+    function swapFeed(item) {
+        setActiveFilter(item);
+        //navigateToFeed(item);
+      }
+      
     return (
 
         <View
@@ -243,10 +311,22 @@ export default function OrgChannel({route,navigation}){
             >
 
        
-            <TouchableOpacity
-            onPress={()=>navigation.goBack()}
-            >
-            <Ionicons name="chevron-back" size={24} color={color_scheme(colorMode,'black')} />
+    
+<TouchableOpacity onPress={()=>{
+                       Haptics.impactAsync('medium')
+                        navigation.goBack()}}
+                    style={{
+                        flexDirection:"row",
+                        alignItems:'center',
+                        justifyContent:'center',
+                        height:33,
+                        width:33,
+                        backgroundColor:'#222',
+                        borderRadius:100,
+                        marginRight:10
+                    }}
+                    >
+            <Ionicons name="chevron-back-outline" size={24} color={color_scheme(colorMode,'black')} />
             </TouchableOpacity>
             <View
             style={{
@@ -255,8 +335,8 @@ export default function OrgChannel({route,navigation}){
             }}
             >
             <Image source={{uri:wrapUIMG(org.org_logo)}} style={{
-                height:30,
-                width:30,
+                height:40,
+                width:40,
                 borderRadius:100,
                 marginRight:10
             }}/>
@@ -288,6 +368,45 @@ export default function OrgChannel({route,navigation}){
                 </Text>
             </View>
             </View>
+            <View
+            style={{
+
+
+                paddingVertical:14
+            }}
+            >
+
+            <ScrollView contentContainerStyle={{
+               flex:0,
+               borderBottomWidth:1,
+               borderStyle:'solid',
+               borderColor:'#222',
+                           
+
+            }}  horizontal={true} showsHorizontalScrollIndicator={false}>
+                    {
+                        filters.map((filter,i)=>{
+                            const color = activeFilter==filter?"white":'#555'
+                            const genstyle = {flexDirection:'row',marginRight:17,paddingBottom:10}
+                            const gentextstyle = {fontSize:18,fontWeight:'400',color:'#444',marginHorizontal:10}
+                            return(
+                                <TouchableOpacity key={i} style={activeFilter==filter?[genstyle,{ borderBottomWidth:1,
+                                    borderStyle:'solid',
+                                    borderColor:'white'}]:[genstyle]} onPress={()=>swapFeed(filter)}>
+                                    {/* {
+                                        filtericons(filter,color)
+                                    } */}
+                                    <Text style={activeFilter==filter?[gentextstyle,{color:color_scheme(colorMode,'black')}]:gentextstyle}>{filter}</Text>
+                                </TouchableOpacity>
+                            )
+                        })
+                    }
+                
+
+
+
+                </ScrollView>
+            </View>
             <ScrollView
             style={{
                 flex:1,
@@ -298,7 +417,7 @@ export default function OrgChannel({route,navigation}){
             }}
             >
                 {
-                    [...Array(10)].map((pst,index)=>{
+                    [...Array(4)].map((pst,index)=>{
                         return (
                         <RenderOrgChannelPost key={index}/>
                         )

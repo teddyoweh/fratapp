@@ -10,6 +10,7 @@ import { AppContext } from "../../../context/appContext";
 import ProfilePosts from "../../../components/ProfilePosts";
 import { wrapUIMG } from "../../../utils/utils";
 import { color_scheme } from "../../../config/color_scheme";
+import * as Haptics from 'expo-haptics'
 export default function ProfilesScreen({navigation,route}){
     const {user,colorMode} = useContext(AppContext)
     const [filters,setFilters]=useState(['All','Posts','Polls','Media','Info','Tagged'])
@@ -17,7 +18,7 @@ export default function ProfilesScreen({navigation,route}){
     const {userdetails} = route.params
     
 
-
+    console.log(userdetails)
     return (
         <View style={[profilestyles.container,{
             backgroundColor:color_scheme(colorMode,'white')
@@ -54,19 +55,33 @@ export default function ProfilesScreen({navigation,route}){
 
     
                 <View style={profilestyles.profilebox}>
-                    <View style={profilestyles.profileboxtop}>
+                <View style={profilestyles.profileboxtop}>
                         <View style={profilestyles.profileimagesec}> 
-                        <Image source={{uri:wrapUIMG(userdetails.uimg)}} style={profilestyles.profileimage}/>
+                        <Image source={{uri:wrapUIMG(user.uimg)}} style={profilestyles.profileimage}/>
 
 
                         </View>
                         <View style={profilestyles.profiledetailssec}>
+                            <View
+                            style={{
+                                flexDirection:'column',
+                       
+                            }}
+                            >
+
+                            
                             <View style={{flexDirection:'row',alignItems:'center'}}><Text style={[profilestyles.profilename,{
-                                              color:color_scheme(colorMode,'black')
+                                color:color_scheme(colorMode,'black')
                             }]}>{`${userdetails.firstname} ${userdetails.lastname}`}</Text>
                         <Text style={profilestyles.profileusername}>{`@${userdetails.username}`}</Text></View>
-                        
-                       
+                        <View style={profilestyles.profilebio}>
+                        <Text style={[profilestyles.profilebiotxt,{
+                            color:color_scheme(colorMode,'black')
+                        }]}>
+                          {userdetails.bio}
+                        </Text>
+                    </View>
+                        </View>
                         
                             {/* <View style={profilestyles.profilefollowers}>
                                 <Text style={profilestyles.profilefollowersno}>
@@ -80,14 +95,15 @@ export default function ProfilesScreen({navigation,route}){
 
 
                     </View>
-                    <View style={profilestyles.profilebio}>
+               
+                    {/* <View style={profilestyles.profilebio}>
                         <Text style={[profilestyles.profilebiotxt,{
                             color:color_scheme(colorMode,'black')
                         }]}>
                           {userdetails.bio}
                         </Text>
                     </View>
-             
+              */}
                     
                     
                     {/* <View style={profilestyles.profilesocials}>

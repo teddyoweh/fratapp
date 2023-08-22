@@ -1,8 +1,8 @@
-import { useContext, useState } from "react";
-import { View,Text,Image,TouchableOpacity,Vibration,  StyleSheet,ScrollView,Modal, TextInput,  RefreshControl} from "react-native";
+import { useContext, useRef, useState } from "react";
+import { View,Text,Image,TouchableOpacity,Vibration,  StyleSheet,ScrollView,Modal, TextInput,  RefreshControl, KeyboardAvoidingView, Button} from "react-native";
 import { homestyles,discoverstyles } from "../../../styles";
 import { Message, Messages1,Message2, Messages2, SearchNormal, Messages3, MessageSquare,More,Like, Like1,AddCircle, ElementPlus} from 'iconsax-react-native';
-import { FontAwesome5,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
+import { FontAwesome5,Ionicons,AntDesign, MaterialIcons,Feather} from '@expo/vector-icons';
 import { makeeventstyles } from "../Calendar/MakeEvent"; 
 import { AppContext } from "../../../context/appContext";
 import axios from "axios";
@@ -10,7 +10,12 @@ import { endpoints } from "../../../config/endpoints";
 import Spinner from "../../../components/Spinner";
 import successgif from '../../../assets/successorg.gif'
 import * as ImagePicker from 'expo-image-picker';
+import BottomSheet from "react-native-gesture-bottom-sheet";
+import * as Haptics from 'expo-haptics'
 import { color_scheme } from "../../../config/color_scheme";
+import { wrapUIMG } from "../../../utils/utils";
+import * as Animatable from 'react-native-animatable';
+ 
 const LoadingModal = ({ isVisible, onClose,success }) => {
     const {colorMode} = useContext(AppContext)
     return (
@@ -31,7 +36,7 @@ const LoadingModal = ({ isVisible, onClose,success }) => {
             style={{
                 marginTop:20,
                 fontSize:16,
-                cocolor:color_scheme(colorMode,'#eee'),
+                color:color_scheme(colorMode,'#eee'),
                 fontWeight:'700'
             }}
             >
@@ -39,18 +44,234 @@ const LoadingModal = ({ isVisible, onClose,success }) => {
             </Text>
             </>
                  :
-                <Image source={successgif} style={{
-                    width:200,
-                    height:200
-                }}>
-
-                </Image>
+                 
+                 <Animatable.View
+                 animation="fadeIn"
+                 duration={800}
+                 style={styles.loadingText}
+               >
+               <AntDesign name="check" size={24} color="black" /> 
+             </Animatable.View>
                 }
           </View>
         </View>
       </Modal>
     );
   };
+function AddSchoolSheet({bottomSheet,selectedSchool,setSelectedSchool}){
+    const {user} = useContext(AppContext)
+    const [schools,setSchools] = useState(null)
+
+  const [input,setInput] = useState('')
+    async function searchSchoolAction(input){
+        setInput(input)
+        await axios.post(endpoints['search_school'],{
+            search:input.toLowerCase(),
+            userid:user.userid
+        }).then(res=>{
+            console.log(res.data)
+            setSchools(res.data)
+        })
+    }
+   
+   
+        
+        
+    function closeSheet(){
+        Haptics.ImpactFeedbackStyle.Medium
+        bottomSheet.current.close()
+    }
+    const {colorMode} = useContext(AppContext)
+    // useEffect(()=>{
+    //     addToHashMap(user.userid, user)
+    // },[])
+    return (
+        <>
+
+        <BottomSheet  hasDraggableIcon={false} ref={bottomSheet} height={850} >
+        <KeyboardAvoidingView style={{backgroundColor:color_scheme(colorMode,'white'),flex:1,
+    paddingTop:20}}>
+<View
+style={{
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:"space-between",
+    paddingHorizontal:10,
+}}
+>
+
+
+<View style={[discoverstyles.searchbox,{backgroundColor:color_scheme(colorMode,'#eee'),width:'85%'}]}>
+                    <SearchNormal variant="Broken" color="grey" />
+                    <TextInput style={[discoverstyles.search,{color:color_scheme(colorMode,'#333')}]}    autoCapitalize="none"  placeholderTextColor={color_scheme(colorMode,'#aaa')} placeholder="Search Schools" value={input} onChangeText={(text)=>searchSchoolAction(text)}/>
+                </View>
+                <Button title="Done" 
+                onPress={()=>closeSheet()}
+                />
+                </View>
+                
+        <View
+              keyboardShouldPersistTaps="always"
+                keyboardDismissMode="on-drag"
+                contentContainerStyle={{backgroundColor:color_scheme(colorMode,'white'),flex:1}}
+              >
+
+<View style={{flexDirection:'column', backgroundColor:color_scheme(colorMode,'white'), height:"100%",paddingVertical:10}}>
+ 
+
+{
+    schools!=null?
+    
+    schools.length==0?
+    <View
+    style={{
+        flexDirection: 'row',
+        justifyContent:'center',
+        alignItems:'center',
+        height:'90%'
+    }}
+    >
+        <Text
+        style={{
+            fontSize: 18,
+            color:'#333',
+            fontWeight:'700'
+        }}
+        >
+           No Schools Found
+        </Text>
+    </View>
+    :
+    <View
+    style={{
+        flexDirection:"column",
+        justifyContent:'flex-start'
+
+    }}
+    >
+
+    
+<ScrollView
+contentContainerStyle={{
+    height:'90%',
+}}
+>
+
+
+        {
+            schools.map((school,index)=>{
+                const bgcolor = selectedSchool==school?color_scheme(colorMode,'#f5f5f5'):'transparent'
+                const isSelected =  selectedSchool==school
+                return (
+     
+                    <TouchableOpacity
+                    key={index}
+                    onPress={()=>{
+                        Haptics.selectionAsync()
+                        setSelectedSchool(school)
+                       }}
+                    style={{
+
+                        flexDirection:'row',
+                        alignItems:'center',
+                        justifyContent:'space-between',
+                     
+                        borderStyle:'solid',
+                        borderColor:color_scheme(colorMode,'#eee'),
+                        borderBottomWidth:2.4,
+                        paddingHorizontal:10,
+                        paddingVertical:10,
+                        backgroundColor:bgcolor
+                        
+                    }}
+                    >
+                    <View
+                    style={{
+                        flexDirection:'row',
+                        alignItems:'center',
+                        justifyContent:'flex-start'
+                    }}
+                    >
+                        <Image source={{uri:wrapUIMG(school.logo)}} style={{
+                            width:40,
+                            height:40,
+                            borderRadius:10,
+                            marginRight:10
+                        }}/>
+                        <View
+                        style={{
+                            flexDirection:'row',
+                            alignItems:'center'
+                        }}
+                        >
+                            <Text style={{
+                                fontSize:16,
+                                fontWeight:'bold',
+                                color:color_scheme(colorMode,'#333')
+                            
+                            }}>
+                                {school.name}
+                            </Text>
+                            <Text
+                            style={{
+                                fontSize:14,
+                                marginLeft:5,
+                                color:"#eee"
+                            }}
+                            >
+                                {school.shortname}
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={{}}>
+                        {isSelected==true &&
+                        <View>
+                            <Feather name="check" size={24} color="#047aff" />
+                        </View>
+                        }
+                    </View>
+                        
+                    </TouchableOpacity>
+                )
+            })
+        }
+        </ScrollView>
+
+        </View>:
+
+        <View
+        style={{
+            flexDirection: 'row',
+            justifyContent:'center',
+            alignItems:'center',
+            height:'90%'
+        }}
+        >
+            <Text
+            style={{
+                fontSize: 18,
+                color:'#333',
+                fontWeight:'700'
+            }}
+            >
+                Search for Schools
+            </Text>
+        </View>
+}
+
+
+     
+     
+        </View>
+        </View>
+        
+        </KeyboardAvoidingView>
+  </BottomSheet>
+
+  </>
+    )
+    
+}
 function RenderGroupInput({group,setGroup,name}){
     const {colorMode} = useContext(AppContext)
     function addToGroup(item){
@@ -139,7 +360,7 @@ export default function CreateOrgs({navigation}){
     const [orgWebsite,setOrgWebsite] = useState('')
     const [orgEmail,setOrgEmail] = useState('')
     const [orgPhone,setOrgPhone] = useState('')
-    const [orgSchool,setOrgSchool] = useState('')
+    const [orgSchool,setOrgSchool] = useState(null)
     const [orgImage,setOrgImage] = useState(null)
     
     const [teams,setTeams] = useState(['Executive','Finance','Media'])
@@ -264,6 +485,7 @@ export default function CreateOrgs({navigation}){
 
     }
     
+    const schoolSheetRef = useRef()
     return (
         <View style={{backgroundColor:color_scheme(colorMode,'white'),flex:1,height:'100%'}}>
              <View style={{
@@ -345,31 +567,15 @@ export default function CreateOrgs({navigation}){
                               
                             </View>
                                }
-                            <TouchableOpacity
-                            onPress={()=>addImage()}
-                            style={{
-                                paddingHorizontal:10,
-                                paddingVertical:10,
-                                borderRadius:6,
-                                backgroundCocolor:color_scheme(colorMode,'#eee'),borderColor:color_scheme(colorMode,'#333'),
-                                position:'relative',
-                                top:-22,
-                                left:-5
-                                
-                            }}
-                            >
-                                <Text
-                                style={{
-                                    color:color_scheme(colorMode,'white'),
-                                    fontWeight:'700',
-                                    fontSize:11,
-                                }}
-                                >
-                                   {orgImage?"Update": 'Upload'}
-                                </Text>
-                            </TouchableOpacity>
+                
+                          
+                             
                             </View>
-                            <Text style={[makeeventstyles.formtext,{color:color_scheme(colorMode,'#333')}]}>Organization Picture</Text>
+                           <Button
+                             onPress={()=>addImage()}
+                           title="Edit Organization Logo"
+                           />
+                     
                         </View>
                         <View style={makeeventstyles.formgrp}>
                             <Text style={[makeeventstyles.formtext,{color:color_scheme(colorMode,'#333')}]}>Organization Name</Text>
@@ -410,9 +616,67 @@ export default function CreateOrgs({navigation}){
                         </View>
                         <View style={makeeventstyles.formgrp}>
                             <Text style={[makeeventstyles.formtext,{color:color_scheme(colorMode,'#333')}]}>Organization School</Text>
-                            <TextInput
-                                       placeholderTextColor={color_scheme(colorMode,'gray')} keyboardAppearance={colorMode}
-                            style={[makeeventstyles.forminput,{ color:color_scheme(colorMode,'black'),          backgroundColor:color_scheme(colorMode,'#eeee'),borderColor:color_scheme(colorMode,'#ccc')}]} placeholder="Organization School" value={orgSchool} onChangeText={(text)=>setOrgSchool(text)}/>
+                            <TouchableOpacity
+
+                            onPress={()=>{
+                                Haptics.impactAsync('medium');
+                                schoolSheetRef.current.show()
+                            }}
+                            style={[makeeventstyles.forminput,{ color:color_scheme(colorMode,'black'), justifyContent:"space-between",          backgroundColor:color_scheme(colorMode,'#eeee'),borderColor:color_scheme(colorMode,'#ccc')}]}
+                            >
+                                {
+                                    orgSchool==null?
+                            
+                     <Text
+                     style={{
+                     color:color_scheme(colorMode,'gray')
+                     }}
+                     >
+                        Organization School
+
+                     </Text>:
+                     <View
+                     style={{
+                         flexDirection:'row',
+                         alignItems:'center',
+                         justifyContent:'flex-start'
+                     }}
+                     >
+                         <Image source={{uri:wrapUIMG(orgSchool.logo)}} style={{
+                             width:30,
+                             height:30,
+                             borderRadius:10,
+                             marginRight:10
+                         }}/>
+                         <View
+                         style={{
+                             flexDirection:'row',
+                             alignItems:'center'
+                         }}
+                         >
+                             <Text style={{
+                                 fontSize:14,
+                                 fontWeight:'bold',
+                                 color:color_scheme(colorMode,'#333')
+                             
+                             }}>
+                                 {orgSchool.name}
+                             </Text>
+                             <Text
+                             style={{
+                                 fontSize:12,
+                                 marginLeft:5,
+                                 color:"#eee"
+                             }}
+                             >
+                                 {orgSchool.shortname}
+                             </Text>
+                         </View>
+                     </View>
+                         }
+                     <SearchNormal color={color_scheme(colorMode,'gray')} size={20}/>
+                                        
+                                        </TouchableOpacity>
                         </View>
                         <RenderGroupInput group={positions} setGroup={setPositions} name={'Positions'}/>
                         <RenderGroupInput group={teams} setGroup={setTeams} name={'Cohorts'}/>
@@ -510,6 +774,7 @@ export default function CreateOrgs({navigation}){
                 <Text style={makeeventstyles.createeventbtntext}>Create Organization</Text>
             </TouchableOpacity>
         </View>
+        <AddSchoolSheet bottomSheet={schoolSheetRef} selectedSchool={orgSchool} setSelectedSchool={setOrgSchool}/>
         </View>
     )
 }

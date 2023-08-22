@@ -10,7 +10,7 @@ import { useRoute } from '@react-navigation/native';
 import LoginStacks from "./Login";
 import RegisterStacks from "./Register";
 import LandingPage from "./Landing";
-
+import AllowPage from "./Requests/Allow";
  
 const AuthScreens = createStackNavigator()
 
@@ -25,8 +25,11 @@ function AuthScreen({navigation,route}) {
     }
     
     >
+      {/* <AuthScreens.Screen name="GalleryAllowPage" initialParams={{type:'gallery'}} component={AllowPage} />
+<AuthScreens.Screen name="LocationAllowPage" initialParams={{type:'location'}} component={AllowPage} />
 
 
+<AuthScreens.Screen name="NotificationAllowPage" initialParams={{type:'notification'}} component={AllowPage} /> */}
 <AuthScreens.Screen name="LandingPage" component={LandingPage} />
 <AuthScreens.Screen name="LoginStack" component={LoginStacks} />
 

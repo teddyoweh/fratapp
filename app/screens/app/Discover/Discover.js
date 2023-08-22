@@ -1,4 +1,4 @@
-import React,{useContext, useState}from "react";
+import React,{useContext, useEffect, useState}from "react";
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput, Dimensions} from "react-native";
 import { homestyles,profilestyles,discoverstyles } from "../../../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Profile, MessageText1, CloudLightning, MessageAdd, MessageQuestion,SearchNormal} from 'iconsax-react-native';
@@ -115,6 +115,93 @@ function DiscoverFeedScreens(){
    
     )
  }
+ function DiscoverOrgs({navigation,people}){
+console.log(people)
+    const {colorMode} = useContext(AppContext)
+    return (
+<View style={[discoverstyles.results,{backgroundColor:color_scheme(colorMode,'white')}]}>
+                 
+                 <ScrollView style={{}}  >
+             
+                     { 
+                     
+                     people?
+                     
+                    people.length>0?
+                     people.map(
+                         (person,index)=>{
+                            
+                  
+                             return(
+                                 <TouchableOpacity style={[discoverstyles.result,{borderColor:color_scheme(colorMode,'#ddd')}]} key={index} onPress={()=>    navigation.navigate('OrgProfilesScreen',{userdetails:person})}>
+                                 <Image source={{uri:wrapUIMG(person.org_logo)}} style={{
+                                    width:40,
+                                    height:40,
+                                    borderRadius:10
+                                 }}/>
+                                 <View style={discoverstyles.resultinfo}>
+                                     {/* <Text style={discoverstyles.resultname}>{greek.name} ({greek.letters})</Text>
+                                     <Text style={discoverstyles.resultaddress}> - Tarleton State University</Text> */}
+                                     <Text style={[discoverstyles.resultname,{color:color_scheme(colorMode,"black")}]}>{person.org_name}</Text>
+                                    {/* <Text style={[discoverstyles.resultaddress,{color:color_scheme(colorMode,"#c3c3c3")}]}> @{person.username}</Text> */}
+                                 </View> 
+                             </TouchableOpacity>
+                             )
+                             }
+                     ):
+                     <View
+                     style={{
+                        flex:1,
+                        flexDirection:'row',
+                        justifyContent:"center",
+                        alignItems:'center',
+                        height:Dimensions.get('window').height/2
+                     }}
+                     >
+                        
+                        <Text
+                            style={{
+                                color:'#aaa',
+                                fontSize:18,
+                                fontWeight:'700'
+
+                            }}
+                    
+                        >No Results Found
+                        </Text>
+                     </View>
+                     :
+                     <View
+                     style={{
+                        flex:1,
+                        flexDirection:'row',
+                        justifyContent:"center",
+                        alignItems:'center',
+                        height:Dimensions.get('window').height/2
+                     }}
+                     >
+                        
+                        <Text
+                            style={{
+                                color:'#aaa',
+                                fontSize:18,
+                                fontWeight:'700'
+
+                            }}
+                    
+                        >
+                            Search Orgs
+                        </Text>
+                     </View>
+                    }
+                                   </ScrollView>
+          
+                    
+                 </View>
+   
+    )
+ }
+
  function DiscoverAll({navigation,results}){
 
     const {colorMode} = useContext(AppContext)
@@ -203,8 +290,8 @@ function DiscoverFeedScreens(){
 
 export default function DiscoverScreen({navigation}){
     const greeks = [...frats,...sors]
-    const [filters,setFilters]=useState(['All','People','Organizations'])//'Fraternities','Sororities','Universities'
-    const [activeFilter,setActiveFilter]=useState('All')
+    const [filters,setFilters]=useState(['Organizations','People'])//'Fraternities','Sororities','Universities'
+    const [activeFilter,setActiveFilter]=useState(filters[0])
     const [people,setPeople] = useState(null)
     const [search,setSearch]= useState('')
     const [orgs,setOrgs] = useState(null)
@@ -218,14 +305,41 @@ export default function DiscoverScreen({navigation}){
     async function SearchOrgs(){
         await axios.post(endpoints['discoverorgs'],{
             search:search,userid:user.userid
+        }).then(res=>{
+            setOrgs(res.data)
+        })
+    }
+    async function SearchAll(){
+        await axios.post(endpoints['discoverall'],{
+            search:search,userid:user.userid
         })
     }
     function performSearch(t){
         
         setSearch(t)
-        SearchPeople()
+        // SearchPeople()
+        if(
+            activeFilter=='People'
+        ){
+            SearchPeople()
+        }
+        else if(
+            activeFilter=='Organizations'
+        ){
+            SearchOrgs()    
+        }
+   
     }
+    async function fetchOrgs(){
+        await axios.post(endpoints['fetchorgs']).then(res=>{
+            setOrgs(res.data)
+        })
+    }
+    useEffect(()=>{
+fetchOrgs()
+    },[])
     const {colorMode} = useContext(AppContext)
+
     return (
         <View style={[discoverstyles.container,{backgroundColor:color_scheme(colorMode,'white')}]}>
            <View style={[discoverstyles.top]}>
@@ -268,6 +382,9 @@ export default function DiscoverScreen({navigation}){
                 activeFilter=='People' && <DiscoverPeople navigation={navigation} people={people}/>
                 }
 
+{
+                activeFilter=='Organizations' && <DiscoverOrgs navigation={navigation} people={orgs}/>
+                }
            </View>
         </View>
     )

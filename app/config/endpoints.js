@@ -27,6 +27,8 @@ const endpoints = {
     'getcommentuser': `${serverip}/api/posts/getcommentuser`,
     'findpost':`${serverip}/api/posts/find`,
     'uploadpost':`${serverip}/api/posts/uploadpost`,
+    'fetchlikeusers':`${serverip}/api/posts/fetchlikeusers`,
+
     //
 
     'majorslist':`${serverip}/api/discover/fetchmajors`,
@@ -40,6 +42,10 @@ const endpoints = {
     'fetchmsgs':`${serverip}/api/messages/fetch`,
     'sendmsg':`${serverip}/api/messages/send`,
     'viewedby':`${serverip}/api/messages/viewedby`,
+    'updateviewed':`${serverip}/api/messages/updateviewed`,
+    'getunreadcount':`${serverip}/api/messages/getunreadcount`,
+
+    'search_school':`${serverip}/api/school/search`,
 
     'addcalendar':`${serverip}/api/calendar/add`,
     'getcalendar':`${serverip}/api/calendar/getcalendar`,
@@ -53,6 +59,11 @@ const endpoints = {
     'get_org_posts':`${serverip}/api/orgs/get_posts`,
     'create_cohort':`${serverip}/api/orgs/create_cohort`,
     'get_my_orgs':`${serverip}/api/orgs/get_my_org`,
+    'manage_follow_org':`${serverip}/api/orgs/manage_follow_org`,
+    'get_org_state':`${serverip}/api/orgs/get_org_state`,
+    'get_org_profile':`${serverip}/api/orgs/get_org_profile`,
+    'manage_org_member':`${serverip}/api/orgs/manage_org_member`,
+    'fetchorgs':`${serverip}/api/orgs/fetchorgs`,
 
     'create_studyhours':`${serverip}/api/studyhours/create`
 

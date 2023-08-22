@@ -9,7 +9,7 @@ function fetcheventposts(req, res) {
   Posts.find({
    ispublic:true,
    isevent:true
-   // date: { $gte: new Date(new Date().getTime() - 24 * 60 * 60 * 1000) }
+   
   })
   .sort({ date: -1 })
   .then(posts => {
@@ -28,7 +28,7 @@ function fetchannouncementposts(req, res) {
      ispublic:true,
      isanouncement:true
      
-     // date: { $gte: new Date(new Date().getTime() - 24 * 60 * 60 * 1000) }
+     
     })
     .sort({ date: -1 })
     .then(posts => {
@@ -47,7 +47,7 @@ function fetchannouncementposts(req, res) {
     Posts.find({
      ispublic:true,
      ispinned:true
-     // date: { $gte: new Date(new Date().getTime() - 24 * 60 * 60 * 1000) }
+     
     })
     .sort({ date: -1 })
     .then(posts => {
@@ -66,7 +66,7 @@ function fetchannouncementposts(req, res) {
     const posts = await Posts.find({
       ispublic: true,
       [postType]: true,
-      _id: { $nin: excludeIds } // exclude posts that have already been added
+      _id: { $nin: excludeIds } 
     })
       .sort({ date: -1 })
       .limit(limit)
@@ -76,7 +76,7 @@ function fetchannouncementposts(req, res) {
   
   async function newsfeed(req, res) {
     try {
-      let excludeIds = []; // keep track of post ids that have been added
+      let excludeIds = []; 
       const eventPosts = await fetchPostsByType('isevent', 2, excludeIds);
       excludeIds = excludeIds.concat(eventPosts.map(post => post._id));
       const pinnedPosts = await fetchPostsByType('ispinned', 2, excludeIds);

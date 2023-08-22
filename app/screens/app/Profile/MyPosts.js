@@ -24,7 +24,6 @@ export default function MyPosts({navigation,route}){
    
         })
     }
-
     useEffect(() => {
         loadMyPosts()
     },[])
@@ -32,7 +31,7 @@ export default function MyPosts({navigation,route}){
         postData&&
         postData.map((post,index)=>{
             return(
-                <PostsList index={index} post={post} route={route} navigation={navigation} users={postData.users}/>
+                <PostsList index={index} key={index}post={post} route={route} navigation={navigation} users={postData.users}/>
             )
         })
         

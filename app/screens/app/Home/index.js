@@ -6,6 +6,7 @@ import { useRoute } from '@react-navigation/native';
 import ProfilesScreen from './Profiles'
 import ProfileStacks from '../Profile';
 import PostPage from '../../../components/PostPage';
+import OrgProfilesScreen from './OrgProfiles';
 const HomeStack = createStackNavigator()
 
 function HomeStacks({navigation,route}) {
@@ -26,6 +27,7 @@ function HomeStacks({navigation,route}) {
     
       <HomeStack.Screen name='ProfileStacks' component={ProfileStacks}/>
       <HomeStack.Screen  name="ProfilesScreen" component={ProfilesScreen}/>
+      <HomeStack.Screen  name="OrgProfilesScreen" component={OrgProfilesScreen}/>
     </HomeStack.Navigator>
  
  

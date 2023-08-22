@@ -1,4 +1,4 @@
-import React,{useContext, useEffect, useState}from "react";
+import React,{useContext, useEffect, useRef, useState}from "react";
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,RefreshControl} from "react-native";
 import { homestyles,poststyles } from "../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Back, MessageSearch} from 'iconsax-react-native';
@@ -115,6 +115,7 @@ export default function PostPage({navigation,route}){
     
         
     }
+    const likeBottomSheet = useRef();
     const [refreshing, setRefreshing]  =useState(false);
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);

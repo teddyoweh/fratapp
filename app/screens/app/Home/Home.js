@@ -1,7 +1,7 @@
 import React,{useState,useContext,useRef, useEffect}from "react";
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,  RefreshControl} from "react-native";
 import { homestyles } from "../../../styles";
-import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Add, Send2, Messenger, Verify} from 'iconsax-react-native';
+import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Add, Send2, Messenger, Verify, Notification} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
 import { AppContext } from "../../../context/appContext";
 import LikeBtn from "../../../components/LikeBtn";
@@ -14,7 +14,37 @@ import { setupNotifications } from "../../../config/setup";
 import { color_scheme } from "../../../config/color_scheme";
 import { BlurView } from "expo-blur";
 import * as Haptics from 'expo-haptics'
-
+import axios from "axios";
+import { endpoints } from "../../../config/endpoints";
+function RenderMessageBtn({navigation}){
+    const {colorMode,user} = useContext(AppContext)
+    const [count,setCount] = useState(null)
+    async function fetchCount(){
+        await axios.post(endpoints['getunreadcount'],{userId:user.userid})
+        .then(res=>{
+        setCount(res.data)
+            }
+        )
+    }
+    useEffect(
+        ()=>{
+            fetchCount()
+        },[]
+    )
+    return (
+        <TouchableOpacity style={homestyles.msgicon} onPress={()=>navigation.navigate('MessagesScreen')}>
+                       
+                            <Messenger color={color_scheme(colorMode,'#333')} variant="Outline" size={30} />
+                            {
+                                count!=null &&
+                     
+                            <View style={homestyles.msgiconnumb}>
+                                <Text style={homestyles.msgiconnum}>{count}</Text>
+                            </View>
+                                   }
+                        </TouchableOpacity>
+    )
+}
 export default function HomeScreen({navigation}){
     const filters = ['For You','Announments','Events','Polls']//'Posts','Polls','Opportunities'
     const [activeFilter,setActiveFilter]=useState('For You')
@@ -97,16 +127,16 @@ export default function HomeScreen({navigation}){
                    
                     </View>
                     <View style={homestyles.topright}>
-                
-                        <TouchableOpacity style={homestyles.msgicon} onPress={()=>navigation.navigate('MessagesScreen')}>
+                    <TouchableOpacity style={homestyles.msgicon} onPress={()=>navigation.navigate('MessagesScreen')}>
                        
-                            <Messenger color={color_scheme(colorMode,'#333')} variant="Outline" size={30} />
-                            <View style={homestyles.msgiconnumb}>
-                                <Text style={homestyles.msgiconnum}>
-                                    3
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
+                       <Notification color={color_scheme(colorMode,'#333')} variant="Bold" size={30} />
+                       <View style={homestyles.msgiconnumb}>
+                           <Text style={homestyles.msgiconnum}>
+                               9+
+                           </Text>
+                       </View>
+                   </TouchableOpacity>
+                        <RenderMessageBtn navigation={navigation}/>
                     </View>
                 </View>
                 <View style={homestyles.topContent}>
@@ -141,15 +171,6 @@ export default function HomeScreen({navigation}){
   
         <Feed  navigation={navigation} postBottomSheet={postBottomSheet} />
        
-            <View style={homestyles.postbtndiv}>
-                <TouchableOpacity style={homestyles.postbtn} onPress={()=>{
-                    Haptics.impactAsync('medium')
-                    postBottomSheet.current.show()}}> 
-                <Add color="white" variant="Broken" size={42} />
-                {/* <Text style={homestyles.postbtntext}>New Post</Text> */}
-                </TouchableOpacity>
-
-            </View>
 
           
         </View>

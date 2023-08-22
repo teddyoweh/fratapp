@@ -68,15 +68,12 @@ export default function Settings({navigation}){
 
 
             <View style={{marginVertical:10,
-             elevation: 10,
- 
-             shadowOffset: { width: 3, height: 10 },
-             shadowOpacity: 0.35,
+  
+            
              marginBottom:30,shadowRadius:4 ,
              width:'95%',
-             borderStyle:'solid',
-             borderWidth:1,
-             borderColor:color_scheme(colorMode,"#eeee"),
+           
+          
              borderRadius:10,
              marginBottom:10,
              paddingVertical:10,
@@ -133,10 +130,10 @@ const settingstyles = StyleSheet.create({
     backgroundColor:'white',
     justifyContent:'space-between',
     borderBottomWidth:0.5,
- 
+    borderColor:'#222',
     borderStyle:"solid",
-    paddingHorizontal:10,
-    paddingVertical:10,                                
+    
+    paddingVertical:15,                                
                 },
     settingoptionstext: {
                     fontSize:17,
