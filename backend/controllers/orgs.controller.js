@@ -6,6 +6,7 @@ const User = require('../models/User')
 const crypto = require('crypto');
 const Links = require('../models/Links');
 var fs = require('fs');
+const Messages = require('../models/Message');
 function hashcode(data){
     
     const hash = crypto.createHash('sha256');
@@ -66,7 +67,22 @@ async function createOrg(req, res) {
           channel_name:team
         })
         await newChannel.save()
-      })
+        const rt = team=='General'?'group':'cohort'
+        const org_ = team=='General'?org.id:newChannel.id
+        const newMessage = new Messages({
+          sender_id:uid,
+          receiver_id:org_,
+          receiver_type:rt,
+          org_id:org.id,
+          channel_id:newChannel.id,
+          content:'Created Group',
+          msg_type:'action',
+        })
+        await newMessage.save()
+      });
+      
+      
+    
       res.status(200).json({
         status: true,
         org: org,
@@ -365,6 +381,39 @@ async function fetchOrgs(req,res){
   const orgs = await Organizations.find({}).sort({ org_name: 1 }).exec();
   res.json(orgs)
 
+
+}
+async function makeOrgPost(req,res){
+  const images = []
+     
+  console.log(req.body.images)
+  req.body.images.map((image,index)=>{
+      images.push({uri:hashfilename(image.uri,req.body.email,req.body.random),width:image.width,height:image.height})
+
+  })
+  const newpost = new OrgPosts({
+    content: req.body.content,
+        // imgurls: req.body.imgurls,
+ 
+        likesno: 0,
+        commentsno: 0,
+        clicksno: 0,
+   
+        likesuserlist: [],
+        commentuserlist: [],
+        isanouncement:req.body.isanouncement,
+        isevent:req.body.isevent,
+        isjob:req.body.isjob,
+        eventgoinglist:[],
+        links:req.body.links,
+        userid: req.body.userid,
+        isrepost: req.body.isrepost,
+        repostid: req.body.repostid,
+        repostlist: [],
+        repostno:0,
+        imgurls:images,
+        posttype:req.body.posttype
+  })
 }
 module.exports =  {
     createOrg,

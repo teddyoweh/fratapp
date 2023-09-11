@@ -116,9 +116,31 @@ function RenderMsg({navigation, msg,msg2}){
     const {user} =useContext(AppContext)
     const rad = msg.sender_id==user.userid? {borderBottomRightRadius:0}:{borderBottomLeftRadius:1}
  
-    
+ 
     return (
     
+       <>
+       {
+                msg.msg_type=='action'&&
+                <View
+                style={{
+                    flexDirection:'row',
+                    alignItems:'center',
+                    justifyContent:'center',
+                    paddingBottom:10,
+                }}
+                >
+                    <Text
+                    style={{
+                        color:"#444",
+                    }}
+                    >
+                        {msg.content}
+                    </Text>
+                </View>
+       }
+   {
+                msg.msg_type=='text'&&
         <View
         style={{
             flexDirection:'row',
@@ -165,7 +187,7 @@ function RenderMsg({navigation, msg,msg2}){
       
             {
                 msg.content.length>0 &&
-       
+             
             <View
             style={[{
                 backgroundColor:msg.sender_id==user.userid?'#b347fd':"#333",
@@ -211,9 +233,17 @@ function RenderMsg({navigation, msg,msg2}){
                     {formatTime(msg.date)}
                 </Text>
             </View>
+ 
+    
+            
+         
+
+           
+           
                  }
             </View>
-            </View>
+            </View>}
+            </>
    
     )
 }
@@ -227,13 +257,14 @@ export default function ChatScreen({navigation,route}){
     
     const {user,colorMode} =useContext(AppContext)
     
-    const {party_data} = route.params
+    const {party_data,receiver_type,channel_id,
+        org_id} = route.params
     
     const [data,setData] = useState(null)
     const [text,setText] = useState('')
     const [msgtype,setMsgType]  = useState('text')
     const scrollViewRef = useRef(null);
-
+ 
     const partyid = party_data._id?party_data._id:party_data.userid
     const scrollToBottom = () => {
       scrollViewRef.current.scrollToEnd({ animated: true });
@@ -244,17 +275,21 @@ export default function ChatScreen({navigation,route}){
     async function SendMessage(){
         const random = randomNumberString()
         Haptics.impactAsync('medium')
-        await axios.post(endpoints['sendmsg'],{
+        const body = {
             user_id:user.userid,
             receiver_id:partyid,
             text: removeExcessWhitespace(text),
             msg_type:msgtype,
-            receiver_type:'user',
+            receiver_type:receiver_type,
             random:random,
             email:user.email,
-            images:images
+            images:images,
+            channel_id,
+            org_id
     
-        }).then(async res=>{
+        }
+        console.log(body)
+        await axios.post(endpoints['sendmsg'],body).then(async res=>{
          
             setText('')
             if(images.length>0){
@@ -267,7 +302,7 @@ export default function ChatScreen({navigation,route}){
         })
     }
     async function FetchMessages(){
-        await axios.post(endpoints['fetchmsgs'],{receiver_id:user.userid}).then(res=>{
+        await axios.post(endpoints['fetchmsgs'],{receiver_id:partyid,user_id:user.userid}).then(res=>{
             setData(res.data)
         })
     }
@@ -421,7 +456,7 @@ function UpdateMessageViewed() {
      
         <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={1}
+        keyboardVerticalOffset={70}
         style={{
             flexDirection:'column',
             flex:1,
@@ -504,7 +539,7 @@ style={{
             >
 
 
-        <Image source={{uri:wrapUIMG(party_data.uimg)}} style={{
+        <Image source={{uri:wrapUIMG(party_data.uimg_)}} style={{
     
         
             height:45,
@@ -526,7 +561,7 @@ style={{
             fontWeight:'500'
         }}
         >
-            {party_data.firstname+' '+party_data.lastname}
+            {party_data.name_}
         </Text>
         <View
         style={{
@@ -633,12 +668,12 @@ style={{
         <View
         style={{
             flexDirection:'row',
-            paddingVertical:10,
+        
             backgroundColor:color_scheme(colorMode,'white'),
             alignItems:'center',
             
             width:Dimensions.get('screen').width-80,
-            paddingBottom:keyboardStatus?70:0
+      
         }}
         >
                  <Pressable

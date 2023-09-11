@@ -25,6 +25,10 @@ const OrganizationSchema = new Schema({
     org_teams:{
         type:Array,
     },
+    is_verified:{
+        default:false,
+        type:Boolean
+    },
     
  
  createdby:{

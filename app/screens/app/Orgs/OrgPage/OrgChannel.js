@@ -15,7 +15,7 @@ import { color_scheme } from "../../../../config/color_scheme";
 import * as Haptics from 'expo-haptics';
 
 
-function RenderOrgChannelPost(){
+function RenderOrgChannelPost({post,userdets}){
     const {user,colorMode} = useContext(AppContext)
     const [isLiked,setIsLiked] = useState(false)
     function LikeBtn(){
@@ -27,12 +27,12 @@ function RenderOrgChannelPost(){
         style={{
             flexDirection:'column',
             paddingHorizontal:18,
-            paddingVertical:20,
+            paddingVertical:10,
             marginVertical:6,
             marginHorizontal:10,
             borderRadius:10,
      
-            backgroundColor:'#2228',
+            backgroundColor:'#2224',
             // borderBottomWidth:0.5,
             // borderStyle:'solid',
             // borderColor:color_scheme(colorMode,'eeee'),
@@ -49,10 +49,10 @@ function RenderOrgChannelPost(){
         >
         
             <Image
-            source={{uri:wrapUIMG(user.uimg)}}
+            source={{uri:wrapUIMG(userdets.uimg)}}
             style={{
-                height:40,
-                width:40,
+                height:35,
+                width:35,
                 borderRadius:100
             }}
             />
@@ -66,22 +66,22 @@ function RenderOrgChannelPost(){
             >
                 <Text
                 style={{
-                    fontSize:18,
+                    fontSize:17,
                     color:color_scheme(colorMode,'black'),
                     fontWeight:'600'
                 }}
                 >
-                    {user.firstname+' '+user.lastname}
+                    {userdets.firstname+' '+userdets.lastname}
                 </Text>
                 <Text
                 style={{
                     marginLeft:5,
-                    fontSize:16,
+                    fontSize:14,
                     color:color_scheme(colorMode,'grayy'),
-                    fontWeight:'600'
+                    fontWeight:'400'
                 }}
                 >
-                    @{user.username}
+                    @{userdets.username}
                 </Text>
                 <Text>
                     
@@ -104,12 +104,11 @@ function RenderOrgChannelPost(){
                 <Text
                 style={{
                     color:color_scheme(colorMode,'black'),
-                    fontWeight:'500',
+                    fontWeight:'300',
                     fontSize:15
                 }}
                 >
-
-This dataset consists of synthetically generated images of clocks with the clock hands placed on one of 100 different clock faces.
+{post.content}
                 </Text>
                 <View
                 style={{
@@ -140,12 +139,12 @@ This dataset consists of synthetically generated images of clocks with the clock
                             >
 
                         
-                            <ArrowCircleUp size="25" color="#a330d0"/>
+                            <ArrowCircleUp size="30" color="#fff"/>
                             </TouchableOpacity>
 
                             <Text
                             style={{
-                                color:'#a330d0',
+                                color:'#fff',
                                 fontWeight:'800',
                                 fontSize:17
                             }}
@@ -159,7 +158,7 @@ This dataset consists of synthetically generated images of clocks with the clock
                             >
 
                         
-                            <ArrowCircleDown size="25" color="#555"/>
+                            <ArrowCircleDown size="30" color="#555"/>
                             </TouchableOpacity>
                       
                         </View>
@@ -173,12 +172,19 @@ This dataset consists of synthetically generated images of clocks with the clock
                         >
                             <TouchableOpacity
                             style={{
-                                marginRight:10
+                                marginRight:10,
+                                height:35,
+                                width:35,
+                                borderRadius:100,
+                                backgroundColor:'#222',
+                                flexDirection:'row',
+                                justifyContent:'center',
+                                alignItems:'center'
                             }}
                             >
 
                         
-                            <Messages1 size="25" color="#555"/>
+                            <Messages1 size="20" color="#444"/>
                             </TouchableOpacity>
                             <Text
                             style={{
@@ -200,12 +206,19 @@ This dataset consists of synthetically generated images of clocks with the clock
                         >
                             <TouchableOpacity
                             style={{
-                                marginRight:10
+                                marginRight:10,
+                                height:35,
+                                width:35,
+                                borderRadius:100,
+                                backgroundColor:'#222',
+                                flexDirection:'row',
+                                justifyContent:'center',
+                                alignItems:'center'
                             }}
                             >
 
                         
-                            <DirectInbox size="25" color="#555"/>
+                            <DirectInbox size="20" color="#444"/>
                             </TouchableOpacity>
                           
                           
@@ -220,12 +233,19 @@ This dataset consists of synthetically generated images of clocks with the clock
                         >
                             <TouchableOpacity
                             style={{
-                                marginRight:10
+                                marginRight:10,
+                                height:35,
+                                width:35,
+                                borderRadius:100,
+                                backgroundColor:'#222',
+                                flexDirection:'row',
+                                justifyContent:'center',
+                                alignItems:'center'
                             }}
                             >
 
                         
-                            <Save2 size="25" color="#555"/>
+                            <Save2 size="20" color="#444"/>
                             </TouchableOpacity>
                         
                           
@@ -247,10 +267,21 @@ This dataset consists of synthetically generated images of clocks with the clock
 export default function OrgChannel({route,navigation}){
     const {org,cohort} = route.params
     const {user,colorMode} = useContext(AppContext)
-    console.log(org)
+    const [postData,setPostData] = useState(null)
     const [message,setMessage] = useState('')
     const filters = ['Recents','Pinned','Announments','Events','Polls','Opportunities']
     const [activeFilter,setActiveFilter]=useState(filters[0])
+    async function getPosts(){
+ 
+        await axios.post(endpoints['getposts'],{userid_:user.userid,orgid:org._id}).then(res=>{
+            setPostData(res.data)
+ 
+ 
+        })
+    }
+    useEffect(()=>{
+        getPosts()
+    },[])
     function filtericons(name,color){
         const filtericonhash ={
             'Recents':<Clock color={color} size={17} style={{
@@ -284,7 +315,10 @@ export default function OrgChannel({route,navigation}){
       
     return (
 
-        <View
+        <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={80}
+
         style={{
             flex:1,
             backgroundColor:color_scheme(colorMode,'white')
@@ -372,27 +406,25 @@ export default function OrgChannel({route,navigation}){
             style={{
 
 
-                paddingVertical:14
+                paddingVertical:14,
+                paddingHorizontal:10,
             }}
             >
 
             <ScrollView contentContainerStyle={{
                flex:0,
-               borderBottomWidth:1,
-               borderStyle:'solid',
-               borderColor:'#222',
+             
                            
 
             }}  horizontal={true} showsHorizontalScrollIndicator={false}>
                     {
                         filters.map((filter,i)=>{
                             const color = activeFilter==filter?"white":'#555'
-                            const genstyle = {flexDirection:'row',marginRight:17,paddingBottom:10}
-                            const gentextstyle = {fontSize:18,fontWeight:'400',color:'#444',marginHorizontal:10}
+                            const genstyle = {flexDirection:'row',marginRight:2,paddingVertical:10,paddingHorizontal:10,
+                            borderRadius:30,}
+                            const gentextstyle = {fontSize:18,fontWeight:'300',color:'#444',marginHorizontal:10}
                             return(
-                                <TouchableOpacity key={i} style={activeFilter==filter?[genstyle,{ borderBottomWidth:1,
-                                    borderStyle:'solid',
-                                    borderColor:'white'}]:[genstyle]} onPress={()=>swapFeed(filter)}>
+                                <TouchableOpacity key={i} style={activeFilter==filter?[genstyle,{ backgroundColor:'#222'}]:[genstyle]} onPress={()=>swapFeed(filter)}>
                                     {/* {
                                         filtericons(filter,color)
                                     } */}
@@ -416,99 +448,33 @@ export default function OrgChannel({route,navigation}){
 
             }}
             >
-                {
-                    [...Array(4)].map((pst,index)=>{
+                {postData &&
+                    postData.posts.map((pst,index)=>{
                         return (
-                        <RenderOrgChannelPost key={index}/>
+                        <RenderOrgChannelPost key={index} post={pst} userdets={postData.users[pst.userid]}/>
                         )
                     })
                 }
                
 
             </ScrollView>
-            <View
-            style={{
-                paddingHorizontal:20,
-                paddingVertical:15,
-                backgroundColor:color_scheme(colorMode,'white'),
-            }}
-            ><View
-            style={{
-                flexDirection:'row'
-            }}
-            >
- 
-    
+            <View style={homestyles.postbtndiv}>
+                <TouchableOpacity style={homestyles.postbtn} onPress={()=>{
+                    Haptics.impactAsync('light')
+                    navigation.navigate("MakePost",{
+                        setPost:setPostData,
+                        postd:postData,
+                        org:org,
+                        cohort:cohort
+                    })
+                   }}> 
+                <Add color="white" variant="Broken" size={42} />
+                {/* <Text style={homestyles.postbtntext}>New Post</Text> */}
+                </TouchableOpacity>
 
-                <View
-                style={{
-                    borderStyle:'solid',
-                    borderWidth:0.5,
-                    borderColor:color_scheme(colorMode,'eeee'),
-                    borderRadius:30,
-                    
-                    backgroundColor:color_scheme(colorMode,'white'),
-                   
-                 
-                    flexDirection:'row',
-                    alignItems:'center',
-                    justifyContent:'space-between',
-                    paddingVertical:10,
-                    paddingHorizontal:15,
-                    width:'90%'
-                 
-                    
-                    
-                }}
-                >
-                    <TextInput
-                    placeholder="Write Something ..."
-                    multiline={true}
-                    value={message}
-                    placeholderTextColor={color_scheme(colorMode,'eeee')}
-
-                    onChangeText={(text)=>setMessage(text)}
-                    style={{
-                        width:'90%',
-                        paddingVertical:5,
-                        paddingHorizontal:10,
-                        fontSize:17
-                    }}
-                    />
-                    
-                     
-           
-             
-                
-                    
-                </View>
-                <Pressable
-        onPress={()=>{
-     
-        }}
-    
-
-
-        style={{
- 
-            width:40,
-            height:40,
-            marginLeft:10,
-            flexDirection:'row',
-            alignItems:'center',
-            justifyContent:'center',
-            borderRadius:100,
-            backgroundColor:color_scheme(colorMode,'eeee')
-
-        }}
-        >
-            <ArrowUp color="white" size={23}/>
-
-            </Pressable>
-                </View>
             </View>
             
-        </View>
+        </KeyboardAvoidingView>
     )
 
 }

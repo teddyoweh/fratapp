@@ -7,6 +7,7 @@ import ProfilesScreen from './Profiles'
 import ProfileStacks from '../Profile';
 import PostPage from '../../../components/PostPage';
 import OrgProfilesScreen from './OrgProfiles';
+import MakePost from './MakePost';
 const HomeStack = createStackNavigator()
 
 function HomeStacks({navigation,route}) {
@@ -24,6 +25,7 @@ function HomeStacks({navigation,route}) {
 
       <HomeStack.Screen name="HomeScreen" component={HomeScreen} />
       <HomeStack.Screen name="PostPage" component={PostPage}/>
+      <HomeStack.Screen name="MakePost" component={MakePost}/>
     
       <HomeStack.Screen name='ProfileStacks' component={ProfileStacks}/>
       <HomeStack.Screen  name="ProfilesScreen" component={ProfilesScreen}/>

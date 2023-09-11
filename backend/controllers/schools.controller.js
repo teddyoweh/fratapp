@@ -22,3 +22,4 @@ async function searchSchools(req, res) {
 module.exports = {
     searchSchools
 };
+

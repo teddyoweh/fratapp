@@ -24,6 +24,8 @@ function RenderCheckMark({stat}){
 }
 export default function MessagesScreen({navigation,route}){
     const {user,colorMode} = useContext(AppContext)
+    const [refreshing, setRefreshing] = React.useState(false);
+
     const [data,setData] = useState(null)
     async function getMsgList(){
         await axios.post(endpoints['fetchmsglist'],{user_id:user.userid}).then(res=>{
@@ -33,16 +35,25 @@ export default function MessagesScreen({navigation,route}){
 
 
     }
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        getMsgList()
+        setTimeout(() => {
+          setRefreshing(false);
+        }, 2000);
+      }, []);
+      
     const msgfilters = ['All','Unread','Groups']
     const [msgfilter,setMessageFilter] = useState(msgfilters[0])
     function swapFil(msgfil){
         setMessageFilter(msgfil)
     }
 
-    function goToChat(data){
-     
+    function goToChat(data,receiver_type){
+        
         navigation.navigate('ChatStacks',{
-            party_data:data
+            party_data:data,
+            receiver_type:receiver_type
         })
     }
     useEffect(()=>{
@@ -190,7 +201,9 @@ style={{
                     paddingTop:10,
                     marginBottom:50
                 }}
-                >
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                  }>
                     <View>
 
              
@@ -208,11 +221,34 @@ style={{
                     </View>
                     {
                         data.contacts.latestMessages.map((item,index)=>{
-                            
+                            let name_ 
+                            let uimg_  
+                            let chat_data_
+                            let type_ = item.receiver_type
+                            let channel_id = item.channel_info? item.channel_info.id:null
+                            alert(JSON.stringify(item))
+                            let org_id = item.org_info? item.org_info.id:null
+                            if(item.receiver_type=='user'){
+                                name_ = item.user_info.firstname+' '+item.user_info.lastname
+                                uimg_ = item.user_info.uimg
+                                chat_data_ = item.user_info
+                            }
+                            else if(item.receiver_type=='group'){
+                                name_ = item.org_info.org_name
+                                uimg_ = item.org_info.org_logo
+                                chat_data_ = item.org_info
+                            }
+
+                            else if(item.receiver_type=='cohort'){
+                                name_ = item.channel_name
+                                uimg_ = item.org_info.org_logo
+                                chat_data_ = item.org_info
+                            }
                             return (
                                     <TouchableOpacity
                                 
-                                    onPress={()=>goToChat(item.user_info)}
+                                    onPress={()=>goToChat({...chat_data_,type_,name_,uimg_},item.receiver_type,channel_id,
+                                        org_id)}
                                     key={index}
                                     style={{
                                         flexDirection:'row',                    
@@ -249,7 +285,7 @@ style={{
                                         borderRadius:100
 
                                     }}
-                                    source={{uri:wrapUIMG(item.user_info.uimg)}}
+                                    source={{uri:wrapUIMG(uimg_)}}
                                     />
                                     </View>   
                                     <View
@@ -268,13 +304,13 @@ style={{
                                      
                                         }}
                                         >
-                                        {item.user_info.firstname+' '+item.user_info.lastname}
+                                        {name_}
                                         </Text>
                                         <Text
                                         style={{
-                                            color:item.viewedby.includes(user.userid)?'white':color_scheme(colorMode,'#777777'),
+                                            color:!item.viewedby.includes(user.userid)?'white':color_scheme(colorMode,'#777777'),
                                             marginTop:5,
-                                            fontWeight:item.viewedby.includes(user.userid)?'600':'400',
+                                            fontWeight:!item.viewedby.includes(user.userid)?'600':'400',
                                             paddingLeft:4,
                                             fontSize:16,
 

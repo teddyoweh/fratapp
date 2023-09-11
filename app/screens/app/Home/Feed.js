@@ -24,7 +24,7 @@ function LoadingScreen(){
 }
 function MapOutPosts({posts,navigation,users,route}){
  const {user,colorMode} = useContext(AppContext)
- 
+ console.log(users,'this the post')
     return(
 <View
 style={{
@@ -196,13 +196,17 @@ postData ?
   
 
     </ScrollView>
-    <MakePost navigation={navigation} setPost={setPostData} postd={postData} postBottomSheet={postBottomSheet
- }/>
+    {/* <MakePost navigation={navigation} setPost={setPostData} postd={postData} postBottomSheet={postBottomSheet
+ }/> */}
 
 <View style={homestyles.postbtndiv}>
                 <TouchableOpacity style={homestyles.postbtn} onPress={()=>{
                     Haptics.impactAsync('light')
-                    postBottomSheet.current.show()}}> 
+                    navigation.navigate("MakePost",{
+                        setPost:setPostData,
+                        postd:postData,
+                    })
+                   }}> 
                 <Add color="white" variant="Broken" size={42} />
                 {/* <Text style={homestyles.postbtntext}>New Post</Text> */}
                 </TouchableOpacity>

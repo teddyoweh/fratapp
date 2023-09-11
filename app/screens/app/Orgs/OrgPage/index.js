@@ -9,6 +9,7 @@ import MembersPage from './MembersPage';
 import OrgChannel from './OrgChannel';
 import StudyHoursStacks from '../StudyHours';
 import NewCohort from './NewCohort';
+import MakePost from './MakePost';
 const OrgStack = HomeStack
 
 function OrgPageStacks({navigation,route}) {
@@ -31,6 +32,7 @@ function OrgPageStacks({navigation,route}) {
         <OrgStack.Screen name='OrgChannelScreen' component={OrgChannel}/>
         <OrgStack.Screen name='StudyHourStack' component={StudyHoursStacks}/>
         <OrgStack.Screen name='NewCohort' component={NewCohort}/>
+        <OrgStack.Screen name='MakePost' component={MakePost}/>
 
 
        

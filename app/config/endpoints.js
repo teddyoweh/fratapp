@@ -26,8 +26,10 @@ const endpoints = {
     'addcomment':`${serverip}/api/posts/addcomment`,
     'getcommentuser': `${serverip}/api/posts/getcommentuser`,
     'findpost':`${serverip}/api/posts/find`,
+    'deletepost':`${serverip}/api/posts/delete`,
     'uploadpost':`${serverip}/api/posts/uploadpost`,
     'fetchlikeusers':`${serverip}/api/posts/fetchlikeusers`,
+    'updatepoll':`${serverip}/api/posts/updatepoll`,
 
     //
 

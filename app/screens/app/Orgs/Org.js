@@ -155,6 +155,7 @@ export default function OrgHome({navigation}){
     const [refreshing, setRefreshing] = useState(false);
     const [Orgs,setOrgs] =  useState(null);
     const {user,colorMode} = useContext(AppContext);
+    const [searchTerm,setSearchTerm] = useState('')
     async function FetchOrgs(){
         await axios.post(endpoints['getorgs'],{user_id:user.userid}).then(res=>{
             setOrgs(res.data.orgs)
@@ -162,6 +163,14 @@ export default function OrgHome({navigation}){
         })
 
     }
+    const handleSearch = (event) => {
+        const searchTerm = event.target.value;
+        setSearchTerm(searchTerm);
+    
+        const filteredOrgs = Orgs.filter(org => org.org_name.toLowerCase().includes(searchTerm.toLowerCase()));
+        setSearchResults(filteredOrgs);
+      };
+    
     const onRefresh = useCallback(() => {
       setRefreshing(true);
       FetchOrgs()

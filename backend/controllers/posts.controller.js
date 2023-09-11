@@ -18,14 +18,17 @@ function hashcode(data){
      }
 function postscontroller(req, res) {
     const images = []
-     
+    const {userid} = req.body
     console.log(req.body.images)
     req.body.images.map((image,index)=>{
         images.push({uri:hashfilename(image.uri,req.body.email,req.body.random),width:image.width,height:image.height})
 
     })
      
- 
+    const pollvotes = {}
+    req.body.pollsoptions.map((option,index)=>{
+        pollvotes[option]=[]
+    })
     const newPost = new Posts({
  
   
@@ -51,7 +54,21 @@ function postscontroller(req, res) {
         repostid: req.body.repostid,
         repostlist: [],
         repostno:0,
-        imgurls:images
+        imgurls:images,
+        posttype:req.body.posttype,
+        eventname:req.body.eventname,
+        eventlocation:req.body.eventlocation,
+        eventstartdate:req.body.eventstartdate,
+        eventenddate:req.body.eventenddate,
+        isorgpriv:req.body.isorgpriv,
+        orgid:req.body.orgid,
+        eventdescription:req.body.eventdescription,
+        
+        pollsoptions:req.body.pollsoptions,
+    
+        pollsdeadline:req.body.pollsdeadline,
+        postype:req.body.postype,
+        pollsvotes:pollvotes,
         // imgurls:imagedata
 
 

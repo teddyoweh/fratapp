@@ -5,21 +5,19 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 // Addition of  the Schema for the User model
 
-const OrgPostsSchema = new Schema({
+const OrgPostSchema = new Schema({
     userdata: {},
     isrepost: {
         type: Boolean,
     },
 
     repostid: {},
-
+    posttype:{},
     userid:{
         type: String,
     },
    
-    orgid:{
-        type:String
-    },
+
     content: {
         type: String,
     },
@@ -59,7 +57,9 @@ const OrgPostsSchema = new Schema({
     eventgoinglist:{
         type: Array,
     },
-    likesuserlist: {},
+    likesuserlist: {
+        type:Array
+    },
     commentuserlist: {},
     commentsno: {
         type: Number,
@@ -83,6 +83,24 @@ type:Number
 
     
     sharesno: {},
+    eventname:{},
+    eventlocation:{},
+    eventdescription:{},
+    eventype:{},
+    eventstartdate:{},
+    eventenddate:{},
+    
+
+    pollsoptions:{
+        type: Array,
+    },
+    pollsvotes:{
+    
+    },
+    pollsdeadline:{},
+    postype:{},
+    
+
 
 
 
@@ -96,6 +114,6 @@ networkinfo:{},
 
 });
 
-const OrgPosts = mongoose.model('OrgPosts', OrgPostsSchema);
+const OrgPosts = mongoose.model('OrgPosts',OrgPostSchema);
 
 module.exports = OrgPosts

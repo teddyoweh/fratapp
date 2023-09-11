@@ -41,9 +41,10 @@ function LandingScreen() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Animated.Image
-          source={require('../assets/HERDS.png')}
+          source={require('../assets/refres-logo2.png')}
           style={{
             transform: [{ scale: scaleValue }],
+            
           }}
         />
       </View>

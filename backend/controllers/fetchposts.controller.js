@@ -3,10 +3,10 @@ const Posts = require('../models/Posts');
   const Organizations = require('../models/Organizations');
   const User = require('../models/User'); 
   async function fetchpostscontroller(req, res) {
-    const { cursor,userid} = req.body;
+    const { cursor,userid,userid_, orgid} = req.body;
     const limit = 40;
-    console.log(req.headers)
-  
+
+    
     let query = {};
   
     if (cursor) {
@@ -15,13 +15,20 @@ const Posts = require('../models/Posts');
     if(userid){
       query.userid = userid;
     }
-  
+
+    if(userid_&&orgid){
+      console.log('console dot fucking log')
+      query.orgid = orgid;
+    }else{
+      query.isorgpriv=false
+    }
     try {
       const posts = await Posts.find(query)
         .sort({ _id: "desc" })
         .limit(limit);
   
       const userIds = posts.map((post) => post.userid);
+      
       const users = await User.find({ _id: { $in: userIds } });
   
       // const usersDict = users.reduce((acc, user) => {
@@ -133,4 +140,62 @@ async function fetchPostUserLikes(req,res){
   console.log(usersInfo)
   res.json(usersInfo);
 }
-module.exports = {fetchpostscontroller,getOnePost,fetchmypostscontroller,fetchPostUserLikes}
+
+async function updatePoll(req, res) {
+  const { votedoption, postid, userid } = req.body;
+
+  try {
+    const poll = await Posts.findById(postid);
+
+    if (!poll) {
+      return res.status(404).json({ error: 'Poll not found' });
+    }
+
+    if (!poll.pollsvotes) {
+      poll.pollsvotes = {}; // Initialize it as an empty object
+    }
+
+    let oldVotedOption = null;
+    for (const option in poll.pollsvotes) {
+      if (poll.pollsvotes[option].includes(userid)) {
+        oldVotedOption = option;
+        break;
+      }
+    }
+
+    if (oldVotedOption === votedoption) {
+      res.json(poll);
+      return; // Exit the function early
+    }
+
+    if (oldVotedOption) {
+      const oldVotes = poll.pollsvotes[oldVotedOption];
+      const userIndex = oldVotes.indexOf(userid);
+      if (userIndex !== -1) {
+        oldVotes.splice(userIndex, 1);
+      }
+    }
+
+    if (!poll.pollsvotes[votedoption]) {
+      poll.pollsvotes[votedoption] = []; // Initialize it as an empty array
+    }
+    poll.pollsvotes[votedoption].push(userid);
+
+    const updatedPoll = await Posts.findByIdAndUpdate(
+      postid,
+      poll,
+      { new: true }
+    );
+
+    res.json(updatedPoll);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while updating the poll' });
+  }
+}
+
+
+
+
+module.exports = {fetchpostscontroller,updatePoll,getOnePost,fetchmypostscontroller,fetchPostUserLikes,deletePost}

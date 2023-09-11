@@ -57,7 +57,7 @@ export default function ProfilesScreen({navigation,route}){
                 <View style={profilestyles.profilebox}>
                 <View style={profilestyles.profileboxtop}>
                         <View style={profilestyles.profileimagesec}> 
-                        <Image source={{uri:wrapUIMG(user.uimg)}} style={profilestyles.profileimage}/>
+                        <Image source={{uri:wrapUIMG(userdetails.uimg)}} style={profilestyles.profileimage}/>
 
 
                         </View>

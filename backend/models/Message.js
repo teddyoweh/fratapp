@@ -22,10 +22,13 @@ sender_id:{
  msg_images:{
    type:Array
  },
+ channel_id:{},
+ org_id:{},
  viewedby:{
 type:Array,
 default:[]
  },
+ msg_type:{},
  
  receiver_type:{},
   

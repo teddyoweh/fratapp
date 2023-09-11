@@ -6,6 +6,8 @@ const Links = require('../models/Links')
 const crypto = require('crypto');
 
 var fs = require('fs');
+const Channels = require('../models/Channels');
+const Organization = require('../models/Organizations');
 function hashcode(data){
     
     const hash = crypto.createHash('sha256');
@@ -59,8 +61,10 @@ async function sendmessagescontroller(req,res){
       content:req.body.text,
       msg_type:req.body.msg_type,
       receiver_type:req.body.receiver_type,
-      msg_images:images
-
+      msg_images:images,
+      channel_id:req.body.channel_id,
+      org_id:req.body.org_id,
+      
 
     })
      const mes =  await newMessage.save()
@@ -71,142 +75,186 @@ async function sendmessagescontroller(req,res){
 
 
 
+// async function getLatestMessagesAndPartyInfo(userId) {
+//   try {
+      
+//       const user = await User.findById(userId);
+
+//       if (!user) {
+//           return { error: 'User not found' };
+//       }
+
+      
+//       const latestMessages = await Message.aggregate([
+//           {
+//               $match: {
+//                   $or: [
+//                       { sender_id: userId },
+//                       { receiver_id: userId }
+//                   ],
+//                   $and: [
+//                       { sender_id: { $ne: null } },
+//                       { receiver_id: { $ne: null } }
+//                   ]
+//               }
+//           },
+//           {
+//               $sort: { date: -1 }
+//           },
+//           {
+//               $group: {
+//                   _id: {
+//                       $cond: [
+//                           { $eq: ['$sender_id', userId] },
+//                           '$receiver_id',
+//                           '$sender_id'
+//                       ]
+//                   },
+//                   latestMessage: { $first: '$$ROOT' }
+//               }
+//           },
+//           {
+//               $replaceRoot: { newRoot: '$latestMessage' }
+//           }
+//       ]);
+
+      
+//       const partyIdsSet = new Set();
+//       latestMessages.forEach(message => {
+//           if (message.sender_id !== userId) {
+//               partyIdsSet.add(message.sender_id.toString());
+//           }
+//           if (message.receiver_id !== userId) {
+//               partyIdsSet.add(message.receiver_id.toString());
+//           }
+//       });
+//       const partyIdsArray = Array.from(partyIdsSet);
+
+      
+//       const partyUsers = await User.find({ _id: { $in: partyIdsArray } });
+
+      
+//       const partyUsersLookup = {};
+//       partyUsers.forEach(partyUser => {
+//           partyUsersLookup[partyUser._id.toString()] = partyUser;
+//       });
+
+      
+//       latestMessages.forEach(message => {
+//           const partyId = message.sender_id !== userId ? message.sender_id : message.receiver_id;
+//           message.user_info = partyUsersLookup[partyId.toString()];
+//       });
+
+//       return {
+//           user,
+//           latestMessages
+//       };
+//   } catch (error) {
+//       return { error: 'An error occurred' };
+//   }
+// }
+
 async function getLatestMessagesAndPartyInfo(userId) {
   try {
-      
-      const user = await User.findById(userId);
+    const user = await User.findById(userId);
 
-      if (!user) {
-          return { error: 'User not found' };
-      }
+    if (!user) {
+      return { error: 'User not found' };
+    }
 
-      
-      const latestMessages = await Message.aggregate([
-          {
-              $match: {
-                  $or: [
-                      { sender_id: userId },
-                      { receiver_id: userId }
-                  ],
-                  $and: [
-                      { sender_id: { $ne: null } },
-                      { receiver_id: { $ne: null } }
+    const latestMessages = await Message.aggregate([
+      {
+          $match: {
+              $or: [
+                  { sender_id: userId },
+                  { receiver_id: userId }
+              ],
+              $and: [
+                  { sender_id: { $ne: null } },
+                  { receiver_id: { $ne: null } }
+              ]
+          }
+      },
+      {
+          $sort: { date: -1 }
+      },
+      {
+          $group: {
+              _id: {
+                  $cond: [
+                      { $eq: ['$sender_id', userId] },
+                      '$receiver_id',
+                      '$sender_id'
                   ]
-              }
-          },
-          {
-              $sort: { date: -1 }
-          },
-          {
-              $group: {
-                  _id: {
-                      $cond: [
-                          { $eq: ['$sender_id', userId] },
-                          '$receiver_id',
-                          '$sender_id'
-                      ]
-                  },
-                  latestMessage: { $first: '$$ROOT' }
-              }
-          },
-          {
-              $replaceRoot: { newRoot: '$latestMessage' }
+              },
+              latestMessage: { $first: '$$ROOT' }
           }
-      ]);
+      },
+      {
+          $replaceRoot: { newRoot: '$latestMessage' }
+      }
+  ]);
 
-      
-      const partyIdsSet = new Set();
-      latestMessages.forEach(message => {
-          if (message.sender_id !== userId) {
-              partyIdsSet.add(message.sender_id.toString());
-          }
-          if (message.receiver_id !== userId) {
-              partyIdsSet.add(message.receiver_id.toString());
-          }
-      });
-      const partyIdsArray = Array.from(partyIdsSet);
+    const partyIdsSet = new Set();
+    latestMessages.forEach(message => {
+      if (message.sender_id !== userId) {
+        partyIdsSet.add(message.sender_id.toString());
+      }
+      if (message.receiver_id !== userId) {
+        partyIdsSet.add(message.receiver_id.toString());
+      }
+    });
+    const partyIdsArray = Array.from(partyIdsSet);
 
-      
-      const partyUsers = await User.find({ _id: { $in: partyIdsArray } });
+    const partyUsers = await User.find({ _id: { $in: partyIdsArray } });
 
-      
-      const partyUsersLookup = {};
-      partyUsers.forEach(partyUser => {
-          partyUsersLookup[partyUser._id.toString()] = partyUser;
-      });
-
-      
-      latestMessages.forEach(message => {
-          const partyId = message.sender_id !== userId ? message.sender_id : message.receiver_id;
-          message.user_info = partyUsersLookup[partyId.toString()];
-      });
-
-      return {
-          user,
-          latestMessages
-      };
-  } catch (error) {
-      return { error: 'An error occurred' };
-  }
-}
-
-
-
-async function getContactList(userId) {
-  try {
-    const messages = await Message.find({
-      $or: [{ sender_id: userId }, { receiver_id: userId }]
-    })
-    .sort({ date: -1 })
-    .limit(10) 
+    const partyUsersLookup = {};
+    partyUsers.forEach(partyUser => {
+      partyUsersLookup[partyUser._id.toString()] = partyUser;
+    });
     
-    const processedUserIds = new Set();
-    const latestMessages = [];
+    for (const message of latestMessages) {
+      const partyId = message.sender_id !== userId ? message.sender_id : message.receiver_id;
+      message.user_info = partyUsersLookup[partyId.toString()];
+ 
 
-    const userIdsToFetch = [];
-
-    for (const message of messages) {
-      const counterpartId = message.sender_id === userId ? message.receiver_id : message.sender_id;
+      if(message.receiver_type != 'user'){
+      const orgInfo = await Organization.findOne({ _id: message.org_id });
+      message.org_info = orgInfo;
+      console.log(message.org_info,'message.org_info')
       
-      if (counterpartId && !processedUserIds.has(counterpartId)) {
-        userIdsToFetch.push(counterpartId);
-        processedUserIds.add(counterpartId);
-      }
-
-      latestMessages.push({
-        ...message.toObject()
-      });
-
-      if (userIdsToFetch.length >= 10) { 
-        const usersInfo = await User.find({ _id: { $in: userIdsToFetch } }, '_id firstname lastname isofficial uimg username');
-
-        for (const userInfo of usersInfo) {
-          const messageIndex = latestMessages.findIndex(msg => (msg.sender_id === userInfo._id.toString() || msg.receiver_id === userInfo._id.toString()));
-          if (messageIndex !== -1) {
-            latestMessages[messageIndex].user_info = userInfo;
-          }
-        }
-
-        userIdsToFetch.length = 0; 
-      }
-    }
-
-    if (userIdsToFetch.length > 0) {
-      const usersInfo = await User.find({ _id: { $in: userIdsToFetch } }, '_id firstname lastname isofficial uimg username');
-
-      for (const userInfo of usersInfo) {
-        const messageIndex = latestMessages.findIndex(msg => (msg.sender_id === userInfo._id.toString() || msg.receiver_id === userInfo._id.toString()));
-        if (messageIndex !== -1) {
-          latestMessages[messageIndex].user_info = userInfo;
+  
+    
+   
+    
+      if (message.receiver_type === 'cohort') {
+        const channelInfo = await Channels.findOne({ _id: message.channel_id });
+        message.channel_info = channelInfo;
+    
+        if (channelInfo && orgInfo) {
+          message.channel_name = `${orgInfo.org_name} - ${channelInfo.channel_name}`;
         }
       }
     }
-
-    return latestMessages;
+    }
+ 
+    
+    
+    
+    
+    
+    console.log(latestMessages,'latestMessages')
+    return {
+      user,
+      latestMessages
+    };
   } catch (error) {
-    throw error;
+    return { error: 'An error occurred' };
   }
 }
+
+
+ 
 
 
 async function getSuggestedUsers(userId) {
@@ -324,4 +372,4 @@ function messagesViewedByController(req, res) {
     }
   }
   
-module.exports ={fetchmessagescontroller,messageListController,sendmessagescontroller,messagesViewedByController,updateMessageViewed,getContactList,getSuggestedUsers,getUnreadCount}
+module.exports ={fetchmessagescontroller,messageListController,sendmessagescontroller,messagesViewedByController,updateMessageViewed,getSuggestedUsers,getUnreadCount}

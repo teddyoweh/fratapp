@@ -11,12 +11,9 @@ import { color_scheme } from "../../../config/color_scheme";
 
 function LandingPage({navigation}){
     const {colorMode} = useContext(AppContext)
-    const applogo = colorMode=='dark'?require('../../../assets/HERDS.png'):require('../../../assets/HERDS.png')
-    const logostyle  = colorMode=='dark'?{      width: 200,
-        height:200}:{
-            width:500,
-            height:500,
-        }
+    const applogo = colorMode=='dark'?require('../../../assets/refres-logo2.png'):require('../../../assets/refres-logo2.png')
+    const logostyle  =       {width: 200,
+        height:100}
     return (
         <View style={[authstyles.container,{
             backgroundColor:color_scheme(colorMode,'white')

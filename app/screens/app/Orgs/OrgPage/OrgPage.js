@@ -1,4 +1,4 @@
-import { View,Text,Animated, Image,TouchableOpacity,Keyboard, ScrollView, TextInput,  RefreshControl,KeyboardAvoidingView, Button, Pressable, Vibration, ActionSheetIOS} from "react-native";
+import { View,Text,Animated, Image,TouchableOpacity,Keyboard, ScrollView, TextInput,  RefreshControl,KeyboardAvoidingView, Button, Pressable, Vibration, ActionSheetIOS, Dimensions} from "react-native";
 import { homestyles,discoverstyles } from "../../../../styles";
 import { Message, Messages1,Message2, Messages2, SearchNormal, PictureFrame,Chart,Link21,VoiceCricle,Calendar,VolumeHigh,Briefcase,Send2, Messages3, MessageSquare,More,Like, Like1,AddCircle, ElementPlus, UserCirlceAdd, Add, DirectUp, ArrowUp, Microphone, Microphone2, Hashtag, ArrowRight2, Box2, Celo, Command, Notepad2, People, UserAdd, CalendarAdd, ArchiveBook} from 'iconsax-react-native';
 import { FontAwesome5,Feather, Ionicons,AntDesign, MaterialIcons,Entypo} from '@expo/vector-icons';
@@ -505,8 +505,34 @@ function RendorOrgPost({orgid}){
         </View>
     )
 }
+function RenderDescription({bottomSheet,org}){
+    return (
+        <BottomSheet  sheetBackgroundColor={"#111"} ref={bottomSheet} height={Dimensions.get('screen').height-400}  >
+        <View
+        style={{
+            paddingHorizontal:20,
+            paddingVertical:20,
+            flexDirection:'column',
+            alignItems:'flex-start',
+            justifyContent:'flex-start',
+        }}>
+            <Text
+            style={{
+                fontSize:20,
+                fontWeight:'300',
+                color:'white'
+            }}
+            >
+                {org.org_description}
+            </Text>
+        </View>
+        </BottomSheet>
+
+    )
+}
 export default function OrgPage({navigation,route}){
     const scrollViewRef = useRef()
+    const descriptionSheet = useRef()
     const [refreshing, setRefreshing] = useState(false);
     const {org} = route.params
     const {user,colorMode} = useContext(AppContext)
@@ -569,6 +595,7 @@ export default function OrgPage({navigation,route}){
 
 
     }
+  
     useEffect(() => {
    
         getOrg()
@@ -596,6 +623,8 @@ export default function OrgPage({navigation,route}){
           setRefreshing(false);
         }, 2000);
       }, []);
+      const desc =  org.org_description.length > 120 ? org.org_description.slice(0, 120) + "..." : org.org_description;
+
     return (
 
  
@@ -726,6 +755,7 @@ export default function OrgPage({navigation,route}){
                                         }}
                                         >
                                             {org.org_shortname}
+                                    
                                         </Text>
                                     </View>
                                 }
@@ -736,7 +766,8 @@ export default function OrgPage({navigation,route}){
                 style={{
                     flexDirection:'column',
                     alignItems:'flex-start',
-                    justifyContent:'center'
+                    justifyContent:'center',
+                    width:'90%'
                 }}
                 >
                     <Text
@@ -751,13 +782,38 @@ export default function OrgPage({navigation,route}){
                     </Text>
                     <Text
                     style={{
+                    
                         fontSize:16,
                         color:color_scheme(colorMode,'#333'),
-                        fontWeight:500,
-                        marginTop:5
+                        fontWeight:300,
+                        marginTop:5,
+                        // flexWrap:'wrap',
+                        width:'80%'
+                        
                     }}
                     >
-                        {org.org_description}
+                        {desc}
+                        {
+                            org.org_description.length > 120 &&
+                     
+                        <TouchableOpacity
+                        
+                        onPress={()=>{descriptionSheet.current.show()}}
+                        >
+                        <Text
+                        style={{
+                            color:color_scheme(colorMode,'#333'),
+                            fontWeight:'500',
+                            fontSize:15,
+                            marginLeft:5,
+                            textDecorationLine:'underline',
+                            marginTop:5,
+                        }}
+                        >
+                            Read More
+                        </Text>
+                        </TouchableOpacity>
+                           }
                     </Text>
                 </View>
             </View>
@@ -826,7 +882,7 @@ export default function OrgPage({navigation,route}){
                         flexDirection:'row',
                         alignItems:'center',
                         justifyContent:'space-between',
-                        paddingHorizontal:10,
+                        paddingHorizontal:8,
                         paddingVertical:10,
                      
                        
@@ -842,29 +898,28 @@ export default function OrgPage({navigation,route}){
                         >
                             <View
                             style={{
-                                height:54,
-                                width:54,
+                                
                                 flexDirection:"row",
                                 justifyContent:'center',
                                 alignItems:'center',
-                                backgroundColor:color_scheme(colorMode,'white'),
+                                //backgroundColor:color_scheme(colorMode,'white'),
                                 borderRadius:10,
-                                   borderWidth:0.5,
-                        borderColor:'#333',//color_scheme(colorMode,'#fff'),
-                        borderStyle:'solid',
+                                //    borderWidth:0.5,
+                        // borderColor:'#333',//color_scheme(colorMode,'#fff'),
+                        // borderStyle:'solid',
 
-                        shadowOffset: {
-                            width: 0,
-                            height: 5,
-                          },
-                          shadowOpacity: 0.15,
-                          shadowRadius: 3.84,
-                          elevation: 5,
+                        // shadowOffset: {
+                        //     width: 0,
+                        //     height: 5,
+                        //   },
+                        //   shadowOpacity: 0.15,
+                        //   shadowRadius: 3.84,
+                        //   elevation: 5,
                             }}
                             >
 
                            
-                        <Notepad2 size="40" color={color_scheme(colorMode,'black')}variant="Bulk"/>
+                        <Hashtag size="25" color='#555'variant="Broken"/>
                         </View>
                         <View
                         style={{
@@ -922,7 +977,7 @@ export default function OrgPage({navigation,route}){
    
         {/* <RenderMessageBox orgid={org._id}/> */}
               <AddUserAccessSheet bottomSheet={AddUserAccessSheetref} org={orgData} />
-      
+        <RenderDescription bottomSheet={descriptionSheet} org={org}/>
     </View>
        )
 

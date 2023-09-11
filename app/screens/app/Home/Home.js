@@ -36,8 +36,8 @@ function RenderMessageBtn({navigation}){
                        
                             <Messenger color={color_scheme(colorMode,'#333')} variant="Outline" size={30} />
                             {
-                                count!=null &&
-                     
+                                count!=null && count >0  &&
+                          
                             <View style={homestyles.msgiconnumb}>
                                 <Text style={homestyles.msgiconnum}>{count}</Text>
                             </View>

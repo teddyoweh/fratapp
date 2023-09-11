@@ -26,7 +26,7 @@ const LoadingModal = ({ isVisible, onClose,success }) => {
         onRequestClose={onClose}
       >
         <View style={styles.modalContainer}>
-          <View style={{paddingHorizontal:10, borderStyle:'solid',borderWidth:1,bordercolor:color_scheme(colorMode,'#eee'),borderColor:color_scheme(colorMode,'#aaa'), width:250,backgroundcolor:color_scheme(colorMode,'white'),height:200,borderRadius:10,flexDirection:'column',alignContent:'space-around',alignItems:'center',justifyContent:'center'}}>
+          <View style={{paddingHorizontal:10, borderStyle:'solid',borderWidth:1,bordercolor:color_scheme(colorMode,'#eee'),borderColor:color_scheme(colorMode,'#aaa'), width:250,backgroundcolor:"#333",height:200,borderRadius:10,flexDirection:'column',alignContent:'space-around',alignItems:'center',justifyContent:'center'}}>
             {
                 success==false?
            <>
@@ -50,7 +50,7 @@ const LoadingModal = ({ isVisible, onClose,success }) => {
                  duration={800}
                  style={styles.loadingText}
                >
-               <AntDesign name="check" size={24} color="black" /> 
+               <AntDesign name="check" size={34} color="#555" /> 
              </Animatable.View>
                 }
           </View>

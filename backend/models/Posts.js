@@ -12,7 +12,7 @@ const PostSchema = new Schema({
     },
 
     repostid: {},
-
+    posttype:{},
     userid:{
         type: String,
     },
@@ -83,10 +83,34 @@ type:Number
 
     
     sharesno: {},
+    eventname:{},
+    eventlocation:{},
+    eventdescription:{},
+    eventype:{},
+    eventstartdate:{},
+    eventenddate:{},
+    
+
+    pollsoptions:{
+        type: Array,
+    },
+    pollsvotes:{
+    
+    },
+    pollsdeadline:{},
+    postype:{},
+    
 
 
 
- 
+
+ isorgpriv:{
+    type:Boolean,
+    default:false
+ },
+ orgid:{
+    type:String
+ },
 networkinfo:{},
     date: {
         type: Date,

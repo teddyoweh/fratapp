@@ -1,7 +1,7 @@
 import React,{useState,useEffect,useContext, useRef}from "react";
 import { View,Text,Dimensions, Image,TouchableOpacity, ScrollView, TextInput, Pressable, Share, ActionSheetIOS, KeyboardAvoidingView, InputAccessoryView, Button} from "react-native";
 import { homestyles } from "../styles";
-import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, MessageText, Link2, Link, MessageText1, Send2, ArrowUp, Verify} from 'iconsax-react-native';
+import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, MessageText, Link2, Link, MessageText1, Send2, ArrowUp, Verify, Calendar, Calendar2, ArrowRight} from 'iconsax-react-native';
 import { FontAwesome5,Entypo,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
 import { captureRef, captureScreen } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
@@ -14,6 +14,9 @@ import { color_scheme } from "../config/color_scheme";
 import PagerView from 'react-native-pager-view';
 import PostLikes from "./PostLikes";
 import * as Haptics from 'expo-haptics'
+import BottomSheet from "react-native-gesture-bottom-sheet";
+import MapView from "react-native-maps";
+
 function RenderImages({images}){
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
@@ -225,6 +228,608 @@ backgroundColor:color_scheme(colorMode,'#eee'),
     </View>
     )
 }
+function checkUserVoteStatus(userId, idHashMap) {
+    for (const key in idHashMap) {
+        if (idHashMap.hasOwnProperty(key)) {
+            const idArray = idHashMap[key];
+            if (idArray.includes(userId)) {
+                return {
+                    state: true,
+                    votedFor: key
+                };
+            }
+        }
+    }
+    
+    return {
+        state: false,
+        votedFor: null
+    };
+}
+function calculateVotePercentages(voteHashMap) {
+    const result = {};
+    let totalVotes = 0;
+    for (let index = 0; index < Object.keys(voteHashMap).length; index++) {
+        const key = Object.keys(voteHashMap)[index];
+        const value = voteHashMap[key];
+        
+        totalVotes += value.length;
+        result[key] = value.length;
+     
+        
+    }
+    let ans = {}
+    for (let index = 0; index < Object.keys(voteHashMap).length; index++) {
+        const key = Object.keys(voteHashMap)[index];
+        const value = voteHashMap[key];
+        const percentage = totalVotes === 0 ? 0 : (value.length / totalVotes) * 100;
+        result[key] = percentage;
+
+
+        
+    }
+
+    
+    return result;
+}
+function RenderPollVote({ post, setPosti }) {
+    const { colorMode, user } = useContext(AppContext);
+    const { state, votedFor } = checkUserVoteStatus(user.userid, post.pollsvotes);
+    const voteOptions = calculateVotePercentages(post.pollsvotes);
+  
+    async function updatePoll(who) {
+      try {
+        await axios.post(endpoints['updatepoll'], { userid: user.userid, postid: post._id, votedoption: who }).then(
+            res=>{
+                setPosti(res.data)
+            }
+        );
+        // Assuming the response data is the updated poll data
+        // You might need to adapt this part based on the actual response structure
+ 
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  
+    return (
+      <View
+        style={{
+          flexDirection: 'column',
+          paddingHorizontal: 18,
+          paddingVertical: 5,
+        }}
+      >
+        {post.pollsoptions.map((poll, index) => {
+          const optionPercentage = voteOptions[poll] || 0;
+          const showvalue = !optionPercentage ==0? optionPercentage.toFixed(0):100
+          return (
+            <View
+            style={{
+                width:'100%',
+                flexDirection:'row',
+                alignItems:'center',
+                justifyContent:'space-between',
+            }}
+            >
+
+            <TouchableOpacity
+              onPress={() => updatePoll(poll)}
+              key={index}
+              style={{
+                backgroundColor: color_scheme(colorMode, '#eee'),
+                width: !state ? '100%':'88%',
+            
+                borderRadius: 10,
+                marginBottom: 5,
+                position: 'relative', // Add position to allow relative positioning
+              }}
+            >
+              {/* {state && votedFor === poll && ( // Display indicator only if state is true and votedFor matches current option */}
+                <View
+                  style={{
+                  
+                    width:state && votedFor === poll? `${optionPercentage}%`:`${showvalue}%`, // Set the width based on the percentage
+                    backgroundColor: state && votedFor === poll &&'#a330d0',
+             
+                    paddingHorizontal:10,
+                    paddingVertical: 8,
+                    borderRadius: 10,
+                  }}
+                >
+           
+              {/* )} */}
+           
+              <Text
+                style={{
+                  color: color_scheme(colorMode, '#333'),
+                }}
+              >
+                {poll}
+              </Text>
+                       
+              </View>
+            </TouchableOpacity>
+            {
+                state &&
+            
+            <Text
+            style={{
+                color: color_scheme(colorMode, '#333'),
+                fontWeight:'600',
+                fontSize:13
+            }}
+            >
+                {optionPercentage}%
+            </Text>
+              }
+            </View>
+          );
+        })}
+      </View>
+    );
+  }
+  
+function EventMoreSheet({eventMoreSheetRef,post}){
+    return (
+        <BottomSheet   sheetBackgroundColor="#111" ref={eventMoreSheetRef} height={Dimensions.get("screen").height-140}    style={{
+       
+        }}>
+            <View
+            style={{
+                flexDirection:'column',
+       
+                justifyContent:'space-between',
+                paddingHorizontal:10,
+                paddingVertical:20,
+                // backgroundColor:'#2229',
+                marginHorizontal:15,
+                // borderWidth:1,
+                // borderColor:'#3335',
+
+                borderRadius:10,
+                marginVertical:15,
+                height:'95%',
+
+
+            }}
+            >
+                <View
+                
+                >
+
+       
+                <View
+                style={{
+                    flexDirection:'row',
+                    alignItems:'center',
+                    borderBottomWidth:1,
+                    borderColor:'#333',
+                    borderStyle:'solid',
+                    paddingBottom:16
+
+
+                }}
+                >
+                    <Text
+                    style={{
+                        color:'white',
+                        fontWeight:'900',
+                        fontSize:24,
+                    }}
+                    >
+                        {post.eventname}
+                    </Text>
+                </View>
+                <Text
+                style={{
+                    color:'#fff',
+                    marginTop:20,
+                    fontSize:20,
+                    fontWeight:'300'
+                }}
+                >
+                    {post.eventdescription}
+                </Text>
+                <View
+                style={{
+                    flexDirection:'column',
+                    
+                }}
+                >
+                    <View
+                    style={{
+                        flexDirection:'column',
+                        marginTop:40
+
+                    }}
+                    >
+                        <Text
+                        style={{
+                            color:'#999',
+                            fontWeight:'300',
+                            fontSize:16,
+                        }}
+                        >
+                            Start
+                        </Text>
+                        <Text
+                        style={{
+                            color:'#fff',
+                            fontWeight:'300',
+                            fontSize:20,
+                            marginTop:5
+                        }}
+                        >
+                            {post.eventstartdate}
+                        </Text>
+
+                    </View>
+                    <View
+                    style={{
+                        flexDirection:'column',
+                        marginTop:40
+
+                    }}
+                    >
+                        <Text
+                        style={{
+                            color:'#999',
+                            fontWeight:'300',
+                            fontSize:16,
+                        }}
+                        >
+                            End
+                        </Text>
+                        <Text
+                        style={{
+                            color:'#fff',
+                            fontWeight:'300',
+                            fontSize:20,
+                            marginTop:5
+                        }}
+                        >
+                            {post.eventenddate}
+                        </Text>
+
+                    </View>
+                </View>
+                <View
+                style={{
+                    marginTop:40
+                }}
+                >
+                <MapView
+                 initialRegion={{
+                    latitude: post.eventlocation.lat, // Default latitude
+                    longitude: post.eventlocation.long, // Default longitude
+                    latitudeDelta: 0.02, // Controls the zoom level
+                    longitudeDelta: 0.02, // Controls the zoom level
+                  }}
+            tintColor="#444"
+            style={{
+                
+                height:300,
+             
+                borderRadius:15,
+                width:'99%',
+                borderStyle:'solid',
+                borderWidth:1,
+                borderColor:'#222'
+            }}
+            />
+                </View>
+                </View>
+                <View
+            style={{
+                flexDirection:'row',
+                alignItems:'center',
+                justifyContent:'space-between',
+            }}
+            >
+               
+                <View
+                style={{
+                    flexDirection:'row',
+                    alignItems:'center',
+                    justifyContent:'center',
+                    width:'48%',
+                    paddingHorizontal:20,
+       
+                    paddingVertical:19,
+                    borderWidth:0.5,
+                    borderRadius:60,
+                    borderColor:'white',
+                    // backgroundColor:'white',
+                }}
+                >
+                    <Text
+                    style={{
+                        color:'#fff',
+                        fontWeight:'400',
+                        fontSize:23,
+                    }}
+                    >
+                       RSVP
+                    </Text>
+               
+                </View>
+                <View
+                style={{
+                    flexDirection:'row',
+                    alignItems:'center',
+             justifyContent:'center',
+                    width:'48%',
+                    paddingHorizontal:20,
+       
+                    paddingVertical:19,
+                    borderWidth:0.5,
+                    borderRadius:60,
+                    borderColor:'white',
+                    backgroundColor:'white',
+                }}
+                >
+                    <Text
+                    style={{
+                        color:'#333',
+                        fontWeight:'400',
+                        fontSize:20,
+                    }}
+                    >
+                       Add to Calendar
+                    </Text>
+                
+                </View>
+           
+            </View>
+            </View>
+        
+
+        </BottomSheet>
+    )
+}
+function RenderEvent({ post, setPosti }){
+    const eventMoreSheetRef = useRef(null);
+    function onMore(){
+        
+        eventMoreSheetRef.current.show()
+    }
+    function parseAndFormatDate(inputDate) {
+        // Split the input date string into components
+        const parts = inputDate.split(' ');
+      
+        // Extract day, month, and year from the date part
+        const day = parts[2].replace(',', '').padStart(2, '0');
+        const monthName = parts[1];
+        const year = parts[3];
+      
+        // Convert the month name to a numeric month (assuming English month names)
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const month = (monthNames.indexOf(monthName) + 1).toString().padStart(2, '0');
+      
+        // Extract time and AM/PM
+        const time = parts[4];
+        const ampm = parts[5];
+      
+        // Construct the formatted date string
+        const formattedDate = `${day}/${month}/${year} ${time}${ampm}`;
+      
+        return formattedDate;
+      }
+    return (<View
+    style={{
+        flexDirection:'column',
+        alignItems:'center',   marginHorizontal:10,
+              
+        marginBottom:10,
+    }}
+    >
+       
+        <View
+        style={{
+            paddingHorizontal:10,
+            paddingVertical:20,
+            flexDirection:'column',
+            backgroundColor:'#2229',
+            // borderStyle:'solid',
+            // borderWidth:1,
+            // borderColor:'#333',
+            borderRadius:10,
+   
+            width:'100%'
+        
+        }}
+        >
+            <View
+            style={{
+                flexDirection:'row',
+                paddingBottom:10,
+                borderBottomWidth:1,
+                borderColor:'#333',
+                borderStyle:'solid'
+            }}
+            >
+
+
+            <Text
+            style={{
+                color:'white',
+                fontWeight:'600',
+                fontSize:20,
+     
+            }}
+            >
+                
+                {post.eventname}
+            </Text>
+            </View>
+            <Text
+            style={{
+                paddingVertical:10,
+                color:'white',
+                fontWeight:'300',
+                fontSize:17,
+            }}
+            >
+                {post.eventdescription}
+            </Text>
+            <View>
+            {/* <View
+                style={{
+                    flexDirection:'column',
+                    
+                }}
+                >
+                    <View
+                    style={{
+                        flexDirection:'column',
+                        marginTop:10
+
+                    }}
+                    >
+                        <Text
+                        style={{
+                            color:'#999',
+                            fontWeight:'300',
+                            fontSize:12,
+                        }}
+                        >
+                            Start
+                        </Text>
+                        <Text
+                        style={{
+                            color:'#fff',
+                            fontWeight:'300',
+                            fontSize:17,
+                            marginTop:5
+                        }}
+                        >
+                            {post.eventstartdate}
+                        </Text>
+
+                    </View>
+                    <View
+                    style={{
+                        flexDirection:'column',
+                        marginTop:20,
+                        marginBottom:10
+
+                    }}
+                    >
+                        <Text
+                        style={{
+                            color:'#999',
+                            fontWeight:'300',
+                            fontSize:12,
+                        }}
+                        >
+                            End
+                        </Text>
+                        <Text
+                        style={{
+                            color:'#fff',
+                            fontWeight:'300',
+                            fontSize:17,
+                            marginTop:5
+                        }}
+                        >
+                            {post.eventenddate}
+                        </Text>
+
+                    </View>
+                </View> */}
+            </View>
+            <View
+            style={{
+                flexDirection:'row',
+                alignItems:'center',
+                justifyContent:'space-between',
+                marginTop:10,
+
+            }}
+            >
+
+ 
+            <View
+            style={{
+                backgroundColor:'white',
+          
+                paddingVertical:10,
+         
+                paddingHorizontal:10,
+                flexDirection:'row',
+                alignItems:'center',
+                justifyContent:'space-evenly',
+                borderRadius:10,
+                width:'86%'
+            }}
+            >
+              
+            
+      <Text
+      style={{
+            color:'#333',
+            fontWeight:'600',
+            fontSize:17,
+      }}
+      >
+        RSVP
+      </Text>
+
+            </View>
+            <TouchableOpacity
+            onPress={()=>onMore()}
+            style={{
+                flexDirection:'row',
+                alignItems:'center',
+                justifyContent:'center',
+                height:40,
+                width:40,
+                borderRadius:100,
+                backgroundColor:'#333',
+            }}
+            >
+
+<Calendar2 size="26" color="#aaa" variant="Bold"/>
+            </TouchableOpacity>
+            </View>
+        </View>
+        <View
+        style={{
+            flexDirection:'row',
+            alignItems:'center',
+            marginTop:10
+        }}
+        >
+    <View
+        style={{
+            flexDirection:'row',
+            alignItems:'center',
+            paddingHorizontal:10,
+            paddingVertical:3,
+            borderRadius:10,
+            width:'25%',
+            backgroundColor:'#222',
+        }}
+        />
+
+<View
+        style={{
+            marginLeft:5,
+            flexDirection:'row',
+            alignItems:'center',
+     
+            borderRadius:100,
+            width:8,
+            height:8,
+            backgroundColor:'#222',
+        }}
+        />
+        </View>
+        <EventMoreSheet eventMoreSheetRef={eventMoreSheetRef} post={post}/>
+        </View>
+    )
+}
 export default function PostsList({index,navigation,posti,userdetails,move}){
     
     const windowWidth = Dimensions.get('window').width;
@@ -232,6 +837,7 @@ export default function PostsList({index,navigation,posti,userdetails,move}){
     const windowScale = Dimensions.get('window').scale;
     
  const [post,setPosti] =useState(posti)
+ const [showPost,setShowPost] = useState(true)
  
 const {user} = useContext(AppContext)
 const [isLike, setIsLike] = useState(post.likesuserlist.includes(user.userid));
@@ -317,8 +923,17 @@ function scaleImageToScreen(imageWidth, imageHeight) {
  
     
   }
+  async function deletePost(id){
+    await axios.post(endpoints['deletepost'],{
+        id:id
+    }).then(
+        res=>{
+            setShowPost(false)
+        }
+    )
+  }
   const morepostoptions = post.userid ==user.userid? ['Cancel', 'Report', 'Delete']:['Cancel', 'Report', ]
-  const onMore = () =>
+  const onMore = (id) =>
   
   ActionSheetIOS.showActionSheetWithOptions(
     {
@@ -333,14 +948,15 @@ function scaleImageToScreen(imageWidth, imageHeight) {
       } else if (buttonIndex === 1) {
         setResult(String(Math.floor(Math.random() * 100) + 1));
       } else if (buttonIndex === 2) {
-        setResult('🔮');
+        deletePost(id)
+        
       }
     },
   );
   const inputcommentid = 'uniqueID';
 const likeBottomSheet = useRef(null);
     return (
-        userdetails && 
+        showPost &&   userdetails && 
         <>
 
         <View style={[homestyles.post,{borderColor:color_scheme(colorMode,'#dddd')}]} key={index} 
@@ -388,27 +1004,15 @@ const likeBottomSheet = useRef(null);
                 <Text selectable={true} style={[homestyles.postcontenttext,{color:color_scheme(colorMode,'#333')}]}>
                    {post.content}
                 </Text>
-            </Pressable>{post.links.length>0&&
-            <View style={{flexDirection:'column',marginVertical:8,borderRadius:30,paddingVertical:2}}>
-                
-        {
-            post.links.map((link,index)=>{
-                return(
-                    <View key={index} style={{flexDirection:'row',justifyContent
-                    :'space-between',alignItems:'center',paddingVertical:3}}>
-                    
-                    <View key={index}style={{flexDirection:'row',alignItems:'center'}}>
-                    
-                    <Text style={{marginLeft:5,color:'blue'}}>{link}</Text>
-                    </View>
-                    <TouchableOpacity onPress={()=>remove(link)}>
-                    
-                    </TouchableOpacity>
-                    </View>
-                )
-            })
-        }
-        </View>}
+            </Pressable>
+            {
+                post.posttype=='poll'&& 
+                <RenderPollVote post={post} setPosti={setPosti}/>
+            }
+            {
+                post.posttype=='event'&&
+                <RenderEvent post={post} setPosti={setPosti}/>
+            }
         {/* <View
         style={{
             width:'100%',
@@ -489,7 +1093,7 @@ const likeBottomSheet = useRef(null);
            
             <View>
                 
-            <TouchableOpacity  style={homestyles.insightbtn} onPress={()=>onMore()} >
+            <TouchableOpacity  style={homestyles.insightbtn} onPress={()=>onMore(post._id)} >
             <Entypo name="dots-three-horizontal" size={18} color={  color_scheme(colorMode,'#aaa')} />
         
             </TouchableOpacity>
