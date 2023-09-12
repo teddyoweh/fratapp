@@ -26,20 +26,7 @@ mongoose.connect(config.DB, { useNewUrlParser: true }).then(
     console.log('Can not connect to the database' + err);
   }
 );
-
-if (cluster.isMaster) {
-  const numCPUs = os.cpus().length;
-
-  
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
-
-  cluster.on('exit', (worker) => {
-    console.log(`Worker ${worker.process.pid} died. Forking a new worker...`); 
-    cluster.fork();
-  });
-} else {
+ 
   const app = express();
 
   app.use(cors());
@@ -76,4 +63,4 @@ if (cluster.isMaster) {
   app.listen(PORT, () => {
     console.log(`Worker ${cluster.worker.id} is running on ${ip}:${PORT}`);
   });
-}
+ 
