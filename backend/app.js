@@ -58,7 +58,7 @@ mongoose.connect(config.DB, { useNewUrlParser: true }).then(
     res.send('hello');
   });
 
-  const PORT = process.env.PORT || 9990;
+  const PORT =  9990;
 
   app.listen(PORT, () => {
     console.log(`Worker ${cluster.worker.id} is running on ${ip}:${PORT}`);
