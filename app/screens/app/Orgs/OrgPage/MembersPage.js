@@ -1,6 +1,6 @@
 import { View,Text,Animated, Image,TouchableOpacity,Keyboard, ScrollView, TextInput,  RefreshControl,KeyboardAvoidingView, Button, Pressable, Vibration} from "react-native";
 import { homestyles,discoverstyles } from "../../../../styles";
-import { Message, Messages1,Message2, Messages2, SearchNormal, PictureFrame,Chart,Link21,VoiceCricle,Calendar,VolumeHigh,Briefcase,Send2, Messages3, MessageSquare,More,Like, Like1,AddCircle, ElementPlus, UserCirlceAdd, Add, DirectUp, ArrowUp, Microphone, Microphone2, AddSquare, UserAdd} from 'iconsax-react-native';
+import { Message, Messages1,Message2, Messages2, SearchNormal, PictureFrame,Chart,Link21,VoiceCricle,Calendar,VolumeHigh,Briefcase,Send2, Messages3, MessageSquare,More,Like, Like1,AddCircle, ElementPlus, UserCirlceAdd, Add, DirectUp, ArrowUp, Microphone, Microphone2, AddSquare, UserAdd, Profile, ProfileAdd} from 'iconsax-react-native';
 import { FontAwesome5,Feather, Ionicons,AntDesign, MaterialIcons,Entypo} from '@expo/vector-icons';
 import { useContext, useEffect,useRef, useState,useCallback, useLayoutEffect } from "react";
 import { AppContext } from "../../../../context/appContext";
@@ -123,10 +123,10 @@ export default function MembersPage({navigation,route}){
                 <TouchableOpacity
                 onPress={()=>opeAddMemberSheet()}
                 >
-                    <UserCirlceAdd
-                    size={43}
+                    <ProfileAdd
+                    size={40}
                     color={color_scheme(colorMode,'#aaa')}
-                    variant="Bulk"
+                    variant="Broken"
                     />
                 </TouchableOpacity>
                 </View>

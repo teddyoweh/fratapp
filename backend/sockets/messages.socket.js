@@ -2,6 +2,7 @@ const socketIO = require('socket.io');
 const Message = require('../models/Message')
 
 const http = require('http');
+const Messages = require('../models/Message');
 
 function chatSocket(app){
     const server = http.createServer(app);
@@ -19,13 +20,37 @@ function chatSocket(app){
       const changeStream = Message.watch();
     
       changeStream.on('change', (change) => {
-        const { sender_id, receiver_id } = change.fullDocument;
-        const { userId } = socket;
-        
-        if (userId === sender_id || userId === receiver_id) {
-          console.log('emitting');
-          socket.emit('message', change.fullDocument);
+        if(Object.keys(change).includes('fullDocument')){
+ 
+ 
+          const { sender_id, receiver_id } = change.fullDocument;
+          const { userId } = socket;
+          
+          if (userId === sender_id || userId === receiver_id) {
+            console.log('emitting');
+            socket.emit('message', change.fullDocument);
+          }
         }
+    
+      });
+      socket.on('unreadcount', (userId) => {
+ 
+        socket.userId = userId;
+      });
+    
+ 
+    
+      changeStream.on('change', (change) => {
+        if(Object.keys(change).includes('fullDocument')){
+ 
+ 
+          const { sender_id, receiver_id } = change.fullDocument;
+          const { userId } = socket;
+          socket.emit('unreadcount',countUnviewedMessages(userId))
+          
+       
+        }
+    
       });
     
       socket.on('disconnect', () => {
@@ -35,8 +60,31 @@ function chatSocket(app){
     });
     server.listen(8080)
 
+  }
+
+async function countUnviewedMessages(userid) {
+  try {
+    
+    const unviewedMessagesCount = await Messages.countDocuments({
+      receiver_id: userid, 
+      viewedby: { $nin: [userid] }, 
+    });
+
+    return unviewedMessagesCount;
+  } catch (error) {
+    console.error('Error counting unviewed messages:', error);
+    throw error;
+  }
 }
 
+
+ 
+ 
+
+function unreadCountSocket(app){
+ 
+}
 module.exports = {
-chatSocket
+chatSocket,
+unreadCountSocket
 }

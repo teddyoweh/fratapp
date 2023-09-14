@@ -199,7 +199,8 @@ style={{
  <ScrollView
                 contentContainerStyle={{
                     paddingTop:10,
-                    marginBottom:50
+                    marginBottom:50,
+                    height:'100%',
                 }}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -220,13 +221,32 @@ style={{
                     </Text>
                     </View>
                     {
+                        data.contacts.latestMessages.length==0?<View
+                        style={{
+                            flexDirection:'row',
+                            justifyContent:'center',
+                            alignItems:'center',
+                 
+                            height:'50%'
+                        }}
+                        >
+                                <Text
+                                style={{
+                                    fontWeight:'600',
+                                    fontSize:17,
+                                    color:'#444'
+                                }}
+                                >
+                                    No Recent Messages
+                                </Text>
+                        </View>:
                         data.contacts.latestMessages.map((item,index)=>{
                             let name_ 
                             let uimg_  
                             let chat_data_
                             let type_ = item.receiver_type
                             let channel_id = item.channel_info? item.channel_info.id:null
-                            alert(JSON.stringify(item))
+                        
                             let org_id = item.org_info? item.org_info.id:null
                             if(item.receiver_type=='user'){
                                 name_ = item.user_info.firstname+' '+item.user_info.lastname
@@ -351,122 +371,7 @@ style={{
                     }
 
                 </ScrollView>
-            
-                <ScrollView
-                contentContainerStyle={{
-                    paddingTop:10
-                }}
-                >
-                    <View>
 
-             
-                    <Text
-                    style={{
-                        paddingHorizontal:13,
-                        fontSize:20,
-                        marginBottom:10,
-                        color:color_scheme(colorMode,'#333'),
-                        fontWeight:'600'
-                    }}
-                    >
-                        Suggested
-                    </Text>
-                    </View>
-                 {/* {
-                     data.suggested &&   
-                        data.suggested.map((item,index)=>{
-                            console.log(item,'checking for sumn')
-                            return (
-                                    <TouchableOpacity
-                                
-                                    onPress={()=>goToChat(item)}
-                                    key={index}
-                                    style={{
-                                        flexDirection:'row',                    
-                                        alignItems:'center',
-                                        justifyContent:'space-between',
-                                        width:'100%',
-                                        borderBottomWidth:1,
-                                        borderStyle:'solid',
-                                        borderColor:'#eee',
-                                        paddingVertical:11,
-                                        paddingHorizontal:13
-                                    
-                                    
-                                    }}
-                                    >
-                                    <View
-                                    style={{
-                                        flexDirection:'row',
-                                        width:'80%'
-
-                                    }}
-                                    >
-                                     <View
-                                     style={{
-                                        flexDirection:"column",
-                        
-                                     }}
-                                     >
-                                    <Image
-                                    style={{
-                                        height:45,
-                                        width:45,
-                                        borderRadius:100
-
-                                    }}
-                                    source={{uri:wrapUIMG(item.uimg)}}
-                                    />
-                                    </View>   
-                                    <View
-                                    style={{
-                                        flexDirection:'column',
-                                        paddingHorizontal:10,
-                                        
-                                    }}
-                                    >
-                                        <Text
-                                        style={{
-                                            color:"#333",
-                                            fontWeight:'400',
-                                            fontSize:17,
-                                     
-                                        }}
-                                        >
-                                        {item.firstname+' '+item.lastname}
-                                        </Text>
-                                        <Text
-                                        style={{
-                                            color:'#999',
-                                            marginTop:5,
-                                            fontWeight:'300',
-                                            paddingLeft:4,
-                                            fontSize:13
-                                        }}
-                                        >
-                                        Tap to Chat
-                                        </Text>
-                                    </View>
-                                    </View>
-                                    <View
-                                    style={{
-                                        flexDirection:'column',
-                                        paddingHorizontal:10,
-                                        width:'20%',
-                                        alignItems:'flex-end',
-                                        justifyContent:"space-between"
-                                    }}
-                                    >
-                                        <Ionicons name="chevron-forward" size={2} color="black" />
-
-                                        
-                                    </View>
-                                    </TouchableOpacity>
-                            )
-                        })
-                    }  */}
-
-                </ScrollView>
             </View>
              }
         </View>

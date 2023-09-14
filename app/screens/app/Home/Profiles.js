@@ -17,7 +17,7 @@ export default function ProfilesScreen({navigation,route}){
     const [activeFilter,setActiveFilter]=useState('All')
     const {userdetails} = route.params
     
-
+    const [ receiver_type,setReceiver_type]=useState('user')
     console.log(userdetails)
     return (
         <View style={[profilestyles.container,{
@@ -144,7 +144,9 @@ export default function ProfilesScreen({navigation,route}){
                                     screen:'ChatStacks',
                                     params:{
                                         party_data:userdetails,
-                                    }
+                                        receiver_type:receiver_type
+                                    },
+                                   
                                 })
                             }}
                             >

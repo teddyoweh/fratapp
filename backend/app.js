@@ -48,19 +48,18 @@ mongoose.connect(config.DB, { useNewUrlParser: true }).then(
   app.use('/postimg', express.static(__dirname + '/uploads/posts'));
 
   const ip = require('./ip');
-  const { chatSocket } = require('./sockets/messages.socket');
+  const { chatSocket, unreadCountSocket } = require('./sockets/messages.socket');
 
   orgStream(app);
   ModDB()
   chatSocket();
+  unreadCountSocket(app);
 
   app.get('/', function (req, res) {
     res.send('hello');
   });
-
-  const PORT =  9990;
-
+  const  PORT =  9990;
   app.listen(PORT, () => {
-    console.log(`Worker ${cluster.worker.id} is running on ${ip}:${PORT}`);
+    console.log(`Herds Server running on ${ip}:${PORT}`);
   });
  

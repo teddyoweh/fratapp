@@ -15,10 +15,45 @@ import { color_scheme } from "../../../config/color_scheme";
 import { BlurView } from "expo-blur";
 import * as Haptics from 'expo-haptics'
 import axios from "axios";
+import io from 'socket.io-client';
 import { endpoints } from "../../../config/endpoints";
+import { serverhost } from "../../../config/ip";
 function RenderMessageBtn({navigation}){
     const {colorMode,user} = useContext(AppContext)
     const [count,setCount] = useState(null)
+    function fetchSocket(){
+
+        const socket = io(`http://${serverhost}:8080`);
+    
+        socket.on('connect', () => {
+          const userId = user.userid
+          socket.emit('unreadcount', userId);
+        });
+    
+        socket.on('unreadcount', (message) => {
+            
+            if(message){
+ 
+                try{
+                    setCount(message)
+                }
+                catch{
+                    console.log('lol something happened')
+                }
+                
+            }
+        
+         
+        });
+    
+        socket.on('disconnect', () => {
+          console.log('Connection closed');
+        });
+        return () => {
+          socket.close();
+        };
+    }
+
     async function fetchCount(){
         await axios.post(endpoints['getunreadcount'],{userId:user.userid})
         .then(res=>{
@@ -29,6 +64,7 @@ function RenderMessageBtn({navigation}){
     useEffect(
         ()=>{
             fetchCount()
+            fetchSocket()
         },[]
     )
     return (

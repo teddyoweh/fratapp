@@ -1,4 +1,5 @@
-const User = require('../models/User')
+const User = require('../models/User');
+const UserActivity = require('../models/UserActivity');
 
 
 
@@ -24,7 +25,13 @@ function searchUser(req, res) {
       });
     
   }
-
+function getUserActivity(req,res){
+  const {userid} = req.body
+  UserActivity.find({user_id:userid}).then((activity)=>{
+    res.json(activity)
+  })
+ 
+}
   module.exports = {
     searchUser
   }

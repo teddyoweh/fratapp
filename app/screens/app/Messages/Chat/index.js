@@ -14,7 +14,7 @@ import DMMessageViewer from "./ImageViewer";
 const ChatStack = HomeStack
 export default function ChatStacks({navigation,route}) {
  
-  const {party_data} = route.params
+  const {party_data,receiver_type} = route.params
   return (
     <ChatStack.Navigator
     screenOptions={
@@ -25,7 +25,8 @@ export default function ChatStacks({navigation,route}) {
     
     >
         <ChatStack.Screen name='ChatScreen' initialParams={{
-          party_data:party_data
+          party_data:party_data,
+          receiver_type:receiver_type
         }} component={ChatScreen}
      
         />

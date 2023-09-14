@@ -269,7 +269,7 @@ export default function ChatScreen({navigation,route}){
     const scrollToBottom = () => {
       scrollViewRef.current.scrollToEnd({ animated: true });
     };
- 
+    
   
   
     async function SendMessage(){
@@ -523,6 +523,85 @@ style={{
             </TouchableOpacity>
         
             </TouchableOpacity>
+            {
+                receiver_type=='user'?
+                <View
+                style={{
+                    flexDirection:'row',
+                    alignItems:'center',
+                    justifyContent:'center'
+                }}
+                ><View
+                style={{
+                    flexDirection:'column',
+                    alignItems:'flex-end',
+                    marginRight:10
+                
+                }}
+                >
+    
+    
+            <Image source={{uri:wrapUIMG(party_data.uimg)}} style={{
+        
+            
+                height:45,
+                width:45,
+                borderRadius:100
+            }}/>
+            
+            </View>
+            <View
+            style={{
+                flexDirection:'column'
+            }}
+            >
+            <Text
+            style={{
+                color:color_scheme(colorMode,'#333'),
+                 
+                fontSize:17,
+                fontWeight:'500'
+            }}
+            >
+                {party_data.firstname +' '+ party_data.lastname}
+            </Text>
+            <View
+            style={{
+                flexDirection:'row',
+                alignItems:'center'
+            }}
+            >
+            <View
+            style={{
+                backgroundColor:'#00FF00',
+                height:8,
+                width:8,
+                position:'relative',
+                marginRight:5,
+            
+             
+                borderRadius:100
+            }}
+            />
+     <Text
+            style={{
+                color:color_scheme(colorMode,'#333'),
+                 
+                fontSize:14,
+                fontWeight:'300'
+            }}
+            >
+                Active
+            </Text>
+           
+            </View>
+           
+    
+    
+    </View>
+    
+                </View>:
+        
             <View
             style={{
                 flexDirection:'row',
@@ -599,6 +678,7 @@ style={{
 </View>
 
             </View>
+                }
             </View>
             <View
             style={{

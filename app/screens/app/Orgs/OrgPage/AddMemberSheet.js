@@ -62,7 +62,7 @@ export default function AddUserAccessSheet({bottomSheet,org}){
         <KeyboardAvoidingView style={{backgroundColor:color_scheme(colorMode,'white'),flex:1,
     paddingTop:20}}>
 
-<View style={[discoverstyles.searchbox,{backgroundColor:color_scheme(colorMode,'#eeee'),marginHorizontal:10}]}>
+<View style={[discoverstyles.searchbox,{backgroundColor:color_scheme(colorMode,'#eee'),marginHorizontal:10}]}>
                     <SearchNormal variant="Broken" color="grey" />
                     <TextInput style={discoverstyles.search}    autoCapitalize="none"  placeholderTextColor={'#aaa'} placeholder="Search Username, Firstname, Lastname" value={input} onChangeText={(text)=>searchUsers(text)}/>
                 </View>
@@ -116,7 +116,8 @@ export default function AddUserAccessSheet({bottomSheet,org}){
             <Text
             style={{
                 fontSize: 15,
-                fontWeight:600
+                fontWeight:600,
+                color:'white'
             }}
             >
             Selected Users ({selectedUsers.length}) 
