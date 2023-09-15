@@ -26,7 +26,7 @@ const LoadingModal = ({ isVisible, onClose,success }) => {
         onRequestClose={onClose}
       >
         <View style={styles.modalContainer}>
-          <View style={{paddingHorizontal:10, borderStyle:'solid',borderWidth:1,bordercolor:color_scheme(colorMode,'#eee'),borderColor:color_scheme(colorMode,'#aaa'), width:250,backgroundcolor:"#333",height:200,borderRadius:10,flexDirection:'column',alignContent:'space-around',alignItems:'center',justifyContent:'center'}}>
+          <View style={{paddingHorizontal:10, borderStyle:'solid',borderWidth:1,bordercolor:color_scheme(colorMode,'#eee'),borderColor:color_scheme(colorMode,'#aaa'), width:250,backgroundcolor:"#666",height:200,borderRadius:10,flexDirection:'column',alignContent:'space-around',alignItems:'center',justifyContent:'center'}}>
             {
                 success==false?
            <>
@@ -590,7 +590,7 @@ export default function CreateOrgs({navigation}){
                              style={[makeeventstyles.forminput,{ color:color_scheme(colorMode,'black'),       backgroundColor:color_scheme(colorMode,'#eeee'),borderColor:color_scheme(colorMode,'#ccc')}]} placeholder="Organization Symbol" value={orgSymbol} onChangeText={(text)=>setOrgSymbol(text)}/>
                         </View>
                         <View style={makeeventstyles.formgrp}>
-        <Text style={[makeeventstyles.formtext,{color:color_scheme(colorMode,'#333')}]}>Organization Cohorts</Text>
+        <Text style={[makeeventstyles.formtext,{color:color_scheme(colorMode,'#333')}]}>Organization Type</Text>
         <ScrollView horizontal={true} contentContainerStyle={{paddingVertical:5}} showsHorizontalScrollIndicator={false}>
 
 

@@ -58,7 +58,7 @@ function chatSocket(app){
         changeStream.close();
       });
     });
-    server.listen(5050)
+    server.listen(8080)
 
   }
 

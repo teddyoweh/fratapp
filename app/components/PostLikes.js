@@ -98,7 +98,8 @@ export default function PostLikes({navigation, likeBottomSheet,post}){
                                  key={index}
                                  style={{
                                     flexDirection:'row',
-                                    alignItems:'center'
+                                    alignItems:'center',
+                                    paddingVertical:10
                                  }}
                                  >
                                 <View

@@ -572,7 +572,7 @@ const makeeventstyles = StyleSheet.create({
     forminput:{
         fontSize:16,
         fontWeight:'300',
-
+        color:'white',
         borderRadius:10,
         paddingHorizontal:10,
         paddingVertical:10,

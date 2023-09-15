@@ -169,6 +169,7 @@ const newMemberships = userids.map(userid => ({
   org_type: org.org_type,
   user_id: userid,
   role: 'member',
+  status: 'active',
   teams: [],
   positions: [],
 }));

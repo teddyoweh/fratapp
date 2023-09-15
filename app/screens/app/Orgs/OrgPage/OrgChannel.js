@@ -39,6 +39,14 @@ function RenderOrgChannelPost({post,userdets}){
           
         }}
         >
+            <View
+            style={{
+                flexDirection:'row',
+                alignItems:'center',
+                justifyContent:'space-between',
+            }}
+            >
+   
         <View
         style={{
             flexDirection:'row',
@@ -77,7 +85,7 @@ function RenderOrgChannelPost({post,userdets}){
                 style={{
                     marginLeft:5,
                     fontSize:14,
-                    color:color_scheme(colorMode,'grayy'),
+                    color:"#555",
                     fontWeight:'400'
                 }}
                 >
@@ -87,6 +95,15 @@ function RenderOrgChannelPost({post,userdets}){
                     
                 </Text>
             </View>
+                 </View>
+                 <Text
+                 style={{
+                    color:'#555',
+                    fontSize:13
+                 }}
+                 >
+                        {getTimeDifference(post.date)} ago                                                                                                                                                                                                                                                                                                                                                                                                               vvv 
+                 </Text>
                  </View>
             <View
             style={{
