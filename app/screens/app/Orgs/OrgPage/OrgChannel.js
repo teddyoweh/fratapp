@@ -1,6 +1,6 @@
-import { View,Text,Animated, Image,TouchableOpacity,Keyboard, ScrollView, TextInput,  RefreshControl,KeyboardAvoidingView, Button, Pressable, Vibration, StyleSheet} from "react-native";
+import { View,Text,Animated, Image,TouchableOpacity,Keyboard, ScrollView, TextInput,  RefreshControl,KeyboardAvoidingView, Button, Pressable, Vibration, StyleSheet, ActionSheetIOS} from "react-native";
 import { homestyles,discoverstyles } from "../../../../styles";
-import { Message, Messages1,Message2, Messages2, SearchNormal, PictureFrame,Chart,Link21,VoiceCricle,Calendar,VolumeHigh,Briefcase,Send2, Messages3, MessageSquare,More,Like, Like1,AddCircle, ElementPlus, UserCirlceAdd, Add, DirectUp, ArrowUp, Microphone, Microphone2, Hashtag, ArrowRight2, Box2, Celo, Command, Notepad2, People, Back, Setting2, Notification1, Clock, Key, ArrowCircleUp, ArrowCircleDown, DirectInbox, Save2} from 'iconsax-react-native';
+import { Message, Messages1,Message2, Messages2, SearchNormal, PictureFrame,Chart,Link21,VoiceCricle,Calendar,VolumeHigh,Briefcase,Send2, Messages3, MessageSquare,More,Like, Like1,AddCircle, ElementPlus, UserCirlceAdd, Add, DirectUp, ArrowUp, Microphone, Microphone2, Hashtag, ArrowRight2, Box2, Celo, Command, Notepad2, People, Back, Setting2, Notification1, Clock, Key, ArrowCircleUp, ArrowCircleDown, DirectInbox, Save2, Js} from 'iconsax-react-native';
 import { FontAwesome5,Feather, Ionicons,AntDesign, MaterialIcons,Entypo} from '@expo/vector-icons';
 import { useContext, useEffect,useRef, useState,useCallback, useLayoutEffect } from "react";
 import { AppContext } from "../../../../context/appContext";
@@ -296,6 +296,48 @@ export default function OrgChannel({route,navigation}){
  
         })
     }
+    function gotoChat(){
+        const name_ = cohort.channel_name=='General'?org.org_name:`${org.org_name} - ${cohort.channel_name}`
+        const data_org = {
+            org_id:org._id,
+            name_:name_,
+            uimg_:org.org_logo,
+            receiver_type:cohort.channel_name=='General'?'group':'cohort',
+            _id:org._id,
+            cohort:cohort,
+            channel_id:cohort.channel_name!='General'?cohort._id:null,
+            ...org,
+        }
+ 
+        navigation.navigate("MessagesScreen",{
+  
+            screen:'ChatStacks',
+            params:{
+                party_data:data_org,
+            }
+        })
+    }
+    const [orgData,setOrgData] = useState(null)
+
+    const orgoptionshashmap ={
+        'Messages':gotoChat,
+        'Settings':gotoChat
+       
+    }
+    const orgoptions = [...Object.keys(orgoptionshashmap)]
+    const onSettingsPress = () =>
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: [...orgoptions,'Settings'],
+        title:`${org.org_name} Menu`,
+        cancelButtonIndex: [...orgoptions,'Settings'].length-1,
+        userInterfaceStyle: "dark",
+        tintColor:'#eee'
+      },
+      buttonIndex => {
+         orgoptionshashmap[[...orgoptions,'Settings'][buttonIndex]]()
+      },
+    );
     useEffect(()=>{
         getPosts()
     },[])
@@ -402,7 +444,9 @@ export default function OrgChannel({route,navigation}){
                 {org.org_name}
             </Text>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity
+            onPress={()=>onSettingsPress()}
+            >
                 <More color={color_scheme(colorMode,'#333')} variant="Broken"/>
             </TouchableOpacity>
 

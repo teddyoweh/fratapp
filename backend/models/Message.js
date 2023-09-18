@@ -36,7 +36,6 @@ default:[]
     default: Date.now
 },
  
-
 });
     
 const Messages = mongoose.model('Messages', MessagesSchema);

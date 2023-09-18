@@ -169,7 +169,7 @@ const newMemberships = userids.map(userid => ({
   org_type: org.org_type,
   user_id: userid,
   role: 'member',
-  status: 'active',
+  status: 'active', 
   teams: [],
   positions: [],
 }));
@@ -310,7 +310,7 @@ async function manageFollowOrg(req,res) {
   console.log(req.body)
   const {orgid, userid} = req.body
   
-  try {
+ 
     const existingFollow = await Links.findOneAndDelete({ partyid: orgid, userid: userid });
 
     if (!existingFollow) {
@@ -322,10 +322,7 @@ async function manageFollowOrg(req,res) {
       res.json({ success: true, message: 'Follow record created successfully', data: newFollow })
     }
     res.json({ success: true, message: 'Follow record created successfully' })
-  } catch (error) {
-    console.error(error);
-    res.json({ success: true, message: 'Follow record created successfully' })
-  }
+ 
 }
 async function getOrgStat(orgid, userid ) {
  

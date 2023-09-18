@@ -112,7 +112,7 @@ function RenderSendImages({setImages, images}){
         </View>
     )
 }
-function RenderMsg({navigation, msg,msg2}){
+function RenderMsg({navigation, msg,msg2,usershashmap,receiver_type}){
     const {user} =useContext(AppContext)
     const rad = msg.sender_id==user.userid? {borderBottomRightRadius:0}:{borderBottomLeftRadius:1}
  
@@ -145,16 +145,59 @@ function RenderMsg({navigation, msg,msg2}){
         style={{
             flexDirection:'row',
             paddingHorizontal:20,
-            marginBottom:msg2? msg2.sender_id!=msg.sender_id ?15:2:0,
+            marginBottom:msg2? msg2.sender_id!=msg.sender_id ?15:1:10,
             justifyContent:msg.sender_id==user.userid? 'flex-end':'flex-start'
         }}
-        >   
+        >  
+        <View
+        style={{
+            flexDirection:'row',
+            alignItems:msg.msg_images.length>0?'flex-start':'center',
+            
+        }}
+        >
+            {
+                msg.sender_id!=user.userid&&
+        
+            <View>
+            <Image
+            source={{uri:wrapUIMG(usershashmap[msg.sender_id].uimg)}}
+            style={{
+                height:30,
+                width:30,
+                borderRadius:100,
+                marginRight:5,
+                //marginTop:msg2? msg2.sender_id!=msg.sender_id ?15:2:0,
+            }}
+            />
+            </View>
+                }
+           
          <View
         style={{flexDirection:'column',
-        alignItems:'flex-end',
+        alignItems: msg.sender_id==user.userid? 'flex-end':'flex-start',
       
     }}
         >
+
+            {
+                receiver_type!='user'&&msg.sender_id!=user.userid&&
+         
+            <View
+            style={{
+                paddingVertical:5,
+                paddingHorizontal:8
+            }}
+            >
+                <Text
+                style={{
+                    color:'#aaa',
+                }}
+                >
+                    {usershashmap[msg.sender_id].firstname+' '+usershashmap[msg.sender_id].lastname}
+                </Text>
+            </View>
+               }
              { msg.msg_images.map((img)=>{
                 const {width,height} = scaleImageToScreen(img.width,img.height)
                 return (
@@ -242,6 +285,7 @@ function RenderMsg({navigation, msg,msg2}){
            
                  }
             </View>
+            </View> 
             </View>}
             </>
    
@@ -257,9 +301,14 @@ export default function ChatScreen({navigation,route}){
     
     const {user,colorMode} =useContext(AppContext)
     
-    const {party_data,receiver_type,channel_id,
-        org_id} = route.params
+    const {party_data} = route.params
+ 
+    const { receiver_type, channel_id, org_id } = Object.keys(party_data).includes('receiver_type')
+    ? party_data
+    : route.params;
     
+ 
+  
     const [data,setData] = useState(null)
     const [text,setText] = useState('')
     const [msgtype,setMsgType]  = useState('text')
@@ -270,7 +319,7 @@ export default function ChatScreen({navigation,route}){
       scrollViewRef.current.scrollToEnd({ animated: true });
     };
     
-  
+ 
   
     async function SendMessage(){
         const random = randomNumberString()
@@ -302,7 +351,7 @@ export default function ChatScreen({navigation,route}){
         })
     }
     async function FetchMessages(){
-        await axios.post(endpoints['fetchmsgs'],{receiver_id:partyid,user_id:user.userid}).then(res=>{
+        await axios.post(endpoints['fetchmsgs'],{receiver_id:partyid,user_id:user.userid,org_id,channel_id,receiver_type}).then(res=>{
             setData(res.data)
         })
     }
@@ -321,6 +370,7 @@ export default function ChatScreen({navigation,route}){
                     console.log('shit theres a new mesage')
                     console.log('New message:', message);
                     schedulePushNotification(party_data.firstname+' '+party_data.lastname,message.content)
+                    const newMessages = [...data.messages,message]
                     setData(oldArray => [...oldArray,message])
                     scrollToBottom();
                 }
@@ -559,13 +609,13 @@ style={{
             style={{
                 color:color_scheme(colorMode,'#333'),
                  
-                fontSize:17,
+                fontSize:19,
                 fontWeight:'500'
             }}
             >
                 {party_data.firstname +' '+ party_data.lastname}
             </Text>
-            <View
+            {/* <View
             style={{
                 flexDirection:'row',
                 alignItems:'center'
@@ -594,7 +644,7 @@ style={{
                 Active
             </Text>
            
-            </View>
+            </View> */}
            
     
     
@@ -717,13 +767,13 @@ style={{
                 data==null?<View>
                     <Spinner/>
                 </View>:
-                data.map((msg,index)=>{
+                data.messages.map((msg,index)=>{
                     let msg2 = null
                     if(data[index+1]){
                         msg2 = data[index+1]
                     }
                     return (
-                       <RenderMsg navigation={navigation} msg={msg} msg2={msg2} key={index}/>
+                       <RenderMsg navigation={navigation} msg={msg} msg2={msg2} key={index} usershashmap={data.usersHashMap} receiver_type={receiver_type}/>
                     )
                 })
             }

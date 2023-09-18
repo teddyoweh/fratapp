@@ -49,11 +49,11 @@ export default function MessagesScreen({navigation,route}){
         setMessageFilter(msgfil)
     }
 
-    function goToChat(data,receiver_type){
-        
+    function goToChat(data){
+ 
         navigation.navigate('ChatStacks',{
-            party_data:data,
-            receiver_type:receiver_type
+            party_data:data
+ 
         })
     }
     useEffect(()=>{
@@ -245,9 +245,10 @@ style={{
                             let uimg_  
                             let chat_data_
                             let type_ = item.receiver_type
-                            let channel_id = item.channel_info? item.channel_info.id:null
-                        
-                            let org_id = item.org_info? item.org_info.id:null
+                            let channel_id = item.channel_info? item.channel_info._id:null
+ 
+                            let org_id = item.org_info? item.org_info._id:null
+                            
                             if(item.receiver_type=='user'){
                                 name_ = item.user_info.firstname+' '+item.user_info.lastname
                                 uimg_ = item.user_info.uimg
@@ -260,6 +261,7 @@ style={{
                             }
 
                             else if(item.receiver_type=='cohort'){
+                        
                                 name_ = item.channel_name
                                 uimg_ = item.org_info.org_logo
                                 chat_data_ = item.org_info
@@ -267,8 +269,8 @@ style={{
                             return (
                                     <TouchableOpacity
                                 
-                                    onPress={()=>goToChat({...chat_data_,type_,name_,uimg_},item.receiver_type,channel_id,
-                                        org_id)}
+                                    onPress={()=>goToChat({...chat_data_,type_,name_,uimg_,receiver_type:item.receiver_type,channel_id:channel_id,
+                                        org_id:org_id})}
                                     key={index}
                                     style={{
                                         flexDirection:'row',                    

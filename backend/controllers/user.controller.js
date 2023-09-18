@@ -32,6 +32,11 @@ function getUserActivity(req,res){
   })
  
 }
+
+
+function updateUserActivity(req,res){
+  
+}
   module.exports = {
     searchUser
   }
