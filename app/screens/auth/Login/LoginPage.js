@@ -119,8 +119,9 @@ function LoginPage({navigation}){
 
                 storeData('token',res.data.token)
                 storeJSONData('user',res.data.payload)
-                setIsAuth(true)
                 setUser(res.data.payload)
+                setIsAuth(true)
+
                 
           
               
@@ -160,7 +161,7 @@ function LoginPage({navigation}){
           }
 
           const {colorMode} = useContext(AppContext)
-  const applogo = colorMode=='dark'?require('../../../assets/HERDS.png'):require('../../../assets/union.png')
+  const applogo =require('../../../assets/HERDS-icon.png') 
   const logostyle  = colorMode=='dark'?{      width: 150,
       height:150}:{
           width:500,

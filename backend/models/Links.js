@@ -16,6 +16,8 @@ const LinksSchema = new Schema({
     },
     stat:{
  
+    },
+    type:{
     }
 
 });

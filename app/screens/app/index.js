@@ -19,6 +19,7 @@ import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { color_scheme } from "../../config/color_scheme";
 import { AppContext } from "../../context/appContext";
+import NotificationStacks from "./Notification";
 
 const AppTab = createBottomTabNavigator()  
 const AppStack = createStackNavigator()
@@ -156,6 +157,7 @@ export default function AppScreens(){
 
     <AppStack.Screen name='AppScreen' component={AppScreen}/>
     <AppStack.Screen name='MessagesScreen' component={MessageStacks}/>
+    <AppStack.Screen name='NotificationStacks' component={NotificationStacks}/>
     <AppStack.Screen name='OrgPageStacks' component={OrgPageStacks}/>
 
     </AppStack.Navigator>

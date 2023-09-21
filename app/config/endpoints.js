@@ -13,6 +13,7 @@ const endpoints = {
 
     'getlinkstat':`${serverip}/api/link/stat`,
     'updatelink':`${serverip}/api/link/link`,
+    'update_link_stat':`${serverip}/api/link/update`,
     'makepost':`${serverip}/api/posts/add`,
     'getposts':`${serverip}/api/posts/fetch`,
     'fetchmyposts':`${serverip}/api/posts/fetchmyposts`,
@@ -66,6 +67,9 @@ const endpoints = {
     'get_org_profile':`${serverip}/api/orgs/get_org_profile`,
     'manage_org_member':`${serverip}/api/orgs/manage_org_member`,
     'fetchorgs':`${serverip}/api/orgs/fetchorgs`,
+    'update_member_status':`${serverip}/api/orgs/update_member_status`,
+
+    'get_notifications':`${serverip}/api/notifications/fetch`,
 
     'create_studyhours':`${serverip}/api/studyhours/create`
 

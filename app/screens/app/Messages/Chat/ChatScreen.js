@@ -276,14 +276,7 @@ function RenderMsg({navigation, msg,msg2,usershashmap,receiver_type}){
                     {formatTime(msg.date)}
                 </Text>
             </View>
- 
-    
-            
-         
-
-           
-           
-                 }
+                            }
             </View>
             </View> 
             </View>}

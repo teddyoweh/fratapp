@@ -1,7 +1,10 @@
 
 const jwt = require('jsonwebtoken');
 const User = require('../models/User')
-const Link = require('../models/Links')
+const Link = require('../models/Links');
+const { makeNotification } = require('./notifications.controller');
+const Links = require('../models/Links');
+const Notifications = require('../models/Notifications');
 function getlinkcontroller(req,res){
     const {userid,partyid}=req.body;
  
@@ -17,7 +20,8 @@ function getlinkcontroller(req,res){
                 userid:userid,
                 partyid:partyid,
               
-                stat:false
+                stat:false,
+                type:'Link Pending'
             })
             newLink.save().then(link=>{
 
@@ -35,16 +39,26 @@ function linkcontroller(req,res){
         partyid:partyid
     },{
         $set:{
-            stat:!stat
+            stat:!stat,
+            type:!stat==false?'Link':'Link Pending'
         }
     }).then(link=>{
         console.log(link)
-        if(link){
+        if(!stat){
+            makeNotification(partyid,'link',userid,'linked with you','user')
+        }
+         if(link){
             res.status(200).json({status:true})
         } 
     })
 
 }
-  
+function updateLinkStatus(req,res){
+    const {notif_id,stat}=req.body;
+    Links.updateOne().then(resp=>{
+        Notifications.findOneAndUpdate({ _id: notif_id }, { orginvite_stat: "Accepted",notification_read:true }).then()
+        res.json(resp)
+    })
+}
 
-module.exports = {getlinkcontroller,linkcontroller}
+module.exports = {getlinkcontroller,linkcontroller,updateLinkStatus}

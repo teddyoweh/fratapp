@@ -1,5 +1,5 @@
 const express = require('express');
-const {createOrg,getOrg,getOrgs,addToOrg,MakeOrgPost,getOrgPost, createCohort, getMyOrgs, manageFollowOrg, getOrgStat,getOrgProfile,manageOrgMember, fetchOrgs} = require('../controllers/orgs.controller')
+const {createOrg,getOrg,getOrgs,addToOrg,MakeOrgPost,getOrgPost, createCohort, getMyOrgs, manageFollowOrg, getOrgStat,getOrgProfile,manageOrgMember, fetchOrgs, updateOrgMemberStatus} = require('../controllers/orgs.controller')
 const router = express.Router();
 
  
@@ -16,6 +16,7 @@ router.post('/create_cohort',(req,res)=>{    createCohort(req,res)})
 router.post('/get_org_profile',(req,res)=>{getOrgProfile(req,res)})
 router.post('/manage_org_member',(req,res)=>{manageOrgMember(req,res)})
 router.post('/fetchorgs',(req,res)=>{fetchOrgs(req,res)})
+router.post('/update_member_status',(req,res)=>{updateOrgMemberStatus(req,res)})
 
 
 

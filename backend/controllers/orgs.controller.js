@@ -7,6 +7,8 @@ const crypto = require('crypto');
 const Links = require('../models/Links');
 var fs = require('fs');
 const Messages = require('../models/Message');
+const { makeNotification } = require('./notifications.controller');
+const Notifications = require('../models/Notifications');
 function hashcode(data){
     
     const hash = crypto.createHash('sha256');
@@ -169,13 +171,15 @@ const newMemberships = userids.map(userid => ({
   org_type: org.org_type,
   user_id: userid,
   role: 'member',
-  status: 'active', 
+  status: 'pending', 
   teams: [],
   positions: [],
 }));
 
  await OrgMembership.insertMany(newMemberships).then(memberships=>{
-
+  userids.map((userid)=>{
+    makeNotification(userid,'orginvite',orgid,org.org_name,'org')
+  })
 
 
   res.status(200).json({
@@ -413,6 +417,17 @@ async function makeOrgPost(req,res){
         posttype:req.body.posttype
   })
 }
+
+function updateOrgMemberStatus(req,res){
+  const {orgid,userid,status,notif_id} = req.body;
+  OrgMembership.updateOne({ org_id: orgid, user_id: userid }, { status: status }).then(
+    resp=>{
+        Notifications.findOneAndUpdate({ _id: notif_id }, { orginvite_stat: "Accepted",notification_read:true }).then()
+      res.json(resp)
+    }
+  )
+
+}
 module.exports =  {
     createOrg,
     getOrgs,
@@ -426,6 +441,7 @@ module.exports =  {
     manageFollowOrg,
     getOrgProfile,
     manageOrgMember,
-    fetchOrgs
+    fetchOrgs,
+    updateOrgMemberStatus
     
 }
