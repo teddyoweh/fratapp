@@ -1049,7 +1049,7 @@ return (
       height:'100%',
       flex:1,
   }}
-  keyboardVerticalOffset={80}
+  keyboardVerticalOffset={40}
   >
     <View
     style={{

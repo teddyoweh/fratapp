@@ -28,6 +28,7 @@ function chatSocket(app){
           
           if (userId === sender_id || userId === receiver_id) {
             console.log('emitting');
+            console.log(change.fullDocument,'this is the chage')
             socket.emit('message', change.fullDocument);
           }
         }

@@ -43,6 +43,7 @@ const homestyles = StyleSheet.create({
     },
     msgicon:{
         flexDirection:'row',
+        marginRight:4,
     },
     msgicon1:{
         flexDirection:'row',

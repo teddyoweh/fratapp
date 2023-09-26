@@ -13,10 +13,150 @@ import BottomSheet from "react-native-gesture-bottom-sheet";
 import { getTimeDifference } from "../../../../utils/utils";
 import { color_scheme } from "../../../../config/color_scheme";
 import * as Haptics from 'expo-haptics';
+function checkUserVoteStatus(userId, idHashMap) {
+    for (const key in idHashMap) {
+        if (idHashMap.hasOwnProperty(key)) {
+            const idArray = idHashMap[key];
+            if (idArray.includes(userId)) {
+                return {
+                    state: true,
+                    votedFor: key
+                };
+            }
+        }
+    }
+    
+    return {
+        state: false,
+        votedFor: null
+    };
+}
+function calculateVotePercentages(voteHashMap) {
+    const result = {};
+    let totalVotes = 0;
+    for (let index = 0; index < Object.keys(voteHashMap).length; index++) {
+        const key = Object.keys(voteHashMap)[index];
+        const value = voteHashMap[key];
+        
+        totalVotes += value.length;
+        result[key] = value.length;
+     
+        
+    }
+    let ans = {}
+    for (let index = 0; index < Object.keys(voteHashMap).length; index++) {
+        const key = Object.keys(voteHashMap)[index];
+        const value = voteHashMap[key];
+        const percentage = totalVotes === 0 ? 0 : (value.length / totalVotes) * 100;
+        result[key] = percentage;
 
 
-function RenderOrgChannelPost({post,userdets}){
+        
+    }
+
+    
+    return result;
+}
+function RenderPollVote({ post, setPosti }) {
+    const { colorMode, user } = useContext(AppContext);
+    const { state, votedFor } = checkUserVoteStatus(user.userid, post.pollsvotes);
+    const voteOptions = calculateVotePercentages(post.pollsvotes);
+  
+    async function updatePoll(who) {
+      try {
+        await axios.post(endpoints['updatepoll'], { userid: user.userid, postid: post._id, votedoption: who }).then(
+            res=>{
+                setPosti(res.data)
+            }
+        );
+        // Assuming the response data is the updated poll data
+        // You might need to adapt this part based on the actual response structure
+ 
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  
+    return (
+      <View
+        style={{
+          flexDirection: 'column',
+         
+          paddingVertical: 10,
+        }}
+      >
+        {post.pollsoptions.map((poll, index) => {
+          const optionPercentage = voteOptions[poll] || 0;
+          const showvalue = !optionPercentage ==0? optionPercentage.toFixed(0):100
+          return (
+            <View
+            style={{
+                width:'100%',
+                flexDirection:'row',
+                alignItems:'center',
+                justifyContent:'space-between',
+            }}
+            >
+
+            <TouchableOpacity
+              onPress={() => updatePoll(poll)}
+              key={index}
+              style={{
+                backgroundColor: color_scheme(colorMode, '#eee'),
+                width: !state ? '100%':'88%',
+            
+                borderRadius: 10,
+                marginBottom: 5,
+                position: 'relative', // Add position to allow relative positioning
+              }}
+            >
+              {/* {state && votedFor === poll && ( // Display indicator only if state is true and votedFor matches current option */}
+                <View
+                  style={{
+                  
+                    width:state && votedFor === poll? `${optionPercentage}%`:`${showvalue}%`, // Set the width based on the percentage
+                    backgroundColor: state && votedFor === poll &&'#a330d0',
+             
+                    paddingHorizontal:10,
+                    paddingVertical: 8,
+                    borderRadius: 10,
+                  }}
+                >
+           
+              {/* )} */}
+           
+              <Text
+                style={{
+                  color: color_scheme(colorMode, '#333'),
+                }}
+              >
+                {poll}
+              </Text>
+                       
+              </View>
+            </TouchableOpacity>
+            {
+                state &&
+            
+            <Text
+            style={{
+                color: color_scheme(colorMode, '#333'),
+                fontWeight:'600',
+                fontSize:13
+            }}
+            >
+                {optionPercentage}%
+            </Text>
+              }
+            </View>
+          );
+        })}
+      </View>
+    );
+  }
+function RenderOrgChannelPost({posti,userdets}){
     const {user,colorMode} = useContext(AppContext)
+    const [post,setPosti] = useState(posti)
     const [isLiked,setIsLiked] = useState(false)
     function LikeBtn(){
         Haptics.impactAsync('medium')
@@ -102,7 +242,7 @@ function RenderOrgChannelPost({post,userdets}){
                     fontSize:13
                  }}
                  >
-                        {getTimeDifference(post.date)} ago                                                                                                                                                                                                                                                                                                                                                                                                               vvv 
+                        {getTimeDifference(post.date)} ago                                                                                                                                                                                                                                                                                                                                                                                                              
                  </Text>
                  </View>
             <View
@@ -127,6 +267,10 @@ function RenderOrgChannelPost({post,userdets}){
                 >
 {post.content}
                 </Text>
+                {
+                   post.posttype== 'poll' &&
+                     <RenderPollVote post={post} setPosti={setPosti}/>
+                }
                 <View
                 style={{
                     paddingVertical:16,
@@ -372,6 +516,15 @@ export default function OrgChannel({route,navigation}){
         //navigateToFeed(item);
       }
       
+      const [refreshing, setRefreshing] =useState(false);
+
+  const onRefresh =useCallback(() => {
+    setRefreshing(true);
+    getPosts();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
     return (
 
         <KeyboardAvoidingView
@@ -508,11 +661,13 @@ export default function OrgChannel({route,navigation}){
                
 
             }}
-            >
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }>
                 {postData &&
                     postData.posts.map((pst,index)=>{
                         return (
-                        <RenderOrgChannelPost key={index} post={pst} userdets={postData.users[pst.userid]}/>
+                        <RenderOrgChannelPost key={index} posti={pst}  setPosti={setPostData} userdets={postData.users[pst.userid]}/>
                         )
                     })
                 }

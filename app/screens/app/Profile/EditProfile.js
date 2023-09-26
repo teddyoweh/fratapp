@@ -1,5 +1,5 @@
 import React,{useState,useContext, useRef, useEffect}from "react";
-import { View,Text,Image,TouchableOpacity, ScrollView, TextInput, Button,StyleSheet, Pressable, Dimensions} from "react-native";
+import { View,Text,Image,TouchableOpacity, ScrollView, TextInput, Button,StyleSheet, Pressable, Dimensions, KeyboardAvoidingView} from "react-native";
 import { discoverstyles, homestyles,profilestyles } from "../../../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Profile, MessageText1, CloudLightning, MessageAdd, MessageQuestion, UserEdit, Camera, Bubble, SearchNormal, TickCircle} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons,EvilIcons,Entypo} from '@expo/vector-icons';
@@ -267,7 +267,7 @@ export default function EditProfile({navigation}){
 
     console.log(medata,'medata')
     return (
-        <View style={{backgroundColor:color_scheme(colorMode,'white'),flex:1}}>
+        <KeyboardAvoidingView style={{backgroundColor:color_scheme(colorMode,'white'),flex:1}}>
             <View style={{flexDirection:'row',justifyContent:'space-between'}}>
                 <Button title="Cancel"onPress={()=>navigation.goBack()}/>
                 <Button title="Save" onPress={()=>saveProfile()}/>
@@ -326,7 +326,7 @@ export default function EditProfile({navigation}){
                                 <Text style={editprofilestyles.frmttxt}>UserName</Text>
                                 <TextInput style={[editprofilestyles.frminput,{color:color_scheme(colorMode,'black') }]} value={username} onChangeText={(text)=>setUsername(text)}/>
                             </View>
-                            <View style={editprofilestyles.formgrp}>
+                            {/* <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>DOB</Text>
                                 <View  style={[editprofilestyles.frminput,{flexDirection:'row',color:color_scheme(colorMode,'black') }]}>
                                 <TextInput value={selectedDate}style={{width:'90%'}}
@@ -338,7 +338,7 @@ export default function EditProfile({navigation}){
                                
                                 </View>
                             
-                            </View>
+                            </View> */}
                             </View>
                             <View style={editprofilestyles.frm1}>
                                 <View style={editprofilestyles.formheadbx}>
@@ -350,7 +350,7 @@ export default function EditProfile({navigation}){
                                 placeholderTextColor={color_scheme(colorMode,'grey')}
                                 multiline={true} value={bio} onChangeText={(text)=>setBio(text)}/>
                             </View>
-                            <View style={editprofilestyles.formgrp}>
+                            {/* <View style={editprofilestyles.formgrp}>
                                 <Text style={editprofilestyles.frmttxt}>Pinned Orgs</Text>
                                 <View
                                 style={[editprofilestyles.frminput,{
@@ -389,7 +389,7 @@ export default function EditProfile({navigation}){
                                 <Bubble size={24} color="#a330d0"/>
                                 </TouchableOpacity>
                                 </View>
-                            </View>
+                            </View> */}
                             </View>
                         </View>
      
@@ -411,7 +411,7 @@ export default function EditProfile({navigation}){
      </View>
 </BottomSheet>
 
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 

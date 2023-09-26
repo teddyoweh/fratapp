@@ -50,11 +50,12 @@ const LoadingModal = ({ isVisible, onClose,success }) => {
                  duration={800}
                  style={styles.loadingText}
                >
-               <AntDesign name="check" size={34} color="#555" /> 
+               <AntDesign name="check" size={44} color="#555" /> 
              </Animatable.View>
                 }
           </View>
         </View>
+    
       </Modal>
     );
   };
@@ -90,7 +91,10 @@ function AddSchoolSheet({bottomSheet,selectedSchool,setSelectedSchool}){
 
         <BottomSheet  hasDraggableIcon={false} ref={bottomSheet} height={850} >
         <KeyboardAvoidingView style={{backgroundColor:color_scheme(colorMode,'white'),flex:1,
-    paddingTop:20}}>
+    paddingTop:20}}
+    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+ 
+    >
 <View
 style={{
     flexDirection:'row',
@@ -487,7 +491,9 @@ export default function CreateOrgs({navigation}){
     
     const schoolSheetRef = useRef()
     return (
-        <View style={{backgroundColor:color_scheme(colorMode,'white'),flex:1,height:'100%'}}>
+        <KeyboardAvoidingView style={{backgroundColor:color_scheme(colorMode,'white'),flex:1,height:'100%'}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        >
              <View style={{
                 flexDirection:'row',
                 alignItems:'center',
@@ -775,7 +781,7 @@ export default function CreateOrgs({navigation}){
             </TouchableOpacity>
         </View>
         <AddSchoolSheet bottomSheet={schoolSheetRef} selectedSchool={orgSchool} setSelectedSchool={setOrgSchool}/>
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 

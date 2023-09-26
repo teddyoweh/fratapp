@@ -72,6 +72,7 @@ export default function NoticationPage({navigation}){
             updateMemberStatus(orgid,userid,status,notif_id)
         }
         if(notif_type=='link'){
+            const {notif_type,notif_id,orgid,userid,status} = data
             updateMemberStatus(orgid,userid,status,notif_id)
         }
         
@@ -279,7 +280,7 @@ export default function NoticationPage({navigation}){
                                       }}
                                       >
                                             <TouchableOpacity
-                                            onPress={()=>notifAction(item.notification_type,item._id,item.org_details._id,user.userid,'Accepted')}
+                                            onPress={()=>notifAction({notification_type:item.notification_type,notif_id:item._id,orgid:item.org_details._id,userid:user.userid,status:'Accepted'})}
                                             style={{
                                                 backgroundColor:"#a330d0",
                                                 paddingHorizontal:10,
@@ -418,7 +419,7 @@ export default function NoticationPage({navigation}){
                                       }}
                                       >
                                             <TouchableOpacity
-                                            onPress={()=>notifAction(item.notification_type,item._id,item.org_details._id,user.userid,'Accepted')}
+                                            onPress={()=>notifAction({notification_type:item.notification_type,notif_id:item._id,userid:user.userid,status:'Accepted'})}
                                             style={{
                                                 backgroundColor:"#a330d0",
                                                 paddingHorizontal:10,

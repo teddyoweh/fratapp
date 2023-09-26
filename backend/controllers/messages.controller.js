@@ -61,8 +61,10 @@ function fetchmessagescontroller(req, res) {
     console.log(req.body,'fetch message shit')
   
     if (req.body.receiver_type === 'user') {
+      query.receiver_type=req.body.receiver_type
       query.$or= [
             { sender_id: req.body.receiver_id },
+
        { receiver_id: req.body.receiver_id },]
     } else if (req.body.receiver_type === 'cohort') {
     //   query.$and = [ {org_id :req.body.org_id}, 

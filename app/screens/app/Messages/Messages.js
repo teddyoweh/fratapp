@@ -1,4 +1,4 @@
-import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,  RefreshControl, Pressable} from "react-native";
+import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,  RefreshControl, Pressable, Dimensions} from "react-native";
 import React,{ useState,useEffect,useLayoutEffect, useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -266,6 +266,17 @@ style={{
                                 uimg_ = item.org_info.org_logo
                                 chat_data_ = item.org_info
                             }
+                            function shortenText(text,proportion) {
+                                const maxLength = Math.floor(Dimensions.get('window').width * proportion)/10;
+ 
+                                if (text.length <= maxLength) {
+                                  return text;
+                                } else {
+                                  return text.slice(0, maxLength - 3) + '...';
+                                }
+                              }
+
+                              name_ = shortenText(name_,0.8);
                             return (
                                     <TouchableOpacity
                                 

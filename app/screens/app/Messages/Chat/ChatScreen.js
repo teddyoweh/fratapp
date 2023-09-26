@@ -157,7 +157,7 @@ function RenderMsg({navigation, msg,msg2,usershashmap,receiver_type}){
         }}
         >
             {
-                msg.sender_id!=user.userid&&
+                msg.sender_id!=user.userid&&msg.receiver_type!='user'&&
         
             <View>
             <Image
@@ -343,9 +343,14 @@ export default function ChatScreen({navigation,route}){
             //oya nasetData([...data,res.data])
         })
     }
+    const [usersHashMap,setUsersHashMap] = useState(null)
     async function FetchMessages(){
         await axios.post(endpoints['fetchmsgs'],{receiver_id:partyid,user_id:user.userid,org_id,channel_id,receiver_type}).then(res=>{
-            setData(res.data)
+            setData(res.data.messages)
+            setUsersHashMap(res.data.usersHashMap)
+ 
+            console.log(res.data, 'this is the orginal data')
+
         })
     }
     function fetchSocket(){
@@ -360,11 +365,15 @@ export default function ChatScreen({navigation,route}){
         socket.on('message', (message) => {
             if(message){
                 try{
-                    console.log('shit theres a new mesage')
-                    console.log('New message:', message);
-                    schedulePushNotification(party_data.firstname+' '+party_data.lastname,message.content)
-                    const newMessages = [...data.messages,message]
-                    setData(oldArray => [...oldArray,message])
+             
+                    // console.log('New message:', message);
+                    setData([...data,message])
+                    //ahaschedulePushNotification(party_data.firstname+' '+party_data.lastname,message.content)
+       
+                    // setData([...data,newMessages])
+          
+                    // console.log({...data,messages:newMessages},'this is the new data')
+                
                     scrollToBottom();
                 }
                 catch{
@@ -760,13 +769,13 @@ style={{
                 data==null?<View>
                     <Spinner/>
                 </View>:
-                data.messages.map((msg,index)=>{
+                data.map((msg,index)=>{
                     let msg2 = null
                     if(data[index+1]){
                         msg2 = data[index+1]
                     }
                     return (
-                       <RenderMsg navigation={navigation} msg={msg} msg2={msg2} key={index} usershashmap={data.usersHashMap} receiver_type={receiver_type}/>
+                       <RenderMsg navigation={navigation} msg={msg} msg2={msg2} key={index} usershashmap={usersHashMap} receiver_type={receiver_type}/>
                     )
                 })
             }

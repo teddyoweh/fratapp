@@ -975,7 +975,7 @@ const likeBottomSheet = useRef(null);
                             {
                                 userdetails.isofficial &&
                             
-                            <Verify size="18" color="#1d9bf0" variant="Bold"/>
+                            <Verify size="16" color="#1d9bf0" variant="Bold"/>
                         }
                         {
                             userdetails.pinnedorg &&

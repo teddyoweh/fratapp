@@ -195,7 +195,7 @@ function RegisterPage({navigation}) {
   }
 
   const {colorMode} = useContext(AppContext)
-  const applogo = colorMode=='dark'?require('../../../assets/HERDS.png'):require('../../../assets/union.png')
+  const applogo =require('../../../assets/HERDS-icon.png') 
   const logostyle  = colorMode=='dark'?{      width: 150,
       height:150}:{
           width:500,

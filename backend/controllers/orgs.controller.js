@@ -424,7 +424,7 @@ function updateOrgMemberStatus(req,res){
     resp=>{
         Notifications.findOneAndUpdate({ _id: notif_id }, { orginvite_stat: "Accepted",notification_read:true }).then()
       res.json(resp)
-    }
+    } 
   )
 
 }

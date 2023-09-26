@@ -252,7 +252,7 @@ export default function StudyHours({route,navigation}){
                 
             </View>
             <ScrollView>
-                {[...Array(3)].map((peo,index)=>{
+                {[...Array(1)].map((peo,index)=>{
                     return (
                         <RenderPeople key={index}/>
                     )

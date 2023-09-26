@@ -111,7 +111,7 @@ export default function VerificationPage({ navigation,route }) {
                     <View style={[authstyles.forminput,{flexDirection:'row',alignItems:'center',marginVertical:5,width:'90%'},borderError(coderror)]}>
 
     
-<TextInput style={{width:'95%',padding:10,color:color_scheme(colorMode,'black')}}
+        <TextInput  style={[authstyles.forminputbx,{width:'95%',color:color_scheme(colorMode,'black')}]}
  autoCapitalize="none"
  autoCorrect={false}
  placeholder="Enter verification code"

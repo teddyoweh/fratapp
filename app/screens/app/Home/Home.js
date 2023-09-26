@@ -166,11 +166,11 @@ export default function HomeScreen({navigation}){
                     <TouchableOpacity style={homestyles.msgicon} onPress={()=>navigation.navigate('NotificationStacks')}>
                        
                        <Notification color={color_scheme(colorMode,'#333')} variant="Bold" size={30} />
-                       <View style={homestyles.msgiconnumb}>
+                       {/* <View style={homestyles.msgiconnumb}>
                            <Text style={homestyles.msgiconnum}>
                                9+
                            </Text>
-                       </View>
+                       </View> */}
                    </TouchableOpacity>
                         <RenderMessageBtn navigation={navigation}/>
                     </View>
