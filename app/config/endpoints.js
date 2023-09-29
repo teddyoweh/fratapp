@@ -70,6 +70,7 @@ const endpoints = {
     'update_member_status':`${serverip}/api/orgs/update_member_status`,
 
     'get_notifications':`${serverip}/api/notifications/fetch`,
+    'count_unread':`${serverip}/api/notifications/count_unread`,
 
     'create_studyhours':`${serverip}/api/studyhours/create`
 

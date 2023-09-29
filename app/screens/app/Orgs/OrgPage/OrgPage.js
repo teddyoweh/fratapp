@@ -849,9 +849,10 @@ export default function OrgPage({navigation,route}){
         </View>
         <View
          style={{
-            backgroundColor:color_scheme(colorMode,'#eee'),
+            // backgroundColor:color_scheme(colorMode,'#eee'),
             marginHorizontal:10,
-    
+            flexDirection:'row',
+            flexWrap:'wrap',
             borderRadius:10,
         
         }}
@@ -865,7 +866,18 @@ export default function OrgPage({navigation,route}){
                     borderStyle:'solid',
 
                 }:{}
-          
+                function shortenText(text) {
+                    const screenWidth = Dimensions.get('window').width/10;
+                    const proportion = 0.4;
+                    const maxLength = Math.floor(screenWidth * proportion);
+                    
+                    if (text.length <= maxLength) {
+                      return text;
+                    } else {
+                      return text.slice(0, maxLength - 3) + '...';
+                    }
+                  }
+                  
                 return (
                     <TouchableOpacity
                     key={index}
@@ -882,17 +894,25 @@ export default function OrgPage({navigation,route}){
                         flexDirection:'row',
                         alignItems:'center',
                         justifyContent:'space-between',
-                        paddingHorizontal:8,
-                        paddingVertical:10,
+     paddingHorizontal:10,
+                        paddingVertical:9,
+                        backgroundColor:'#333',
+                        borderRadius:10,
+                        borderStyle:'solid',
+                        borderWidth:2,
+                        borderColor:"#444",
+                        marginBottom:10,
+                        marginRight:5
                      
                        
              
-                    },borderstyle]}
+                    }]}
                     >
                         <View
                           style={{
                             flexDirection:'row',
                             alignItems:'center',
+                            paddingHorizontal:8,
                          
                         }}
                         >
@@ -904,27 +924,17 @@ export default function OrgPage({navigation,route}){
                                 alignItems:'center',
                                 //backgroundColor:color_scheme(colorMode,'white'),
                                 borderRadius:10,
-                                //    borderWidth:0.5,
-                        // borderColor:'#333',//color_scheme(colorMode,'#fff'),
-                        // borderStyle:'solid',
-
-                        // shadowOffset: {
-                        //     width: 0,
-                        //     height: 5,
-                        //   },
-                        //   shadowOpacity: 0.15,
-                        //   shadowRadius: 3.84,
-                        //   elevation: 5,
+                                marginRight:4,
                             }}
                             >
 
                            
-                        <Hashtag size="25" color='#555'variant="Broken"/>
+                        <Hashtag size="20" color='#999'variant="Broken"/>
                         </View>
                         <View
                         style={{
                             flexDirection:'column',
-                            marginLeft:10,
+                     
                         }}
                         >
 
@@ -932,13 +942,16 @@ export default function OrgPage({navigation,route}){
                         <Text
                         style={{
                          
-                            fontSize:18,
+                            fontSize:14,
                             color:color_scheme(colorMode,'#333'),
-                            fontWeight:'500'
+                            fontWeight:'400'
                         }}
                         >
-                        {cohort.channel_name}
+                        {shortenText(cohort.channel_name)}
                         </Text>
+                   
+                        </View>
+                        </View>
                         <View
                         style={{
                             flexDirection:'row',
@@ -948,23 +961,21 @@ export default function OrgPage({navigation,route}){
                         >
          
                         
-                        <Text
+                        {/* <Text
                         style={{
              
-                            fontSize:14,
+                            fontSize:13,
                   
-                            color:color_scheme(colorMode,'#aaa'),
+                            color:"#bbb",
                             fontWeight:'200'
                         }}
                         >
                         {cohort.channel_members.length} Members
-                        </Text>
-                        </View>
-                        </View>
+                        </Text> */}
                         </View>
 
 
-                        <ArrowRight2 size="20" color={color_scheme(colorMode,'#aaa')}/>
+                        <ArrowRight2 size="20" color={"#999"}/>
                     </TouchableOpacity>
                 )
             })

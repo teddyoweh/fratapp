@@ -1,5 +1,5 @@
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput, Animated,    RefreshControl, Pressable, KeyboardAvoidingView, Dimensions, Keyboard, TouchableWithoutFeedback, Alert} from "react-native";
-import React,{ useState,useEffect,useLayoutEffect,useRef,  useContext } from 'react';
+import React,{ useState,useEffect,useLayoutEffect,useRef,  useContext, useMemo } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { messagestyles } from '../../../../styles/messagestyles';
@@ -347,12 +347,15 @@ export default function ChatScreen({navigation,route}){
     async function FetchMessages(){
         await axios.post(endpoints['fetchmsgs'],{receiver_id:partyid,user_id:user.userid,org_id,channel_id,receiver_type}).then(res=>{
             setData(res.data.messages)
-            setUsersHashMap(res.data.usersHashMap)
+            setUsersHashMap(res.data.usersHashMap) 
+
+
  
             console.log(res.data, 'this is the orginal data')
 
         })
     }
+    const receivedMessages = useMemo(() => new Set(), []); 
     function fetchSocket(){
 
         const socket = io(`http://${serverhost}:8080`);
@@ -362,12 +365,13 @@ export default function ChatScreen({navigation,route}){
           socket.emit('userId', userId);
         });
     
-        socket.on('message', (message) => {
+        socket.on('message', async (message) => {
             if(message){
                 try{
-             
-                    // console.log('New message:', message);
-                    setData([...data,message])
+                    receivedMessages.add(message.id);
+              
+              
+             setData((prevData) => [...prevData, message]);
                     //ahaschedulePushNotification(party_data.firstname+' '+party_data.lastname,message.content)
        
                     // setData([...data,newMessages])
@@ -393,18 +397,17 @@ export default function ChatScreen({navigation,route}){
         };
     }
     useEffect(()=>{
+ 
+        fetchSocket()
+        
+     },[receivedMessages])
+    useEffect(()=>{
        FetchMessages() 
-       fetchSocket()
+ 
        
     },[])
-    // useEffect(() => {
-    //     if(data){
-
-        
-    //     fetchSocket()
-    // }
-    //   }, []);
-   ;
+   
+  
    const [keyboardStatus, setKeyboardStatus] = useState(Keyboard.isVisible());
 
    useEffect(() => {

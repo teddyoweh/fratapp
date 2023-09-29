@@ -59,6 +59,23 @@ export default function MessagesScreen({navigation,route}){
     useEffect(()=>{
         getMsgList()
     },[])
+    function sortByDate(arr) {
+        return arr.sort((a, b) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+          
+          // Compare the dates
+          if (dateA < dateB) {
+            return -1;
+          } else if (dateA > dateB) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+
+   
+      }
     return (
 
         <View style={[messagestyles.container,{
@@ -240,7 +257,7 @@ style={{
                                     No Recent Messages
                                 </Text>
                         </View>:
-                        data.contacts.latestMessages.map((item,index)=>{
+                      sortByDate(data.contacts.latestMessages).reverse().map((item,index)=>{
                             let name_ 
                             let uimg_  
                             let chat_data_
@@ -277,6 +294,7 @@ style={{
                               }
 
                               name_ = shortenText(name_,0.8);
+                        
                             return (
                                     <TouchableOpacity
                                 
@@ -308,14 +326,20 @@ style={{
                                      <View
                                      style={{
                                         flexDirection:"column",
+                                        borderWidth:1,
+                                        borderStyle:'solid',
+                                        borderColor:'#333',
+                                        padding:1.4,
+                                        borderRadius:100,
                         
                                      }}
                                      >
                                     <Image
                                     style={{
-                                        height:50,
-                                        width:50,
-                                        borderRadius:100
+                                        height:45,
+                                        width:45,
+                                        borderRadius:100,
+                                        
 
                                     }}
                                     source={{uri:wrapUIMG(uimg_)}}
@@ -333,7 +357,7 @@ style={{
                                         style={{
                                             color:color_scheme(colorMode,"#333"),
                                             fontWeight:'400',
-                                            fontSize:17,
+                                            fontSize:16,
                                      
                                         }}
                                         >
@@ -343,9 +367,9 @@ style={{
                                         style={{
                                             color:!item.viewedby.includes(user.userid)?'white':color_scheme(colorMode,'#777777'),
                                             marginTop:5,
-                                            fontWeight:!item.viewedby.includes(user.userid)?'600':'400',
-                                            paddingLeft:4,
-                                            fontSize:16,
+                                            fontWeight:!item.viewedby.includes(user.userid)?'500':'400',
+                                            paddingLeft:2,
+                                            fontSize:14,
 
                                         }}
                                         >
@@ -358,13 +382,14 @@ style={{
                                         flexDirection:'column',
                                         paddingHorizontal:10,
                                         width:'20%',
-                                        alignItems:'center',
-                                        justifyContent:"space-between"
+                                        alignItems:'flex-end',
+                                        justifyContent:"center",
+ 
                                     }}
                                     >
                                         <Text
                                         style={{
-                                            fontSize:13,
+                                            fontSize:12,
                                             color:color_scheme(colorMode,'#aaa')
                                         }}
                                         >
@@ -373,7 +398,7 @@ style={{
                                         {
                                             !item.viewedby.includes(user.userid)&&
                                             <Ionicons name="checkmark-done" size={17} color="#555" style={{
-                                         
+                                                marginTop:10
                                             }} />
                                            
                                              }

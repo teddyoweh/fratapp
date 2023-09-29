@@ -7,10 +7,16 @@ const homestyles = StyleSheet.create({
         flex:1,
    
     },
+    top:{
+        backgroundColor:'#ffffff00',
+ 
+    },
     toptop:{
         flexDirection:'row',
         paddingHorizontal:10,
         alignItems:'center',
+ 
+ 
         justifyContent:'space-between',
   
     },
@@ -89,7 +95,11 @@ const homestyles = StyleSheet.create({
     },
     post:{
         // paddingHorizontal:6,
-
+        backgroundColor:'#191919',
+        marginHorizontal:10,
+        borderRadius:15,
+        paddingVertical:19,
+        paddingHorizontal:10,
         marginBottom:10,
         borderStyle:'solid',
         borderBottomWidth:0.4,

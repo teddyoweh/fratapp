@@ -79,7 +79,8 @@ function RenderImages({images}){
                         <View
                         key={`${index}`}
                         style={{
-                            width:windowWidth
+                
+                            paddingHorizontal:10,
                         }}
                         >
 
@@ -88,12 +89,12 @@ function RenderImages({images}){
                         <Image key={index} source={{uri:wrapPostImg(imgurl.uri)}} style={{
                             //width:windowWidth-1,
                           
-                            width:width,
+                            width:width-55,
                             height:height,
                             
                             // marginRight:20,
                             marginBottom:10,
-                            borderRadius:1,
+                            borderRadius:10,
                        
                       
                         }}/>
@@ -622,6 +623,7 @@ function RenderEvent({ post, setPosti }){
         alignItems:'center',   marginHorizontal:10,
               
         marginBottom:10,
+    
     }}
     >
        
@@ -1187,7 +1189,7 @@ const likeBottomSheet = useRef(null);
                 paddingHorizontal:10
             }}
             >
-            <CommentInput  />
+            {/* <CommentInput  /> */}
             </View>
          
             

@@ -9,6 +9,7 @@ var fs = require('fs');
 const Channels = require('../models/Channels');
 const Organization = require('../models/Organizations');
 const OrgMembership = require('../models/OrgMemberships');
+const Messages = require('../models/Message');
 function hashcode(data){
     
     const hash = crypto.createHash('sha256');
@@ -420,30 +421,55 @@ function messagesViewedByController(req, res) {
 
   async function getUnreadCount(req,res) {
     const {userId} = req.body
+    const orgsids = await OrgMembership.find({user_id:userId}).distinct('org_id')
+    const myids = [...orgsids,userId]
     try {
-      const unreadCounts = await Message.aggregate([
+      // const unreadCounts = await Messages.aggregate([
+      //   {
+      //     $match: {
+      //       receiver_id: {$in:myids},
+      //       viewedby: { $ne: userId },
+      //     },
+      //   },
+      //   {
+      //     $group: {
+      //       _id: { sender_id: "$sender_id", receiver_id: "$receiver_id" },
+      //       latestMessage: { $last: "$$ROOT" },
+      //     },
+      //   },
+      //   {
+      //     $group: {
+      //       _id: null,
+      //       unreadCount: { $sum: 1 },
+      //     },
+      //   },
+      // ]);
+      const unreadCounts = await Messages.aggregate([
         {
           $match: {
-            receiver_id: userId,
+            receiver_id: { $in: myids }, // assuming myids is an array of ids
             viewedby: { $ne: userId },
           },
         },
         {
           $group: {
-            _id: { sender_id: "$sender_id", receiver_id: "$receiver_id" },
-            latestMessage: { $last: "$$ROOT" },
+            _id: "$sender_id", // Group by sender
+            count: { $sum: 1 }, // Count unread messages
+            latestMessageDate: { $max: "$created_at" }, // Assuming you have a created_at field
           },
         },
         {
-          $group: {
-            _id: null,
-            unreadCount: { $sum: 1 },
+          $sort: {
+            latestMessageDate: -1, // Sort by latest message date in descending order
           },
         },
       ]);
+      
+      
   
       if (unreadCounts.length > 0) {
-        res.json(unreadCounts[0].unreadCount);
+        // res.json(unreadCounts[0].unreadCount);
+        res.json(unreadCounts.length)
       } else {
         res.json(0);
       }

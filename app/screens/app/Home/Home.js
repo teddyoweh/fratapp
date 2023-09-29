@@ -1,5 +1,5 @@
 import React,{useState,useContext,useRef, useEffect}from "react";
-import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,  RefreshControl} from "react-native";
+import { View,Text,Image,TouchableOpacity, ScrollView, StyleSheet, TextInput,  RefreshControl} from "react-native";
 import { homestyles } from "../../../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Add, Send2, Messenger, Verify, Notification} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
@@ -13,11 +13,72 @@ import Spinner from "../../../components/Spinner";
 import { setupNotifications } from "../../../config/setup";
 import { color_scheme } from "../../../config/color_scheme";
 import { BlurView } from "expo-blur";
+ 
+
 import * as Haptics from 'expo-haptics'
 import axios from "axios";
 import io from 'socket.io-client';
 import { endpoints } from "../../../config/endpoints";
 import { serverhost } from "../../../config/ip";
+
+function RenderNotificationBtn({navigation}){
+    const {colorMode,user}  = useContext(AppContext)
+    const [count,setCount] = useState(null)
+    function fetchSocket(){
+
+        const socket = io(`http://${serverhost}:8080`);
+    
+        socket.on('connect', () => {
+          const userId = user.userid
+          socket.emit('userId', userId);
+        });
+    
+        socket.on('unreadnotifs', async (count) => {
+            
+            setCount(count)
+         
+        });
+    
+        socket.on('disconnect', () => {
+          console.log('Connection closed');
+        });
+        return () => {
+          socket.close();
+        };
+    }
+    async function fetchCount(){
+        await axios.post(endpoints.count_unread,{userid:user.userid}).then(
+            res=>{
+                setCount(res.data)
+            }
+        )
+    }
+    useEffect(()=>{
+        fetchCount()
+    },[])
+    useEffect(
+        ()=>{
+            fetchSocket()
+        },[]
+    )
+    return (
+        <TouchableOpacity style={homestyles.msgicon} onPress={()=>navigation.navigate('NotificationStacks')}>
+                       
+        <Notification color={color_scheme(colorMode,'#333')} variant="Bold" size={30} />
+        {
+            count!=null && count >0  &&
+      
+        <View style={homestyles.msgiconnumb}>
+            <Text style={homestyles.msgiconnum}>
+               {count}
+            </Text>
+        </View>
+          }
+ 
+    </TouchableOpacity>
+    )
+
+}
 function RenderMessageBtn({navigation}){
     const {colorMode,user} = useContext(AppContext)
     const [count,setCount] = useState(null)
@@ -30,12 +91,13 @@ function RenderMessageBtn({navigation}){
           socket.emit('unreadcount', userId);
         });
     
-        socket.on('unreadcount', (message) => {
+        socket.on('unreadcount', (count) => {
             
-            if(message){
+            if(count){
  
                 try{
-                    setCount(message)
+                    alert(count)
+                    setCount(count)
                 }
                 catch{
                     console.log('lol something happened')
@@ -64,9 +126,13 @@ function RenderMessageBtn({navigation}){
     useEffect(
         ()=>{
             fetchCount()
-            fetchSocket()
+      
         },[]
+
     )
+    useEffect(()=>{
+        fetchSocket()   
+    },[])
     return (
         <TouchableOpacity style={homestyles.msgicon} onPress={()=>navigation.navigate('MessagesScreen')}>
                        
@@ -140,6 +206,7 @@ export default function HomeScreen({navigation}){
  
       
             <View style={homestyles.top}>
+    
                 <View style={homestyles.toptop}>
                    <View style={homestyles.topleft}>
                     <Image source={require('../../../assets/HERDS-Landing.png')} style={{
@@ -163,23 +230,16 @@ export default function HomeScreen({navigation}){
                    
                     </View>
                     <View style={homestyles.topright}>
-                    <TouchableOpacity style={homestyles.msgicon} onPress={()=>navigation.navigate('NotificationStacks')}>
-                       
-                       <Notification color={color_scheme(colorMode,'#333')} variant="Bold" size={30} />
-                       {/* <View style={homestyles.msgiconnumb}>
-                           <Text style={homestyles.msgiconnum}>
-                               9+
-                           </Text>
-                       </View> */}
-                   </TouchableOpacity>
+                  
+                       <RenderNotificationBtn navigation={navigation}/>
+            
                         <RenderMessageBtn navigation={navigation}/>
                     </View>
                 </View>
                 <View style={homestyles.topContent}>
 
                 </View>
-            </View>
-            <View style={homestyles.filters}>
+                <View style={homestyles.filters}>
                 <ScrollView  horizontal={true} showsHorizontalScrollIndicator={false}>
                     {
                         filters.map((filter,i)=>{
@@ -199,6 +259,9 @@ export default function HomeScreen({navigation}){
                 </ScrollView>
                 
             </View>
+ 
+            </View>
+           
             
  
         
