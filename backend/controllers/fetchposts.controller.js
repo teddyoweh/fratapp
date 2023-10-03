@@ -92,7 +92,9 @@ const Posts = require('../models/Posts');
     const { cursor,userid} = req.body;
     const limit = 40;
     
-    let query = { };
+    let query = {
+      account_type:undefined
+     };
     if(userid){
       query.userid = userid;
     }

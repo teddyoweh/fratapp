@@ -114,14 +114,14 @@ const AppStack = createStackNavigator()
           <AppTab.Screen name="Home" component={HomeStacks} />
           <AppTab.Screen name="Discover" component={DiscoverStacks} />
           <AppTab.Screen name="Orgs" component={OrgStacks} />
-          <AppTab.Screen name="Calendar" component={CalendarStacks} 
+          {/* <AppTab.Screen name="Calendar" component={CalendarStacks} 
           options={{
             tabBarBadge:10,
             tabBarBadgeStyle:{
               backgroundColor:'#a330d0',
             }
           }}
-          />
+          /> */}
                   
           {/* <AppTab.Screen name="Notification" component={SafeHome} options={{
                   tabBarBadge:1,

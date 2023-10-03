@@ -351,7 +351,7 @@ async function getSuggestedUsers(userId) {
     return suggestedUsers;
   } catch (error) {
     throw error;
-  }
+  } 
 }
 
 

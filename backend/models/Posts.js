@@ -10,7 +10,9 @@ const PostSchema = new Schema({
     isrepost: {
         type: Boolean,
     },
-
+    account_type:{
+        type:String        
+    },
     repostid: {},
     posttype:{},
     userid:{

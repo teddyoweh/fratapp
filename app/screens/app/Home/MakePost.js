@@ -3,7 +3,7 @@ import { View,Text,Image,TouchableOpacity, ScrollView,   Vibration,    TextInput
 import { authstyles, homestyles } from "../../../styles";
 import { Feather } from '@expo/vector-icons'; 
 
-import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle,PictureFrame,Chart, Link, Link1, Link21, VoiceCricle, Calendar, VolumeHigh, Volume,Briefcase, Send, Send2, Link2, Xd, Minus, MinusCirlce, MinusSquare, BoxRemove, NoteRemove} from 'iconsax-react-native';
+import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle,PictureFrame,Chart, Link, Link1, Link21, VoiceCricle, Calendar, VolumeHigh, Volume,Briefcase, Send, Send2, Link2, Xd, Minus, MinusCirlce, MinusSquare, BoxRemove, NoteRemove, ArrowDown2} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
 import { AppContext } from "../../../context/appContext";
 import LikeBtn from "../../../components/LikeBtn";
@@ -22,6 +22,7 @@ import { makeeventstyles } from "../Calendar/MakeEvent";
 import {Picker} from '@react-native-picker/picker';
 import * as Animatable from 'react-native-animatable';
 import { FontAwesome } from '@expo/vector-icons';
+ 
 function LinkInputBox({addLinks}){
     const [link,setLink] = useState('')
     function add(){
@@ -850,8 +851,121 @@ style={{
     )
     
 }
+
+function RenderUserOptionsSheet({postedby,setPostedBy,sheet,activeType}){
+    const {colorMode,user} = useContext(AppContext)
+    const accounts = [
+        {name_:user.username,img:{uri:wrapUIMG(user.uimg)},id:user.userid},
+        {
+        name_:'Anonymous',
+        type:'anonymous',
+        id:'anonymous',
+        img:require('../../../assets/icon.png')
+
+    } ]
+
+ 
+    const screenHeight = Dimensions.get('screen').height;
+const baseValue = screenHeight * 0.5;  
+const padding = 500;  
+const minValue = 50;
+const maxValue = 500;
+
+const calculatedHeight =  (screenHeight - baseValue) / accounts.length + padding;
+
+ 
+const finalHeight = Math.max(minValue, Math.min(maxValue, calculatedHeight));
+
+ return (
+    <BottomSheet ref={sheet} height={Dimensions.get('screen').height-calculatedHeight} draggable={false} sheetBackgroundColor={"#111"}  >
+        <View
+        style={{
+    
+    
+        }}
+        >
+          {
+                accounts.map((account,index)=>{
+              
+                
+         return (
+
+      
+            <TouchableOpacity
+            key={index}
+            onPress={()=>{
+                Haptics.impactAsync('medium')
+         
+                setPostedBy(account)
+            }}
+            style={{
+                flexDirection:'row',
+                alignItems:'center',
+                paddingHorizontal:10,
+       
+             
+                borderStyle:'solid',
+                backgroundColor:account.id==postedby.id?"#222":"transparent",
+                borderBottomWidth:index+1 ==accounts.length?0: 0.5,
+                borderBottomColor:'#333',
+                paddingVertical:12,
+                justifyContent:'space-between'
+
+            }}
+            >
+                <View
+                style={{
+                    
+                    flexDirection:'row',
+                    alignItems:'center',
+                }}
+                >
+                    {
+                        account.type=='anonymous' ?
+                        <Image source={account.img} style={{
+                            height:45,
+                            width:45,
+                            borderRadius:100
+                        }}/> 
+                    :
+                      <Image source={account.img} style={{
+                        height:45,
+                        width:45,
+                        borderRadius:100
+                    }}/>
+                }
+                        <Text
+                        style={{
+                            marginLeft:6,
+                            color:"white",
+                            fontWeight:"600",
+                            fontSize:16
+                        }}
+                        >
+                            {
+                                    account.type!='anonymous'&&"@"
+                            }{
+                                account.name_
+                            }
+                        </Text>
+                </View>
+                {
+                    account.id==postedby.id &&
+              
+                <AntDesign name="checkcircle" size={20} color="white" />
+            }
+            </TouchableOpacity>
+               )
+             })}
+             
+        </View>
+    </BottomSheet>
+ )   
+}
 export default function MakePost({navigation,route}){
 const {setPost,postd} = route.params
+
+
  const [postinput,setPostInput] = useState('')
     const [images,setImages] = useState([])
   
@@ -860,7 +974,12 @@ const {setPost,postd} = route.params
 const [linkStore, setLinkStore] = useState([])
 const snapPoints = useMemo(() => ['25%', '50%'], []);
 const {user} = useContext(AppContext)
- 
+const [postedby,setPostedBy] = useState({
+    name:user.username,
+    id:user.userid,
+    img:{uri:wrapUIMG(user.uimg)}
+
+})
 function randomNumberString() {
     var min = 10000; // Minimum 5-digit number (10,000)
     var max = 99999; // Maximum 5-digit number (99,999)
@@ -971,6 +1090,7 @@ const handleSheetChanges = useCallback((index) => {
  function removeLinks(link){
     setLinkStore((prevLinkStore)=>prevLinkStore.filter((l)=>l!==link))
  }
+ const userOptionsSheet = useRef()
  const [polldate,setPollDate] = useState('')
  const [polls,setPolls] = useState(['',''])
  const [eventstartdate,setEventStartDate] = useState('')
@@ -985,10 +1105,10 @@ const handleSheetChanges = useCallback((index) => {
 async function axiosMakePost(){
     const random = randomNumberString()
   
-   await axios.post(endpoints['makepost'],{eventstartdate:eventstartdate,eventenddate:eventenddate, eventdescription:eventdescription,eventname:eventname,eventlocation:eventlocation, links:linkStore, random:random, email:user.username,content:postinput,isjob:opportunityOptionActive,isevent:eventOptionActive,isanouncement:announcementOptionActive,userid:user.userid,repostid:null,isrepost:false,images:images,posttype:selectedTab.toLowerCase(),pollsoptions:polls,pollsdeadline:polldate,userid:user.userid})
+   await axios.post(endpoints['makepost'],{account_type:postedby.type, eventstartdate:eventstartdate,eventenddate:eventenddate, eventdescription:eventdescription,eventname:eventname,eventlocation:eventlocation, links:linkStore, random:random, email:user.username,content:postinput,isjob:opportunityOptionActive,isevent:eventOptionActive,isanouncement:announcementOptionActive,userid:user.userid,repostid:null,isrepost:false,images:images,posttype:selectedTab.toLowerCase(),pollsoptions:polls,pollsdeadline:polldate,userid:user.userid})
     .then(async (res)=>{
         console.log(res.data);
-  
+        
         await uploadImages(random).then(res=>{
             navigation.goBack()
             setImages([])
@@ -1126,13 +1246,19 @@ style={{
       
             <View style={{paddingHorizontal:10,flexDirection:'row',paddingVertical:10,
         alignItems:"flex-start"}}>
-                <View style={{flexDirection:'row',alignItems:"center",paddingTop:10}}>
-                    <Image source={{uri:wrapUIMG(user.uimg)}} style={{
+                <TouchableOpacity style={{flexDirection:'row',alignItems:"center",paddingTop:10}} onPress={()=>{
+                    Haptics.impactAsync('medium')
+                    userOptionsSheet.current.show()
+                }}>
+                    <Image source={postedby.img} style={{
                         height:40,
                         width:40,
                         borderRadius:100
                     }}/>
-                </View>
+                    <ArrowDown2 variant="Broken" size={16} color="#666" style={{
+                    marginLeft:4
+                    }}/>
+                </TouchableOpacity>
                 <View
                 style={{
                     flexDirection:'column',
@@ -1325,6 +1451,7 @@ style={{
             </View>
           
 </KeyboardAvoidingView>
+<RenderUserOptionsSheet sheet={userOptionsSheet} postedby={postedby} setPostedBy={setPostedBy}/>
 
         </View>
         

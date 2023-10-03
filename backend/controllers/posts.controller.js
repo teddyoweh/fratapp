@@ -41,7 +41,7 @@ function postscontroller(req, res) {
         likesno: 0,
         commentsno: 0,
         clicksno: 0,
-   
+        account_type: req.body.account_type,
         likesuserlist: [],
         commentuserlist: [],
         isanouncement:req.body.isanouncement,

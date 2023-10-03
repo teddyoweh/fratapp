@@ -942,10 +942,15 @@ const [likeno,setLikeNo] = useState(post.likesuserlist.length)
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 
         >
+                      {
+                            post.account_type!='anonymous'&&
             <View style={homestyles.posttop}>
                 <View style={homestyles.posttopleft}>
+                    
                     <View style={homestyles.posttopimg}>
-                        <Image source={{uri:wrapUIMG(userdetails.uimg)}} style={homestyles.postuserimg}/>
+ 
+                     
+                        <Image source={{uri:wrapUIMG(userdetails.uimg)}} style={homestyles.postuserimg}/>   
                         
                     </View>
                     <Pressable style={homestyles.postuserdetails} onPress={()=>navigateToUser()}>
@@ -979,11 +984,24 @@ const [likeno,setLikeNo] = useState(post.likesuserlist.length)
                             </Text>
                 </View>
             </View>
+            }
+            <View
+            style={{
+                flexDirection:'row',
+                alignItems:'center',
+                paddingBottom: post.account_type=='anonymous'?10:0
+            }}
+            >
+            {
+                            post.account_type=='anonymous'&&
+                            <Image source={require('../assets/icon.png')} style={[homestyles.postuserimg,{marginRight:1,marginLeft:10}]}/>}
+           
             <Pressable style={homestyles.postcontent} onPress={()=>moveToPost()}>
                 <Text selectable={true} style={[homestyles.postcontenttext,{color:color_scheme(colorMode,'#333')}]}>
                    {post.content}
                 </Text>
             </Pressable>
+            </View>
             {
                 post.posttype=='poll'&& 
                 <RenderPollVote post={post} setPosti={setPosti}/>
