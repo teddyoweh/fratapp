@@ -204,7 +204,7 @@ export default function OrgHome({navigation}){
                 <ElementPlus
                 variant="Bulk"
                 size={30}
-                color="#a330d0"
+                color="#aaa"
                 />
                 </TouchableOpacity>
             </View>

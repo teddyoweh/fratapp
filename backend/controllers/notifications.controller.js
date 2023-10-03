@@ -67,6 +67,7 @@ async function getNotifications(req, res) {
   }
 }
 
+
 async function getUnreadNotificationCount(req,res){
     const count = await Notifications.countDocuments({owner_id:req.body.userid,notification_read:false})
     res.json(count)

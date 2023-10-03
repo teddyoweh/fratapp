@@ -422,7 +422,8 @@ function messagesViewedByController(req, res) {
   async function getUnreadCount(req,res) {
     const {userId} = req.body
     const orgsids = await OrgMembership.find({user_id:userId}).distinct('org_id')
-    const myids = [...orgsids,userId]
+    const cohortids = await Channels.find({channel_members:userId}).distinct('cohort_id')
+    const myids = [...orgsids, ...cohortids, userId]
     try {
       // const unreadCounts = await Messages.aggregate([
       //   {
@@ -451,21 +452,21 @@ function messagesViewedByController(req, res) {
             viewedby: { $ne: userId },
           },
         },
-        {
-          $group: {
-            _id: "$sender_id", // Group by sender
-            count: { $sum: 1 }, // Count unread messages
-            latestMessageDate: { $max: "$created_at" }, // Assuming you have a created_at field
-          },
-        },
-        {
-          $sort: {
-            latestMessageDate: -1, // Sort by latest message date in descending order
-          },
-        },
+        // {
+        //   $group: {
+        //     _id: "$sender_id", // Group by sender
+        //     count: { $sum: 1 }, // Count unread messages
+        //     latestMessageDate: { $max: "$created_at" }, // Assuming you have a created_at field
+        //   },
+        // },
+        // {
+        //   $sort: {
+        //     latestMessageDate: -1, // Sort by latest message date in descending order
+        //   },
+        // },
       ]);
-      
-      
+      console.log(myids)
+      console.log(unreadCounts,'this is the unread count SHIIII')
   
       if (unreadCounts.length > 0) {
         // res.json(unreadCounts[0].unreadCount);

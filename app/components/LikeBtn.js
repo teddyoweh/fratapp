@@ -11,10 +11,10 @@ import * as Haptics from 'expo-haptics';
 import * as SMS from 'expo-sms';
 import { color_scheme } from "../config/color_scheme";
 
-export default function LikeBtn({likesno,postid,isLike,setIsLike,setPost}){
+export default function LikeBtn({likeno,setLikeNo,postid,isLike,setIsLike,setPost}){
     const {user} = useContext(AppContext);
    
-    const [likeno,setLikeNo] = useState(likesno)
+ 
     async function LikeFunction(){
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
      await   axios.post(endpoints['likepost'],{
@@ -28,6 +28,12 @@ export default function LikeBtn({likesno,postid,isLike,setIsLike,setPost}){
 
    async function onClick(){
         setIsLike(!isLike);
+        if(isLike){
+            setLikeNo(likeno-1)
+        }
+        else{
+            setLikeNo(likeno+1)
+        }
 await LikeFunction()
     }
    

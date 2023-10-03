@@ -1265,7 +1265,7 @@ style={{
     marginRight:10
  }}
  >
-                    <PictureFrame color="white" variant={'Bulk'} size={35}/>
+                    <PictureFrame color="#888" variant={' n '} size={35}/>
                 </Pressable>
                 {
                     tabfilters.map((tab,index)=>{

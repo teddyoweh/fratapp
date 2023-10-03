@@ -850,9 +850,9 @@ export default function OrgPage({navigation,route}){
         <View
          style={{
             // backgroundColor:color_scheme(colorMode,'#eee'),
-            marginHorizontal:10,
-            flexDirection:'row',
-            flexWrap:'wrap',
+ 
+            flexDirection:'column',
+     
             borderRadius:10,
         
         }}
@@ -889,20 +889,22 @@ export default function OrgPage({navigation,route}){
                     })}}
                     style={[{
                       
-            
+                borderBottomWidth:1,
+                            borderStyle:'solid',
+                            borderColor:"#191919",
                    
                         flexDirection:'row',
                         alignItems:'center',
                         justifyContent:'space-between',
-     paddingHorizontal:10,
+     paddingHorizontal:2,
                         paddingVertical:9,
-                        backgroundColor:'#333',
+                        // backgroundColor:'#222',
                         borderRadius:10,
-                        borderStyle:'solid',
-                        borderWidth:2,
-                        borderColor:"#444",
-                        marginBottom:10,
-                        marginRight:5
+                        // borderStyle:'solid',
+                        // borderWidth:2,
+                        // borderColor:"#333",
+                        marginBottom:5,
+             
                      
                        
              
@@ -922,15 +924,33 @@ export default function OrgPage({navigation,route}){
                                 flexDirection:"row",
                                 justifyContent:'center',
                                 alignItems:'center',
-                                //backgroundColor:color_scheme(colorMode,'white'),
-                                borderRadius:10,
+                        height:55,
+                        width:55,
+                        backgroundColor:"#222",
+                                borderRadius:100,
                                 marginRight:4,
                             }}
                             >
 
                            
-                        <Hashtag size="20" color='#999'variant="Broken"/>
+                        <Hashtag size="20" color='#666'variant="Broken"/>
                         </View>
+                        <View
+                        style={{
+                            flexDirection:'row',
+                            alignItems:'center',
+                            justifyContent:'space-between',
+                            width:'85%',
+                            marginLeft:10,
+                            borderRadius:10,
+                            paddingVertical:15,
+                            paddingHorizontal:10,
+                        
+                    
+                        }}
+                        >
+
+            
                         <View
                         style={{
                             flexDirection:'column',
@@ -942,7 +962,7 @@ export default function OrgPage({navigation,route}){
                         <Text
                         style={{
                          
-                            fontSize:14,
+                            fontSize:18,
                             color:color_scheme(colorMode,'#333'),
                             fontWeight:'400'
                         }}
@@ -951,7 +971,7 @@ export default function OrgPage({navigation,route}){
                         </Text>
                    
                         </View>
-                        </View>
+               
                         <View
                         style={{
                             flexDirection:'row',
@@ -972,10 +992,13 @@ export default function OrgPage({navigation,route}){
                         >
                         {cohort.channel_members.length} Members
                         </Text> */}
+                    
+
+
+                        <ArrowRight2 size="20" color={"#222"}/>
                         </View>
-
-
-                        <ArrowRight2 size="20" color={"#999"}/>
+                        </View>
+                        </View>
                     </TouchableOpacity>
                 )
             })

@@ -6,7 +6,7 @@ import { messagestyles } from '../../../../styles/messagestyles';
 import { discoverstyles } from "../../../../styles";
 import { useRoute } from '@react-navigation/native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons,FontAwesome} from '@expo/vector-icons';
-import { Add, ArrowUp, Call, ChartCircle, MessageAdd, MessageAdd1, Microphone2, PenAdd,PictureFrame,SearchNormal, Video } from "iconsax-react-native";
+import { Add, ArrowUp, Blend2, Call, ChartCircle, Element4, MessageAdd, MessageAdd1, Microphone2, PenAdd,PictureFrame,SearchNormal, Video } from "iconsax-react-native";
 import axios from "axios";
 import { endpoints } from "../../../../config/endpoints";
 import { AppContext } from "../../../../context/appContext";
@@ -523,7 +523,7 @@ function UpdateMessageViewed() {
             <View
              style={{
                 flexDirection:'row',
-                alignItems:'flex-start',
+                alignItems:'center',
                 justifyContent:'space-between',
                 paddingHorizontal:10,
                 paddingVertical:10,
@@ -743,18 +743,19 @@ style={{
             >
    <TouchableOpacity
                  style={{
+                 
                     marginRight:10
                 }}
                 >
-                <Video size="28" color={color_scheme(colorMode,'#333')} variant="Linear"/>
+                <Element4 size="20" color={color_scheme(colorMode,'#333')} variant="Bulk"/>
                 </TouchableOpacity>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                 style={{
                     marginRight:10
                 }}
                 >
                 <Call size="28" color={color_scheme(colorMode,'#333')} variant="Linear"/>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
          
             </View>
             </View>

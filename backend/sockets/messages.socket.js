@@ -5,6 +5,7 @@ const http = require('http');
 const Messages = require('../models/Message');
 const Notifications = require('../models/Notifications');
 const OrgMembership = require('../models/OrgMemberships');
+const User = require('../models/User');
 
 function chatSocket(app){
     const server = http.createServer(app);
@@ -67,10 +68,33 @@ function chatSocket(app){
       messagesStream.on('change', async (change) => {
         console.log('this been a change in the messages fuck')
         const counts  = await getUnreadCount(socket.userId)
+        let data;
+        const {user_data} = await findUnreadPartyData(change.fullDocument) ;
+        
         console.log(counts)
-        socket.emit('unreadcount',counts)
+        socket.emit('unreadcount',{
+          counts,
+          data:{
+            user_data,
+            data:change.fullDocument
+          }
+        })
       });
-    
+      messagesStream.on('update', async (change) => {
+        console.log('this been a change in the messages fuck')
+        const counts  = await getUnreadCount(socket.userId)
+        let data;
+        const {user_data} = await findUnreadPartyData(change.fullDocument) ;
+        
+        console.log(counts)
+        socket.emit('unreadcount',{
+          counts,
+          data:{
+            user_data,
+            data:change.fullDocument
+          }
+        })
+      });
       notifStream.on('change', async (change) => {
         if(Object.keys(change).includes('fullDocument')){
  
@@ -93,6 +117,25 @@ function chatSocket(app){
     server.listen(8080)
 
   }
+
+async function findUnreadPartyData(data){
+  let user_data;
+  let org_data
+  if(data){
+
+
+  if(Object.keys(data).includes('receiver_type')){
+
+
+  if(data.receiver_type=='user'){
+    user_data =  await User.findById(data.sender_id)
+  }
+}  }
+  return {
+    user_data,
+    org_data
+  }
+}
 async function countUnreadNotifs(userid){
   try {
     
@@ -107,20 +150,7 @@ async function countUnreadNotifs(userid){
     throw error;
   }
 }
-async function countUnviewedMessages(userid) {
-  try {
-    
-    const unviewedMessagesCount = await Messages.countDocuments({
-      receiver_id: userid, 
-      viewedby: { $nin: [userid] }, 
-    });
-
-    return unviewedMessagesCount;
-  } catch (error) {
-    console.error('Error counting unviewed messages:', error);
-    throw error;
-  }
-}
+ 
 
 
 async function getUnreadCount(userId) {
@@ -128,26 +158,27 @@ async function getUnreadCount(userId) {
   const orgsids = await OrgMembership.find({user_id:userId}).distinct('org_id')
   const myids = [...orgsids,userId]
   try {
-    const unreadCounts = await Messages.find(
+      // ]);
+    const unreadCounts = await Messages.aggregate([
       {
-  
-          receiver_id: userId,// {$in:myids},
-          //viewedby: { $ne: userId },
- 
+        $match: {
+          receiver_id:{ $in: myids }, //{ $in: myids }, // assuming myids is an array of ids
+          viewedby: { $ne: userId },
+        },
       },
       // {
-      //   // $group: {
-      //   //   _id: { sender_id: "$sender_id", receiver_id: "$receiver_id" },
-      //   //   //latestMessage: { $last: "$$ROOT" },
-      //   // },
-      // },
-      // {
       //   $group: {
-      //     _id: null,
-      //     unreadCount: { $sum: 1 },
+      //     _id: "$sender_id", // Group by sender
+      //     count: { $sum: 1 }, // Count unread messages
+      //     latestMessageDate: { $max: "$created_at" }, // Assuming you have a created_at field
       //   },
       // },
-    );
+      // {
+      //   $sort: {
+      //     latestMessageDate: -1, // Sort by latest message date in descending order
+      //   },
+      // },
+    ]);
     console.log(unreadCounts,'this is the unread count SHIIII')
     if (unreadCounts.length > 0) {
       // /return unreadCounts[0].unreadCount;

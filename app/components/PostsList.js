@@ -55,7 +55,7 @@ function RenderImages({images}){
         <View
         style={{
             flex:1,
-            height:pageheight,
+            height:pageheight+50,
             marginBottom:10
         }}
         >
@@ -79,7 +79,7 @@ function RenderImages({images}){
                         <View
                         key={`${index}`}
                         style={{
-                
+                   
                             paddingHorizontal:10,
                         }}
                         >
@@ -121,43 +121,19 @@ function RenderImages({images}){
 
       }}
       >
-        {
-            images.map((im,index)=>{
-                return (
-                    <TouchableOpacity
-                    key={index}
-                    style={{
-                        height:25,
-                        width:25,
-                        flexDirection:'row',
-                        alignItems:'center',
-                        justifyContent:"center",
-                        marginLeft:8,
-                        // backgroundColor:color_scheme(colorMode,'#aaa'),
-                        borderWidth:1,
-                        borderColor:index==cidnex?color_scheme(colorMode,'#eee'):'transparent',
-                        borderRadius:100,
-                    }}
-                    onPress={()=>pagerRef.current.setPage(index)}
-                    >
-                        <View
-                        style
-                        ={{
-                            height:15,
-                            width:15,
-                            backgroundColor:index==cidnex?color_scheme(colorMode,'#aaa'): color_scheme(colorMode,'#eee'),
-                            borderRadius:100,
-                      
-                            
-                        }}
-                        >
-
-                        </View>
-                    </TouchableOpacity>
-                    
-                )
-            })
-        }
+        <Text
+        style={{
+            color:"#555",
+            fontWeight:'600',
+            fontSize:16,
+            marginRight:5
+        }}
+        >
+            {
+                cidnex+1 +"/"+images.length
+            }
+        </Text>
+         
 
         </View>}
       </View>
@@ -331,7 +307,7 @@ function RenderPollVote({ post, setPosti }) {
                   style={{
                   
                     width:state && votedFor === poll? `${optionPercentage}%`:`${showvalue}%`, // Set the width based on the percentage
-                    backgroundColor: state && votedFor === poll &&'#a330d0',
+                    backgroundColor: state && votedFor === poll?'#a330d0':optionPercentage==0?"transparent":"#444",
              
                     paddingHorizontal:10,
                     paddingVertical: 8,
@@ -957,6 +933,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
   );
   const inputcommentid = 'uniqueID';
 const likeBottomSheet = useRef(null);
+const [likeno,setLikeNo] = useState(post.likesuserlist.length)
     return (
         showPost &&   userdetails && 
         <>
@@ -1072,7 +1049,7 @@ const likeBottomSheet = useRef(null);
 
             <View style={homestyles.postinsights1}>
             <View style={homestyles.postinsight}>
-                 <LikeBtn setPost={setPosti} likesno={post.likesuserlist.length} postid={post._id} isLike={isLike} setIsLike={setIsLike}/>
+                 <LikeBtn likeno={likeno}  setLikeNo={setLikeNo} setPost={setPosti} likesno={post.likesuserlist.length} postid={post._id} isLike={isLike} setIsLike={setIsLike}/>
                 
                 </View>
                  
@@ -1095,8 +1072,10 @@ const likeBottomSheet = useRef(null);
            
             <View>
                 
-            <TouchableOpacity  style={homestyles.insightbtn} onPress={()=>onMore(post._id)} >
-            <Entypo name="dots-three-horizontal" size={18} color={  color_scheme(colorMode,'#aaa')} />
+            <TouchableOpacity  style={[homestyles.insightbtn,{
+                marginRight:6
+            }]} onPress={()=>onMore(post._id)} >
+            <Entypo name="dots-three-horizontal"   size={18} color={  color_scheme(colorMode,'#aaa')} />
         
             </TouchableOpacity>
             </View>
@@ -1129,7 +1108,7 @@ const likeBottomSheet = useRef(null);
                     
                 }}
                 >
-                {post.likesuserlist.length}
+                {likeno}
                 </Text>
                 <Text
                    style={{

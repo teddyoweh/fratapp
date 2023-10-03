@@ -396,7 +396,7 @@ style={{
                                             {formatMsgDate(item.date)}
                                         </Text>
                                         {
-                                            !item.viewedby.includes(user.userid)&&
+                                            item.sender_id== user.userid&&
                                             <Ionicons name="checkmark-done" size={17} color="#555" style={{
                                                 marginTop:10
                                             }} />

@@ -10,7 +10,7 @@ import MakePost from "./MakePost";
 import Feed from "./Feed";
 import { wrapUIMG } from "../../../utils/utils";
 import Spinner from "../../../components/Spinner";
-import { setupNotifications } from "../../../config/setup";
+import { schedulePushNotification, setupNotifications } from "../../../config/setup";
 import { color_scheme } from "../../../config/color_scheme";
 import { BlurView } from "expo-blur";
  
@@ -82,6 +82,7 @@ function RenderNotificationBtn({navigation}){
 function RenderMessageBtn({navigation}){
     const {colorMode,user} = useContext(AppContext)
     const [count,setCount] = useState(null)
+
     function fetchSocket(){
 
         const socket = io(`http://${serverhost}:8080`);
@@ -92,12 +93,17 @@ function RenderMessageBtn({navigation}){
         });
     
         socket.on('unreadcount', (count) => {
-            
+            let name_;
+            let img_;
+            let text;
             if(count){
- 
+              
+                name_ = count.data.user_data.firstname+' '+count.data.user_data.lastname
+                img_ = wrapUIMG(count.data.user_data.uimg)
+                text = count.data.data.content
                 try{
-                    alert(count)
-                    setCount(count)
+                    // schedulePushNotification(name_,text,img_)
+                    setCount(count.counts)
                 }
                 catch{
                     console.log('lol something happened')
@@ -126,7 +132,7 @@ function RenderMessageBtn({navigation}){
     useEffect(
         ()=>{
             fetchCount()
-      
+ 
         },[]
 
     )

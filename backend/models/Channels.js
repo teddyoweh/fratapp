@@ -14,7 +14,10 @@ const ChannelSchema = new Schema({
 
     channel_logo:{
     },
-    channel_members:{},
+    channel_members:{
+        type:Array,
+    
+    },
  
     
  

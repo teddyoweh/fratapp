@@ -12,14 +12,17 @@ function setupNotifications(){
       });
       
 }
-async function schedulePushNotification(title,body) {
+async function schedulePushNotification(title,body,imgUrl) {
+   
     await Notifications.scheduleNotificationAsync({
       content: {
         title: title,
         body: body,
         data: { data: 'goes here' },
+        icon: imgUrl, // This is for a small icon
+        image: imgUrl,
       },
-      trigger: { seconds: 2 },
+      trigger: { seconds: 1 },
     });
   }
   

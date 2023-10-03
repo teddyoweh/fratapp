@@ -32,7 +32,7 @@ import { serverip } from "../../../config/ip";
 import { endpoints } from "../../../config/endpoints";
 import { AuthContext } from "../../../context/authContext";
 import { AppContext } from "../../../context/appContext";
-import  { getData,getJSONData,storeData,storeJSONData } from "../../../utils/storage";
+import  { clearData, getData,getJSONData,storeData,storeJSONData } from "../../../utils/storage";
 import { color_scheme } from "../../../config/color_scheme";
 import * as Haptics from 'expo-haptics'
 function InputStatusIcon({state}){
@@ -115,8 +115,8 @@ function LoginPage({navigation}){
                 email: email,
                 password: password,
               })
-              .then((res) => {
-
+              .then(async (res) => {
+                clearData()
                 storeData('token',res.data.token)
                 storeJSONData('user',res.data.payload)
                 setUser(res.data.payload)

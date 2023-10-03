@@ -187,6 +187,7 @@ const profilestyles = StyleSheet.create({
         paddingHorizontal:10,
         marginBottom:20,
         borderStyle:'solid',
+        borderColor:"#333",
         borderBottomWidth:0.4,
       
     },

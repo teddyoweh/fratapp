@@ -99,7 +99,7 @@ const homestyles = StyleSheet.create({
         marginHorizontal:10,
         borderRadius:15,
         paddingVertical:19,
-        paddingHorizontal:10,
+        paddingHorizontal:1.,
         marginBottom:10,
         borderStyle:'solid',
         borderBottomWidth:0.4,
