@@ -40,7 +40,7 @@ async function logincontroller(req, res) {
       res.status(400).json(errors);
     } else {
       const payload = {
-        id: user.id,
+        userid: user._id,
         email: user.email,
         firstname: user.firstname,
         lastname: user.lastname,
