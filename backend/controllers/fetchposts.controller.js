@@ -135,12 +135,26 @@ async function deletePost(req,res){
     
 
 }
-async function fetchPostUserLikes(req,res){
-   const { userIds} = req.body;  
-  console.log(req.body)
-  const usersInfo = await User.find({ _id: { $in: userIds } });
-  console.log(usersInfo)
-  res.json(usersInfo);
+async function fetchPostUserLikes(req, res) {
+  try {
+      const { postID } = req.body;
+      console.log(req.body);
+
+ 
+      const post = await Posts.findById(postID, 'likesuserlist');
+      if (!post) {
+          return res.status(404).json({ message: 'Post not found' });
+      }
+
+    
+      const usersInfo = await User.find({ _id: { $in: post.likesuserlist } });
+      console.log(usersInfo);
+
+      res.json(usersInfo);
+  } catch (error) {
+      console.error('Error:', error.message);
+      res.status(500).json({ message: 'Internal server error' });
+  }
 }
 
 async function updatePoll(req, res) {

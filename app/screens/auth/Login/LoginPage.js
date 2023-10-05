@@ -52,7 +52,7 @@ function InputStatusIcon({state}){
   }
   
 function LoginPage({navigation}){
-    const {setIsAuth} = useContext(AuthContext)
+    const {setIsAuth,setToken} = useContext(AuthContext)
     const {user,setUser} = useContext(AppContext)
     const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
@@ -116,9 +116,10 @@ function LoginPage({navigation}){
                 password: password,
               })
               .then(async (res) => {
+ 
                 clearData()
                 storeData('token',res.data.token)
-                storeJSONData('user',res.data.payload)
+                setToken(res.data.token)
                 setUser(res.data.payload)
                 setIsAuth(true)
 

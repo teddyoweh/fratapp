@@ -1,5 +1,5 @@
 import React,{useState,useContext,useRef,useEffect,useCallback}from "react";
-import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,  RefreshControl, Dimensions, Animated} from "react-native";
+import { View,Text,Image,TouchableOpacity, ScrollView, TextInput, StyleSheet, RefreshControl, Dimensions, Animated} from "react-native";
 import { homestyles } from "../../../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Add} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
@@ -15,6 +15,60 @@ import { color_scheme } from "../../../config/color_scheme";
 import { useFocusEffect } from '@react-navigation/native';
 import api from "../../../config/api";
 import * as Haptics from 'expo-haptics'
+import * as Animatable from 'react-native-animatable';
+const Skeleton = () => {
+    return (
+        <Animatable.View 
+        style={styles.skeletonContainer}
+        animation={{
+          0: {
+            opacity: 1,
+          },
+          0.25: {
+            opacity: 0.75,
+          },
+          0.5: {
+            opacity: 0.5,
+          },
+          0.75: {
+            opacity: 0.75,
+          },
+          1: {
+            opacity: 1,
+          },
+        }}
+        duration={2000}
+        iterationCount="infinite"
+      >
+        <View style={styles.skeletonHeader}>
+          <View style={styles.skeletonAvatar}></View>
+          <View style={styles.skeletonHeaderContent}>
+            <View style={styles.skeletonLineShort}></View>
+            <View style={styles.skeletonLine}></View>
+          </View>
+        </View>
+        <View style={styles.skeletonContent}>
+          <View style={styles.skeletonLine}></View>
+          <View style={styles.skeletonLine}></View>
+          <View style={styles.skeletonLine}></View>
+        </View>
+        <View style={styles.skeletonFooter}>
+          <View style={styles.skeletonIcon}></View>
+          <View style={styles.skeletonIcon}></View>
+          <View style={styles.skeletonIcon}></View>
+        </View>
+        <View
+        style={{
+            flexDirection:'row',
+            alignItems:'center',
+        }}
+        >
+        <View style={styles.skeletonLineComments}></View>
+        <View style={styles.skeletonLineComments}></View>
+        </View>
+      </Animatable.View>
+    );
+  }
 function LoadingScreen(){
     return(
         <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
@@ -107,6 +161,7 @@ export default function Feed({navigation,postBottomSheet}){
 function AllFeed({navigation,route}){
  
     const postBottomSheet = useRef()
+    const {user} = useContext(AppContext)
  
     const [refreshing, setRefreshing] = React.useState(false);
     const [posts,setPost]  = useState(null)
@@ -129,16 +184,17 @@ async function loadPosts(){
         // Get the new posts from the response
         const newPosts = res.data.posts;
     
-        // Check if each new post already exists in the postData.posts array
-        const uniqueNewPosts = newPosts.filter(newPost => 
-            !postData.posts.some(existingPost => existingPost._id === newPost._id)
-        );
+        // // Check if each new post already exists in the postData.posts array
+        // const uniqueNewPosts = newPosts.filter(newPost => 
+        //     !postData.posts.some(existingPost => existingPost._id === newPost._id)
+        // );
     
-        // Update the state with the unique new posts
-        setPostData(prevData => ({
-            ...prevData,
-            posts: [...uniqueNewPosts,...prevData.posts, ]
-        }));
+        // // Update the state with the unique new posts
+        // setPostData(prevData => ({
+        //     ...prevData,
+        //     posts: [...uniqueNewPosts,...prevData.posts, ]
+        // }));
+        setPostData(res.data)
         console.log(`Number of new unique posts added: ${uniqueNewPosts.length}`);
 
     });
@@ -192,7 +248,19 @@ postData ?
 
 <MemoizedMapOutPosts posts={postData.posts} navigation={navigation} route={route}  users={postData.users} />
 
-: <Loading />}
+: 
+
+    <View>
+        {
+            [...Array(10)].map((_, i) => {
+                return <Skeleton key={i} />;
+            }
+            )
+
+        }
+    </View>
+ 
+}
   
 
     </ScrollView>
@@ -220,3 +288,70 @@ postData ?
 
 
  
+const styles = StyleSheet.create({
+    skeletonContainer: {
+      backgroundColor: '#1a1a1a',
+      marginHorizontal: 10,
+      borderRadius: 15,
+      paddingVertical: 19,
+      paddingHorizontal: 10,
+      marginBottom: 10,
+      borderStyle: 'solid',
+      borderBottomWidth: 0.4,
+      paddingBottom: 15,
+    },
+    skeletonHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 10,
+    },
+    skeletonAvatar: {
+      backgroundColor: '#2a2a2a',
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      marginRight: 10,
+    },
+    skeletonHeaderContent: {
+      flex: 1,
+    },
+    skeletonLine: {
+      backgroundColor: '#2a2a2a',
+      height: 8,
+      borderRadius: 4,
+      marginBottom: 6,
+      width: '100%',
+    },
+    skeletonLineShort: {
+      backgroundColor: '#3a3a3a',
+      height: 8,
+      borderRadius: 4,
+      marginBottom: 6,
+      width: '60%',
+    },
+    skeletonContent: {
+      marginBottom: 10,
+    },
+    skeletonFooter: {
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+    },
+    skeletonIcon: {
+      backgroundColor: '#3a3a3a',
+      width: 15,
+      height: 15,
+      borderRadius: 12,
+      marginRight: 10,
+    },
+    skeletonLineComments:{
+        backgroundColor: '#2a2a2a',
+        height: 5,
+        borderRadius: 4,
+        marginBottom: 6,
+        marginRight:10,
+        width: '15%',
+        marginTop:10
+    }
+  });
+  
+  

@@ -644,7 +644,7 @@ function RenderMakeEvent({startdate,enddate,setStartDate,setEndDate,eventtype, s
           lat: e.nativeEvent.coordinate.latitude,
           long: e.nativeEvent.coordinate.longitude,
         };
-        alert(JSON.stringify(newLocation));
+ 
         setEventLocation(newLocation);
     }    
     function openDateSheet(type){

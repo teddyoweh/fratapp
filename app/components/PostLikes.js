@@ -25,7 +25,7 @@ export default function PostLikes({navigation, likeBottomSheet,post}){
 
     const [lusers,setLusers]=useState(users)
     async function getUsers(){
-        await axios.post(endpoints['fetchlikeusers'],{userIds:post.likesuserlist})
+        await axios.post(endpoints['fetchlikeusers'],{postID:post._id})
         .then(res=>{
  
             setUsers(res.data)
@@ -62,7 +62,8 @@ export default function PostLikes({navigation, likeBottomSheet,post}){
         navigation.navigate('ProfilesScreen',{userdetails:usx})
     }
       }
-      const usersToDisplay = search.length > 0 ? filteredUsers : users;
+    //   const usersToDisplay =  search.length > 0 ? filteredUsers : users;
+    const usersToDisplay =   users;
 
     return (
         <BottomSheet   ref={likeBottomSheet} height={Dimensions.get('screen').height-90}
@@ -75,7 +76,7 @@ export default function PostLikes({navigation, likeBottomSheet,post}){
             paddingVertical:20
         }}
         >
-              <View style={[discoverstyles.searchbox,{backgroundColor:color_scheme(colorMode,'#eee')}]}>
+              {/* <View style={[discoverstyles.searchbox,{backgroundColor:color_scheme(colorMode,'#eee')}]}>
                     <SearchNormal variant="Broken" color="grey" />
                     <TextInput style={[discoverstyles.search,{color:color_scheme(colorMode,'black')}]}placeholder="Search People"
                     placeholderTextColor={color_scheme(colorMode,'gray')}
@@ -83,7 +84,7 @@ export default function PostLikes({navigation, likeBottomSheet,post}){
                     keyboardAppearance={colorMode}
                     onChangeText={(text)=>performSearch(text)}
                     />
-                </View>
+                </View> */}
                 <ScrollView
                 contentContainerStyle={{
                     paddingVertical:19

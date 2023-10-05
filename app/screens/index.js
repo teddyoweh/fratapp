@@ -80,15 +80,17 @@ export default function Screens(){
     async function VerifyAuth(){
  
         const token1 = await AsyncStorage.getItem('token')
+ 
         try {
             const res = await axios.post(endpoints['me'], { token: token1 });
-          
+       
             if (res.data.status) {
- 
+      
               
-              storeData('token', res.data.payload.token);
-              setToken(res.data.payload.token);
-              setUser(res.data.payload.user)
+              storeData('token', res.data.token);
+              setToken(res.data.token);
+              setUser(res.data.user)
+    
               setIsAuth(true);
     
       
@@ -137,7 +139,7 @@ export default function Screens(){
    
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: color_scheme(colorMode,'white') }}>
-            <AuthContext.Provider value={{isAuth,setIsAuth}}>
+            <AuthContext.Provider value={{isAuth,setIsAuth,setToken,token}}>
 <AppContext.Provider value={{user,setUser,colorMode,setColorMode,   color_scheme}}>
   <NotificationContext.Provider value={{notificationListener,responseListener,notification}}>
 

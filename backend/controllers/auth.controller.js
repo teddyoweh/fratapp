@@ -39,17 +39,12 @@ async function logincontroller(req, res) {
     if (errors.length > 0) {
       res.status(400).json(errors);
     } else {
-      const payload = {
-        userid: user._id,
-        email: user.email,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        username: user.username,
-        joinedAt: user.joinedAt,
-        isfirsttime: user.isfirsttime,
-        isverified: user.isverified,
-        uimg:user.uimg
-      };
+      
+      const payload = {firstname:user.firstname,lastname:user.lastname,username:user.username,uimg:user.uimg,userid:user.id,bio:user.bio,pinnedorg:user.pinnedorg, isofficial:user.isofficial,email:user.email}
+      console.log(
+        `User Logged In [${new Date().toLocaleString()}]`,
+        payload
+      )
       const token = jwt.sign({ user: payload }, process.env.JWT_SECRET);
   
       res.status(200).json({ token: token, payload: payload, status: true });
@@ -89,7 +84,7 @@ async function registercontroller(req, res) {
   
       const savedUser = await newUser.save();
       const payload = {
-        id:savedUser.id,
+        userid:savedUser.id,
         email: savedUser.email,
         firstname: savedUser.firstname,
         lastname: savedUser.lastname,
@@ -133,7 +128,7 @@ function verifyEmailController(req, res) {
         { new: true,}
       ).then(updatedUser => {
         const payload = {
-          id: updatedUser.id,
+          userid: updatedUser.id,
           email: updatedUser.email,
           firstname: updatedUser.firstname,
           lastname: updatedUser.lastname,

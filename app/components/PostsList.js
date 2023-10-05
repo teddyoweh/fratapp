@@ -309,6 +309,7 @@ function RenderPollVote({ post, setPosti }) {
                     width:state && votedFor === poll? `${optionPercentage}%`:`${showvalue}%`, // Set the width based on the percentage
                     backgroundColor: state && votedFor === poll?'#a330d0':optionPercentage==0?"transparent":"#444",
              
+                   
                     paddingHorizontal:10,
                     paddingVertical: 8,
                     borderRadius: 10,
@@ -320,6 +321,7 @@ function RenderPollVote({ post, setPosti }) {
               <Text
                 style={{
                   color: color_scheme(colorMode, '#333'),
+                  width:500
                 }}
               >
                 {poll}
@@ -337,7 +339,7 @@ function RenderPollVote({ post, setPosti }) {
                 fontSize:13
             }}
             >
-                {optionPercentage}%
+                {Math.round(optionPercentage)}%
             </Text>
               }
             </View>
@@ -865,11 +867,11 @@ function scaleImageToScreen(imageWidth, imageHeight) {
   const handleScrollToImg = (index) => {
     if (scrollViewRef.current) {
       const offsetX = index * windowWidth;
-      alert('shiot')
+    
       scrollViewRef.current.scrollTo({ x: offsetX, animated: true });
     }else{
         const offsetX = index * windowWidth;
-      alert('dam')
+      
       scrollViewRef.current.scrollTo({ x: offsetX, animated: true });
     }
   };

@@ -8,13 +8,13 @@ function mecontroller(req,res){
     try{
         const payload = jwt.verify(token,process.env.JWT_SECRET);
       
-        User.findById(payload.user.id).then(user=>{
+        User.findById(payload.user.userid).then(user=>{
          
             if(user){
                 Organization.findById(user.pinnedorg).then(rex =>{
-                    payload['user']={firstname:user.firstname,lastname:user.lastname,username:user.username,uimg:user.uimg,userid:user.id,bio:user.bio,pinnedorg:user.pinnedorg,pinnedorgdetail:rex, isofficial:user.isofficial,email:user.email}
- 
-                    res.status(200).json({payload:payload,status:true});
+                    payload['user']={firstname:user.firstname,lastname:user.lastname,username:user.username,uimg:user.uimg,userid:user._id,bio:user.bio,pinnedorg:user.pinnedorg,pinnedorgdetail:rex, isofficial:user.isofficial,email:user.email}
+                    console.log(payload,'this is the payload token')
+                    res.status(200).json({user:payload.user,token,status:true});
                 })
                  
             }else{
