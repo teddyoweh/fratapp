@@ -11,6 +11,7 @@ import axios from "axios";
 import { endpoints } from "../config/endpoints";
  
 import Loading from "./Loading";
+import PostSkeleton from "./PostSkeleton";
 
 
 export default function ProfilePosts({navigation,userid}){
@@ -26,7 +27,7 @@ export default function ProfilePosts({navigation,userid}){
     }
     async function loadMyPosts(){
  
-       await axios.post(endpoints['getposts'],{userid:id})
+       await axios.post(endpoints['fetchmyposts'],{userid:id})
         .then(res=>{
         
             setPostData(res.data)
@@ -44,7 +45,7 @@ export default function ProfilePosts({navigation,userid}){
             return(
                 <>
                 { postData.posts.length>0?
-                <PostsList key={index}index={index} posti={post} navigation={navigation} move={false} userdetails ={postData.users[post.userid]}/>
+                <PostsList key={index}index={index} posti={post} navigation={navigation} move={false} userdetails ={postData.user}/>
                 :
               <View
         style={{
@@ -76,7 +77,15 @@ export default function ProfilePosts({navigation,userid}){
             )
         }):
         
-        <Loading/>
+        <View>
+        {
+            [...Array(10)].map((_, i) => {
+                return <PostSkeleton key={i} />;
+            }
+            )
+
+        }
+    </View>
         
     )
 }  

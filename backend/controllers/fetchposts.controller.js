@@ -88,33 +88,45 @@ const Posts = require('../models/Posts');
   
   
 
-  function fetchmypostscontroller(req, res) {
-    const { cursor,userid} = req.body;
+  async function fetchmypostscontroller(req, res) {
+    const { cursor, userid } = req.body;
     const limit = 40;
-    
+  
     let query = {
-      account_type:undefined
-     };
-    if(userid){
-      query.userid = userid;
+      account_type: { $ne: "anonymous" }
+    };
+  
+    if (userid) {
+      query.userid= userid ;
     }
+  
     if (cursor) {
       query._id = { $lt: cursor };
     }
-    console.log(cursor)
-    Posts.find(query)
-      .sort({ _id: "desc" })
-      .limit(limit)
-      .then((posts) => {
   
-        res.json(posts);
-      })
-      .catch((err) => {
-        console.log(err);
-        res.json({ status: false, data: err });
-      });
+    try {
+      // Fetch the user by their ID
+      const user = await User.findById(userid);
+  
+      // Fetch posts based on the query
+      const posts = await Posts.find(query)
+        .sort({ _id: "desc" })
+        .limit(limit);
+  
+      // Combine the user and posts data into a response object
+      const responseData = {
+        user: user,
+        posts: posts
+      };
+      console.log(responseData,'this is the response data from fetch my posts')
+      res.json(responseData);
+    } catch (err) {
+      console.log(err);
+      res.json({ status: false, data: err });
+    }
   }
-
+  
+  
 function getOnePost(req,res){
     Posts.findOne({ _id: req.body.id }).then(post => {
         res.json(post)
