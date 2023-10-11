@@ -2,53 +2,65 @@ const Posts = require('../models/Posts');
  
   const Organizations = require('../models/Organizations');
   const User = require('../models/User'); 
+const Links = require('../models/Links');
   async function fetchpostscontroller(req, res) {
-    const { cursor,userid,userid_, orgid} = req.body;
+    const { cursor, userid, userid_, orgid } = req.body;
     const limit = 40;
 
-    
     let query = {};
-  
+
     if (cursor) {
       query._id = { $lt: cursor };
     }
-    if(userid){
+    if (userid) {
       query.userid = userid;
     }
 
-    if(userid_&&orgid){
-      console.log('console dot fucking log')
+    if (userid_ && orgid) {
       query.orgid = orgid;
-    }else{
-      query.isorgpriv=false
+    } else {
+      query.isorgpriv = false;
     }
+
     try {
+      // Fetch users you've blocked
+      const blockedUsers = await Links.find({ userid: userid, stat: "block" }).distinct('partyid');
+      
+      // Fetch users who have blocked you
+      const usersWhoBlockedYou = await Links.find({ partyid: userid, stat: "block" }).distinct('userid');
+
+      // Combine both lists
+      const allBlockedUsers = [...new Set([...blockedUsers, ...usersWhoBlockedYou])];
+
+      // Exclude posts from all blocked users and from users who have blocked you
+      query.userid = { $nin: allBlockedUsers };
+
       const posts = await Posts.find(query)
         .sort({ _id: "desc" })
         .limit(limit);
-  
-      const userIds = posts.map((post) => post.userid);
-      
-      const users = await User.find({ _id: { $in: userIds } });
-  
-      // const usersDict = users.reduce((acc, user) => {
-      //   acc[user._id] = {
-      //     firstname: user.firstname,
-      //     lastname: user.lastname,
-      //     username: user.username,
-      //     uimg: user.uimg,
-      //     userid:user.id,
-      //     isofficial:user.isofficial,
-      //   bio:user.bio,
-      //   pinnedorgs:user.pinnedorg
-      //   };
-      //   return acc;
-      // }, {});
+
+      const [users, allPinnedOrgs] = await Promise.all([
+        User.find({ _id: { $in: posts.map((post) => post.userid) } }, {
+          firstname: 1,
+          lastname: 1,
+          username: 1,
+          uimg: 1,
+          id: 1,
+          isofficial: 1,
+          bio: 1,
+          pinnedorg: 1
+        }),
+        Organizations.find({ _id: { $in: posts.map((post) => post.userid) } })
+      ]);
+
+      const pinnedOrgsDict = allPinnedOrgs.reduce((acc, org) => {
+        acc[org._id] = org;
+        return acc;
+      }, {});
+
       const usersDict = {};
 
       for (const user of users) {
-        const pinnedOrgs = await Organizations.findById(user.pinnedorg);
-        
         usersDict[user._id] = {
           firstname: user.firstname,
           lastname: user.lastname,
@@ -57,34 +69,22 @@ const Posts = require('../models/Posts');
           userid: user.id,
           isofficial: user.isofficial,
           bio: user.bio,
-          pinnedorg: pinnedOrgs, // Assuming pinnedorgid is an array of organization IDs
+          pinnedorg: pinnedOrgsDict[user.pinnedorg],
         };
       }
-      // const usersDict = {};
+      const res_data = { posts: posts, users: usersDict }  
+      console.log(res_data, 'this is the response data from fetch posts');
+      res.json(res_data);
 
-      // await Promise.all(users.map(async user => {
-      //   const pinnedOrgs = await Organizations.find(user.pinnedorg);
-
-      //   usersDict[user._id] = {
-      //     firstname: user.firstname,
-      //     lastname: user.lastname,
-      //     username: user.username,
-      //     uimg: user.uimg,
-      //     userid: user.id,
-      //     isofficial: user.isofficial,
-      //     bio: user.bio,
-      //     pinnedorgs: pinnedOrgs,
-      //   };
-      // }));
-      // console.log(usersDict)
-    
-      res.json({ posts: posts, users: usersDict });
-  
     } catch (err) {
- 
-      res.json({ status: false, data: err });
+      console.error("Error fetching posts:", err); // Log the error for debugging
+      res.json({ status: false, message: "An error occurred while fetching posts." });
     }
-  }
+}
+
+
+
+
   
   
 
@@ -105,15 +105,14 @@ const Posts = require('../models/Posts');
     }
   
     try {
-      // Fetch the user by their ID
+ 
       const user = await User.findById(userid);
-  
-      // Fetch posts based on the query
+
       const posts = await Posts.find(query)
         .sort({ _id: "desc" })
         .limit(limit);
   
-      // Combine the user and posts data into a response object
+
       const responseData = {
         user: user,
         posts: posts

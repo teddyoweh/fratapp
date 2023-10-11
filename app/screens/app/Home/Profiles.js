@@ -1,5 +1,5 @@
 import React,{useState,useContext}from "react";
-import { View,Text,Image,TouchableOpacity, ScrollView, TextInput} from "react-native";
+import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,ActionSheetIOS} from "react-native";
 import { homestyles,profilestyles } from "../../../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Profile, MessageText1, CloudLightning, MessageAdd, MessageQuestion, MessageText, DirectInbox} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons,EvilIcons,Entypo} from '@expo/vector-icons';
@@ -11,6 +11,8 @@ import ProfilePosts from "../../../components/ProfilePosts";
 import { wrapUIMG } from "../../../utils/utils";
 import { color_scheme } from "../../../config/color_scheme";
 import * as Haptics from 'expo-haptics'
+import axios from "axios";
+import { endpoints } from "../../../config/endpoints";
  
 export default function ProfilesScreen({navigation,route}){
     const {user,colorMode} = useContext(AppContext)
@@ -27,15 +29,40 @@ export default function ProfilesScreen({navigation,route}){
           return str.slice(0, maxLength - 3) + '...';
         }
       }
+      async function blockUser(){
+       await axios.post(endpoints['block_link'],{
+            userid:user.userid, partyid:userdetails.userid
+        }).then(res=>{
+    
+            navigation.goBack()
+        })
+      }
+      const onSettingsPress = () =>
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: ["Block"],
+ 
+          cancelButtonIndex: 0,
+          userInterfaceStyle: "dark",
+          tintColor:'#eee',
+          cancelButtonTintColor:"red"
+        },
+        buttonIndex => {
+            if (buttonIndex === 0) {
+                blockUser()
+            }
+        },
+      );
+ 
     return (
         <View style={[profilestyles.container,{
             backgroundColor:color_scheme(colorMode,'white')
         }]}>
             <View style={{
                 flexDirection:'row',
-                alignItems:'flex-start',
-                justifyContent:'flex-start',
-                alignContent:'flex-start',
+                alignItems:'center',
+                justifyContent:'space-between',
+            
                 paddingHorizontal:10,
                 paddingVertical:10,
                 paddingBottom:15,
@@ -57,7 +84,13 @@ export default function ProfilesScreen({navigation,route}){
                     >
             <Ionicons name="chevron-back-outline" size={24} color={color_scheme(colorMode,'black')} />
             </TouchableOpacity>
-        
+            <TouchableOpacity
+            onPress={()=>{
+                onSettingsPress()
+            }}
+            >
+            <Entypo name="dots-three-horizontal" size={24} color="white" />
+            </TouchableOpacity>
             </View>
             <ScrollView>
 

@@ -166,4 +166,35 @@ function findUser(req, res) {
       }
     })
 }
-module.exports = { logincontroller, registercontroller,checkUsername,findUser, verifyEmailController}
+
+async function deleteAccount(req,res){
+  const {userid} = req.body
+  try{
+    const user = await User.findById(userid)
+    if(user){
+      const memberships = await Membership.find({userid:userid})
+      if(memberships){
+        memberships.forEach(async (membership)=>{
+          const org = await Organization.findById(membership.orgid)
+          if(org){
+            org.members = org.members.filter((member)=>member.userid!==userid)
+            org.save()
+          }
+          membership.delete()
+        })
+      }
+      const messages = await Message.find({$or:[{senderid:userid},{receiverid:userid}]})
+      if(messages){
+        messages.forEach(async (message)=>{
+          message.delete()
+        })
+      }
+      user.delete()
+      res.json({status:true})
+    }
+  }
+  catch(err){
+    res.json({status:false})
+  }
+}
+module.exports = { logincontroller,deleteAccount, registercontroller,checkUsername,findUser, verifyEmailController}

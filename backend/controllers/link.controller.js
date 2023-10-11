@@ -60,5 +60,24 @@ function updateLinkStatus(req,res){
         res.json(resp)
     })
 }
+function blockLink(req, res) {
+    const { userid, partyid } = req.body;
+    console.log(req.body,'about out to block')
+    // Find the link and update it, or create a new one if it doesn't exist
+    Links.findOneAndUpdate(
+        { userid, partyid },  
+        { $set: { stat:"block" } },   
+        { 
+            new: true,       
+            upsert: true     
+        },
+        (err, link) => {
+            if (err) {
+                return res.status(500).send(err);
+            }
+            res.send(link);
+        }
+    );
+}
 
-module.exports = {getlinkcontroller,linkcontroller,updateLinkStatus}
+module.exports = {getlinkcontroller,blockLink, linkcontroller,updateLinkStatus}

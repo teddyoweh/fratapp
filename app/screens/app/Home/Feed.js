@@ -129,7 +129,7 @@ function AllFeed({navigation,route}){
 
 async function loadPosts(){
  
-    await api.post(endpoints['getposts'], { cursor: null }).then(res => {
+    await api.post(endpoints['getposts'], { cursor: null,userid:user.userid }).then(res => {
         // Get the new posts from the response
         const newPosts = res.data.posts;
     
@@ -153,7 +153,7 @@ async function loadPosts(){
 const MemoizedMapOutPosts = React.memo(MapOutPosts);
 
 const memoizedLoadPosts = useCallback(async () => {
-    const res = await api.post(endpoints['getposts'], { cursor: null });
+    const res = await api.post(endpoints['getposts'], { cursor: null,userid:user.userid });
  
     setPostData(res.data);
 }, []);

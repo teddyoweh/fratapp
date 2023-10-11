@@ -1,5 +1,5 @@
 import React,{useState,useContext}from "react";
-import { View,Text,Image,TouchableOpacity, ScrollView, TextInput} from "react-native";
+import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,ActionSheetIOS, Alert} from "react-native";
 import { homestyles,profilestyles } from "../../../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Profile, MessageText1, CloudLightning, MessageAdd, MessageQuestion, Category2} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons,EvilIcons,Entypo} from '@expo/vector-icons';
@@ -11,18 +11,84 @@ import ProfilePosts from "../../../components/ProfilePosts";
 import { wrapUIMG } from "../../../utils/utils";
 import { color_scheme } from "../../../config/color_scheme";
 import * as Haptics from 'expo-haptics'
+import { endpoints } from "../../../config/endpoints";
+import { clearData } from "../../../utils/storage";
+
+import axios from "axios";
+import { AuthContext } from "../../../context/authContext";
 export default function ProfileScreen({navigation}){
     const {user,colorMode} = useContext(AppContext)
+    const {setIsAuth} = useContext(AuthContext)
     const [filters,setFilters]=useState(['All','Posts','Polls','Media','Info','Tagged'])
     const [activeFilter,setActiveFilter]=useState('All')
+    async function logtfout(){
+
+        await clearData()
+        setIsAuth(false)
+    }
+    function logOuT(){
+        Alert.alert('Logout', `Are you sure you want to log out of  @${user.username}`, [
+            {
+              text: 'Cancel',
+              style: 'cancel',
+            },
+            {text: 'Logout', 
+            style:'destructive',
+            onPress: () => logtfout()
+            
+        
+        },
+          ]);
+      
+    }
+    function del_account(){
+        Alert.alert('Delete Account', `Are you sure you want to delete your account?`, [
+            {
+              text: 'Cancel',
+              style: 'cancel',
+            },
+            {text: 'Delete', 
+            style:'destructive',
+            onPress: () => delete_account()
+            
+        
+        },
+          ]);
+    }
+    async function delete_account(){
+        await axios.post(endpoints['delete_account'],{
+            userid:user.userid
+        }).then( res=>{
+ logtfout()
+        })
+    }
+    const onSettingsPress = () =>
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: ["Log Out","Delete Account"],
+
+        cancelButtonIndex: 1,
+        userInterfaceStyle: "dark",
+        tintColor:'#eee',
+        cancelButtonTintColor:"red"
+      },
+      buttonIndex => {
+          if (buttonIndex === 0) {
+            logOuT()
+          }   
+            if (buttonIndex === 1) {
+                del_account()
+            } 
+      },
+    );
     return (
         <View style={[profilestyles.container,{
             backgroundColor:color_scheme(colorMode,'white')
         }]}>
             <View style={profilestyles.settingstop}>
                 <TouchableOpacity style={profilestyles.settingstopitem} onPress={()=>{
-                    Haptics.impactAsync('medium')
-                    navigation.navigate('Settings')}} >
+                    onSettingsPress()
+                }} >
                 <EvilIcons name="gear" size={30} color={color_scheme(colorMode,'black')} />
                 </TouchableOpacity>
             </View>

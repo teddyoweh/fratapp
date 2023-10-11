@@ -8,12 +8,16 @@ const endpoints = {
     'searchuser':`${serverip}/api/auth/searchuser`,
     'checkusername':`${serverip}/api/auth/checkusername`,
     'verify':`${serverip}/api/auth/verify`,
+    'delete_account':`${serverip}/api/auth/delete_account`,
     'editprofile':`${serverip}/api/auth/editprofile`,
     'uploadprofile':`${serverip}/api/auth/uploadprofile`,
 
     'getlinkstat':`${serverip}/api/link/stat`,
     'updatelink':`${serverip}/api/link/link`,
     'update_link_stat':`${serverip}/api/link/update`,
+    'block_link':`${serverip}/api/link/block`,
+
+
     'makepost':`${serverip}/api/posts/add`,
     'getposts':`${serverip}/api/posts/fetch`,
     'fetchmyposts':`${serverip}/api/posts/fetchmyposts`,
