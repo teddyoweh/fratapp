@@ -65,20 +65,24 @@ export default function ProfileScreen({navigation}){
     const onSettingsPress = () =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: ["Log Out","Delete Account"],
+        options: ["Log Out","Delete Account", "Cancel"],
 
-        cancelButtonIndex: 1,
+        cancelButtonIndex: 2,
         userInterfaceStyle: "dark",
-        tintColor:'#eee',
-        cancelButtonTintColor:"red"
+        tintColor:'red',
+        
+        cancelButtonTintColor:"#fff"
       },
       buttonIndex => {
           if (buttonIndex === 0) {
             logOuT()
           }   
-            if (buttonIndex === 1) {
+            else if (buttonIndex === 1) {
                 del_account()
             } 
+        else{
+            return
+        }
       },
     );
     return (
