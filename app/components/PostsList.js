@@ -912,7 +912,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
         }
     )
   }
-  const morepostoptions = post.userid ==user.userid? ['Cancel', 'Report', 'Delete']:['Cancel', 'Report', ]
+  const morepostoptions = post.userid ==user.userid? ['Cancel', 'Report', 'Delete']:['Cancel', 'Report','Block' ]
   const onMore = (id) =>
   
   ActionSheetIOS.showActionSheetWithOptions(
@@ -928,11 +928,26 @@ function scaleImageToScreen(imageWidth, imageHeight) {
       } else if (buttonIndex === 1) {
         setResult(String(Math.floor(Math.random() * 100) + 1));
       } else if (buttonIndex === 2) {
-        deletePost(id)
+        if (post.userid ==user.userid){
+            deletePost(id)
+        }
+        else{
+            blockUser()
+            alert(`Successfully Blocked @${userdetails.username}\n Refresh Feed to see changes.`)
+        }
+    
         
       }
     },
   );
+  async function blockUser(){
+    await axios.post(endpoints['block_link'],{
+         userid:user.userid, partyid:post.userid
+     }).then(res=>{
+ 
+         navigation.goBack()
+     })
+   }
   const inputcommentid = 'uniqueID';
 const likeBottomSheet = useRef(null);
 const [likeno,setLikeNo] = useState(post.likesuserlist.length)
