@@ -64,7 +64,6 @@ app.get('/', function (req, res) {
 });
 
 const PORT = 9990;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Herds Server running on ${ip}:${PORT}`);
 });
- 
