@@ -926,7 +926,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
       if (buttonIndex === 0) {
         // cancel action
       } else if (buttonIndex === 1) {
-        setResult(String(Math.floor(Math.random() * 100) + 1));
+        alert(`Successfuly Reported @${userdetails.username}\n We will review this post and take action if necessary.`)
       } else if (buttonIndex === 2) {
         if (post.userid ==user.userid){
             deletePost(id)

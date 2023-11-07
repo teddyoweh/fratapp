@@ -144,7 +144,7 @@ async function loadPosts(){
         //     posts: [...uniqueNewPosts,...prevData.posts, ]
         // }));
         setPostData(res.data)
-        console.log(`Number of new unique posts added: ${uniqueNewPosts.length}`);
+        // console.log(`Number of new unique posts added: ${uniqueNewPosts.length}`);
 
     });
     
