@@ -54,10 +54,10 @@ app.use('/postimg', express.static(__dirname + '/uploads/posts'));
 const ip = require('./ip');
 const { chatSocket, unreadCountSocket } = require('./sockets/messages.socket');
 
-orgStream(app);
+ 
 ModDB();
-chatSocket();
-unreadCountSocket(app);
+chatSocket(app);
+//unreadCountSocket(app);
 
 app.get('/', function (req, res) {
     res.send('hello');

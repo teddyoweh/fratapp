@@ -13,8 +13,7 @@ import Spinner from "../../../components/Spinner";
 import { schedulePushNotification, setupNotifications } from "../../../config/setup";
 import { color_scheme } from "../../../config/color_scheme";
 import { BlurView } from "expo-blur";
- 
-
+import * as Location from 'expo-location';
 import * as Haptics from 'expo-haptics'
 import axios from "axios";
 import io from 'socket.io-client';
@@ -30,7 +29,7 @@ function RenderNotificationBtn({navigation}){
     
         socket.on('connect', () => {
           const userId = user.userid
-          socket.emit('userId', userId);
+        //   socket.emit('userId', userId);
         });
     
         socket.on('unreadnotifs', async (count) => {
@@ -89,7 +88,7 @@ function RenderMessageBtn({navigation}){
     
         socket.on('connect', () => {
           const userId = user.userid
-          socket.emit('unreadcount', userId);
+        //   socket.emit('unreadcount', userId);
         });
     
         socket.on('unreadcount', (count) => {
@@ -154,8 +153,8 @@ function RenderMessageBtn({navigation}){
     )
 }
 export default function HomeScreen({navigation}){
-    const filters = ['For You','Announments','Events','Polls']//'Posts','Polls','Opportunities'
-    const [activeFilter,setActiveFilter]=useState('For You')
+    const filters = ['Nearby','School']//'Posts','Polls','Opportunities'
+    const [activeFilter,setActiveFilter]=useState(filters[0])
     const {user} = useContext(AppContext)
     const postBottomSheet = useRef()
     function swapFeed(item) {
@@ -193,7 +192,27 @@ export default function HomeScreen({navigation}){
      
     
  const {colorMode} = useContext(AppContext)
- 
+
+
+ const [location, setLocation] = useState(null);
+ const [errorMsg, setErrorMsg] = useState(null);
+
+ useEffect(() => {
+   (async () => {
+     
+     let { status } = await Location.requestForegroundPermissionsAsync();
+     if (status !== 'granted') {
+       setErrorMsg('Permission to access location was denied');
+       return;
+     }
+
+     let location_ = await Location.getCurrentPositionAsync({});
+     const x_  = JSON.stringify(location_)
+     console.log(x_)
+    
+     setLocation(location_);
+   })();
+ }, []);
     return (
         <>
        {

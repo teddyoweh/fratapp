@@ -926,7 +926,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
       if (buttonIndex === 0) {
         // cancel action
       } else if (buttonIndex === 1) {
-        alert(`Successfuly Reported @${userdetails.username}\n We will review this post and take action if necessary.`)
+        alert(`Successfuly Reported this post, We will review this post and take action if necessary.`)
       } else if (buttonIndex === 2) {
         if (post.userid ==user.userid){
             deletePost(id)
@@ -1002,6 +1002,25 @@ const [likeno,setLikeNo] = useState(post.likesuserlist.length)
                 </View>
             </View>
             }
+            {
+                post.account_type=='anonymous'&&
+                <View style={{flexDirection:'row',alignItems:'flex-end',
+                 justifyContent:'flex-end',
+                 paddingVertical:2,
+                 paddingHorizontal:10
+                 }}>
+                {/* <TouchableOpacity>
+                
+                    <More color="grey" size={16}/>
+                </TouchableOpacity> */}
+                 <Text style={homestyles.postdate}>
+                            {
+                                getTimeDifference(post.date)
+                            } ago
+                        </Text>
+            </View>
+            }
+            
             <View
             style={{
                 flexDirection:'row',
@@ -1011,7 +1030,7 @@ const [likeno,setLikeNo] = useState(post.likesuserlist.length)
             >
             {
                             post.account_type=='anonymous'&&
-                            <Image source={require('../assets/icon.png')} style={[homestyles.postuserimg,{marginRight:1,marginLeft:10}]}/>}
+                            <Image source={require('../assets/icon.jpeg')} style={[homestyles.postuserimg,{marginRight:1,marginLeft:10}]}/>}
            
             <Pressable style={homestyles.postcontent} onPress={()=>moveToPost()}>
                 <Text selectable={true} style={[homestyles.postcontenttext,{color:color_scheme(colorMode,'#333')}]}>

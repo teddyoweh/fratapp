@@ -58,7 +58,7 @@ export default function PostLikes({navigation, likeBottomSheet,post}){
         }
         else{
     
-        
+        usx.userid = usx.userid?usx.userid: usx._id
         navigation.navigate('ProfilesScreen',{userdetails:usx})
     }
       }
@@ -93,6 +93,7 @@ export default function PostLikes({navigation, likeBottomSheet,post}){
                     {
                         users?
                         usersToDisplay.map((usx,index)=>{
+           
                             return (
                                 <TouchableOpacity
                                 onPress={()=>navigateToUser(usx)}

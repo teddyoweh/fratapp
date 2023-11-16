@@ -1,7 +1,7 @@
 import React,{useState,useContext,useRef,useEffect,useCallback}from "react";
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput, StyleSheet, RefreshControl, Dimensions, Animated} from "react-native";
 import { homestyles } from "../../../styles";
-import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Add} from 'iconsax-react-native';
+import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Add, TruckRemove} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
 import { AppContext } from "../../../context/appContext";
 import LikeBtn from "../../../components/LikeBtn";
@@ -17,7 +17,9 @@ import api from "../../../config/api";
 import * as Haptics from 'expo-haptics'
 import * as Animatable from 'react-native-animatable';
 import PostSkeleton from "../../../components/PostSkeleton";
-
+import Spinner from "../../../components/Spinner";
+import io from 'socket.io-client';
+import { serverhost } from "../../../config/ip";
 function LoadingScreen(){
     return(
         <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
@@ -124,14 +126,63 @@ function AllFeed({navigation,route}){
         }, 2000);
     }, []);
  
+    const socket = io(`http://${serverhost}:8080`);
+
+    const [cursor_,setCursor] = useState(null)
+    const [loadingnewposts,setloadingnewpost] = useState(false)
+    function fetchSocket(){
 
 
+        console.log(socket)
+        socket.on('connect', () => {
+            const userId = user.userid
+          
+          });
+    
+    
+        socket.on('disconnect', () => {
+          console.log('Connection closed');
+        });
+        // socket.on("newpostsupdate",(posts)=>{
+        //         console.log(posts,'this is the post data')
+        //          setPostData({
+        //             users:{...postData.users,...posts.posts.users},
+        //             posts:[... new Set([...postData.posts,...posts.posts.posts])]
+                    
+        //         })
+    
+        //         setCursor(posts.posts[posts.posts.length-1]._id)
+        // })
+        return () => {
+          socket.close();
+        };
 
-async function loadPosts(){
+    }
+    useEffect(()=>{
+        fetchSocket()   
+    },[])
+
+
+    function loadNewPosts(c){
  
-    await api.post(endpoints['getposts'], { cursor: null,userid:user.userid }).then(res => {
+     
+        socket.emit("newpost",{userid:user.userid,cursor_:c})
+        socket.on("newpostsupdate",(posts)=>{
+            console.log(posts,'this is the post data')
+             setPostData({
+                users:{...postData.users,...posts.posts.users},
+                posts:[... new Set([...postData.posts,...posts.posts.posts])]
+                
+            })
+
+            setCursor(posts.posts.posts[posts.posts.posts.length-1]._id)
+    })
+    }
+async function loadPosts(){
+    
+    await api.post(endpoints['getposts'], { cursor: cursor_,userid:user.userid }).then(res => {
         // Get the new posts from the response
-        const newPosts = res.data.posts;
+       
     
         // // Check if each new post already exists in the postData.posts array
         // const uniqueNewPosts = newPosts.filter(newPost => 
@@ -142,14 +193,19 @@ async function loadPosts(){
         // setPostData(prevData => ({
         //     ...prevData,
         //     posts: [...uniqueNewPosts,...prevData.posts, ]
-        // }));
-        setPostData(res.data)
+    
+            setPostData(res.data)
+            // alert(res.data.posts[res.data.posts.length-1]._id)
+            setCursor(res.data.posts[res.data.posts.length-1]._id)
+        
+ 
         // console.log(`Number of new unique posts added: ${uniqueNewPosts.length}`);
 
     });
     
 
 }
+
 const MemoizedMapOutPosts = React.memo(MapOutPosts);
 
 const memoizedLoadPosts = useCallback(async () => {
@@ -169,7 +225,11 @@ const memoizedLoadPosts = useCallback(async () => {
   );
 
   const {colorMode} = useContext(AppContext)
-  
+  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+    const paddingToBottom = 20;
+    return layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - paddingToBottom;
+  };
 return (
   
 
@@ -186,17 +246,40 @@ return (
         backgroundColor:color_scheme(colorMode,'white')
     }]}
        scrollsToTop={true} 
-       showsVerticalScrollIndicator={false}    
-       //alwaysBounceVertical={true}
+       showsVerticalScrollIndicator={false}   
+       onScroll={ async ({nativeEvent}) => {
+        if (isCloseToBottom(nativeEvent)) {
+            setloadingnewpost(true)
+         loadNewPosts(postData.posts[postData.posts.length-1]._id)
+            setloadingnewpost(false)
+            
+        }
+      }}
+      scrollEventThrottle={400}
     refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={()=>loadPosts()} />
       }>
  
 {
 postData ?
+<>
 
 <MemoizedMapOutPosts posts={postData.posts} navigation={navigation} route={route}  users={postData.users} />
+{
+    loadingnewposts==true&&
 
+<View
+style={{
+    paddingVertical:20,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center'
+}}
+>
+   <Spinner/>
+</View>
+}
+</>
 : 
 
     <View>

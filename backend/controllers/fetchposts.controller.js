@@ -5,7 +5,7 @@ const Posts = require('../models/Posts');
 const Links = require('../models/Links');
   async function fetchpostscontroller(req, res) {
     const { cursor, userid, userid_, orgid } = req.body;
-    const limit = 40;
+    const limit = 4;
 
     let query = {};
 
@@ -23,16 +23,13 @@ const Links = require('../models/Links');
     }
 
     try {
-      // Fetch users you've blocked
-      const blockedUsers = await Links.find({ userid: userid, stat: "block" }).distinct('partyid');
+       const blockedUsers = await Links.find({ userid: userid, stat: "block" }).distinct('partyid');
       
-      // Fetch users who have blocked you
-      const usersWhoBlockedYou = await Links.find({ partyid: userid, stat: "block" }).distinct('userid');
+       const usersWhoBlockedYou = await Links.find({ partyid: userid, stat: "block" }).distinct('userid');
 
-      // Combine both lists
+ 
       const allBlockedUsers = [...new Set([...blockedUsers, ...usersWhoBlockedYou])];
 
-      // Exclude posts from all blocked users and from users who have blocked you
       query.userid = { $nin: allBlockedUsers };
 
       const posts = await Posts.find(query)
@@ -73,8 +70,7 @@ const Links = require('../models/Links');
         };
       }
       const res_data = { posts: posts, users: usersDict }  
-      console.log(res_data, 'this is the response data from fetch posts');
-      res.json(res_data);
+        res.json(res_data);
 
     } catch (err) {
       console.error("Error fetching posts:", err); // Log the error for debugging

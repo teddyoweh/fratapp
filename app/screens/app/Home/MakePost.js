@@ -1090,6 +1090,7 @@ const handleSheetChanges = useCallback((index) => {
  function removeLinks(link){
     setLinkStore((prevLinkStore)=>prevLinkStore.filter((l)=>l!==link))
  }
+ 
  const userOptionsSheet = useRef()
  const [polldate,setPollDate] = useState('')
  const [polls,setPolls] = useState(['',''])
@@ -1107,7 +1108,8 @@ async function axiosMakePost(){
   
    await axios.post(endpoints['makepost'],{account_type:postedby.type, eventstartdate:eventstartdate,eventenddate:eventenddate, eventdescription:eventdescription,eventname:eventname,eventlocation:eventlocation, links:linkStore, random:random, email:user.username,content:postinput,isjob:opportunityOptionActive,isevent:eventOptionActive,isanouncement:announcementOptionActive,userid:user.userid,repostid:null,isrepost:false,images:images,posttype:selectedTab.toLowerCase(),pollsoptions:polls,pollsdeadline:polldate,userid:user.userid})
     .then(async (res)=>{
-        console.log(res.data);
+        console.log(endpoints['makepost'])
+        console.log({account_type:postedby.type, eventstartdate:eventstartdate,eventenddate:eventenddate, eventdescription:eventdescription,eventname:eventname,eventlocation:eventlocation, links:linkStore, random:random, email:user.username,content:postinput,isjob:opportunityOptionActive,isevent:eventOptionActive,isanouncement:announcementOptionActive,userid:user.userid,repostid:null,isrepost:false,images:images,posttype:selectedTab.toLowerCase(),pollsoptions:polls,pollsdeadline:polldate,userid:user.userid})
         
         await uploadImages(random).then(res=>{
             navigation.goBack()

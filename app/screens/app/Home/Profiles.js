@@ -53,7 +53,7 @@ export default function ProfilesScreen({navigation,route}){
             }
         },
       );
- 
+ const userprofleid = userdetails.userid?userdetails.userid:userdetails._id
     return (
         <View style={[profilestyles.container,{
             backgroundColor:color_scheme(colorMode,'white')
@@ -213,7 +213,7 @@ export default function ProfilesScreen({navigation,route}){
                      
                 </View>
                     <View style={profilestyles.profileposts}>
-                    <ProfilePosts  navigation={navigation} userid={userdetails.userid }/>
+                    <ProfilePosts  navigation={navigation} userid={userprofleid }/>
                     </View>
                 </View>
             </ScrollView>

@@ -1,20 +1,20 @@
 import React,{useState,useContext, useEffect}from "react";
 import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,StyleSheet} from "react-native";
-import { homestyles,profilestyles } from "../../../styles";
+import { homestyles,profilestyles } from "../../../../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Profile, MessageText1, CloudLightning, MessageAdd, MessageQuestion, MessageText, DirectInbox} from 'iconsax-react-native';
 import { FontAwesome5,Ionicons,AntDesign, MaterialIcons,EvilIcons,Entypo} from '@expo/vector-icons';
 
-import PostsList from "../../../components/PostsList";
-import ProfileActionbtn from "../../../components/ProfileActionbtn";
-import { AppContext } from "../../../context/appContext";
-import ProfilePosts from "../../../components/ProfilePosts";
-import { wrapUIMG } from "../../../utils/utils";
-import { color_scheme } from "../../../config/color_scheme";
+import PostsList from "../../../../components/PostsList";
+import ProfileActionbtn from "../../../../components/ProfileActionbtn";
+import { AppContext } from "../../../../context/appContext";
+import ProfilePosts from "../../../../components/ProfilePosts";
+import { wrapUIMG } from "../../../../utils/utils";
+import { color_scheme } from "../../../../config/color_scheme";
 import * as Haptics from 'expo-haptics'
-import JoinActionbtn from "../../../components/JoinActionbtn";
-import FollowingOrgBtn from "../../../components/FollowingOrg";
+import JoinActionbtn from "../../../../components/JoinActionbtn";
+import FollowingOrgBtn from "../../../../components/FollowingOrg";
 import axios from "axios";
-import { endpoints } from "../../../config/endpoints";
+import { endpoints } from "../../../../config/endpoints";
 import * as Animatable from 'react-native-animatable';
 import { RefreshControl } from "react-native-gesture-handler";
 

@@ -157,11 +157,13 @@ const homestyles = StyleSheet.create({
     },
     postcontent:{
        paddingHorizontal:18,
-       paddingVertical:10
+       paddingVertical:10,
+       width:"90%"
     },
     postcontenttext:{
         fontSize:16,
         fontWeight:'300',
+        width:"100%"
      
          
     },
