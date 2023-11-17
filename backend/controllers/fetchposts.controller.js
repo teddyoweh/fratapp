@@ -5,7 +5,7 @@ const Posts = require('../models/Posts');
 const Links = require('../models/Links');
   async function fetchpostscontroller(req, res) {
     const { cursor, userid, userid_, orgid } = req.body;
-    const limit = 4;
+    const limit = 100;
 
     let query = {};
 

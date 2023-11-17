@@ -6,4 +6,5 @@ RUN npm install
 COPY . .
 EXPOSE 9990
 EXPOSE 8080
-CMD [ "npm", "start" ]
+RUN npm install -g pm2
+CMD ["pm2-runtime", "npm", "--", "start"]
