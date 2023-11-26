@@ -116,7 +116,7 @@ function DiscoverFeedScreens(){
     )
  }
  function DiscoverOrgs({navigation,people}){
-console.log(people)
+ 
     const {colorMode} = useContext(AppContext)
     return (
 <View style={[discoverstyles.results,{backgroundColor:color_scheme(colorMode,'white')}]}>

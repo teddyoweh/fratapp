@@ -29,7 +29,7 @@ function LoadingScreen(){
 }
 function MapOutPosts({posts,navigation,users,route}){
  const {user,colorMode} = useContext(AppContext)
- console.log(users,'this the post')
+ 
     return(
 <View
 style={{
@@ -133,7 +133,7 @@ function AllFeed({navigation,route}){
     function fetchSocket(){
 
 
-        console.log(socket)
+   
         socket.on('connect', () => {
             const userId = user.userid
           
@@ -163,44 +163,28 @@ function AllFeed({navigation,route}){
     },[])
 
 
-    function loadNewPosts(c){
- 
-     
-        socket.emit("newpost",{userid:user.userid,cursor_:c})
-        socket.on("newpostsupdate",(posts)=>{
-            console.log(posts,'this is the post data')
-             setPostData({
-                users:{...postData.users,...posts.posts.users},
-                posts:[... new Set([...postData.posts,...posts.posts.posts])]
-                
-            })
-
-            setCursor(posts.posts.posts[posts.posts.posts.length-1]._id)
-    })
-    }
 async function loadPosts(){
     
-    await api.post(endpoints['getposts'], { cursor: cursor_,userid:user.userid }).then(res => {
-        // Get the new posts from the response
-       
-    
-        // // Check if each new post already exists in the postData.posts array
-        // const uniqueNewPosts = newPosts.filter(newPost => 
-        //     !postData.posts.some(existingPost => existingPost._id === newPost._id)
-        // );
-    
-        // // Update the state with the unique new posts
-        // setPostData(prevData => ({
-        //     ...prevData,
-        //     posts: [...uniqueNewPosts,...prevData.posts, ]
-    
+    await api.post(endpoints['getposts'], {postids_:postData.postids, userid:user.userid }).then(res => {
+        
+        if(postData){
+            const xposts = [... new Set([...res.data.posts,...postData.posts])]
+            setPostData({
+                users:{...res.data.posts.users,...postData.users,},
+                posts:xposts
+                
+            })
+            setCursor(xposts[xposts.length - 1]._id); 
+        }else{
             setPostData(res.data)
-            // alert(res.data.posts[res.data.posts.length-1]._id)
             setCursor(res.data.posts[res.data.posts.length-1]._id)
+        }
+    
+  
+            
         
  
-        // console.log(`Number of new unique posts added: ${uniqueNewPosts.length}`);
-
+ 
     });
     
 
@@ -230,6 +214,36 @@ const memoizedLoadPosts = useCallback(async () => {
     return layoutMeasurement.height + contentOffset.y >=
       contentSize.height - paddingToBottom;
   };
+  const [loadingNewPost, setLoadingNewPost] = useState(false);
+  const [hasReachedBottom, setHasReachedBottom] = useState(false);
+
+ 
+  function loadNewPosts(c){
+ 
+   console.log(c,'this is the cursor')
+    socket.emit("newpost",{userid:user.userid,cursor:c})
+    socket.on("newpostsupdate",(posts)=>{
+    
+         setPostData({
+            users:{...postData.users,...posts.posts.users},
+            posts:[... new Set([...postData.posts,...posts.posts.posts])]
+            
+        })
+
+        setCursor(posts.posts.posts[posts.posts.posts.length-1]._id)
+})
+}
+ 
+function scrollController( nativeEvent ) {
+ 
+    if (isCloseToBottom(nativeEvent) ) {
+       
+      
+      setLoadingNewPost(true);
+      loadNewPosts(postData.posts[postData.posts.length - 1]._id);
+      setLoadingNewPost(false);
+    }
+  }
 return (
   
 
@@ -248,12 +262,7 @@ return (
        scrollsToTop={true} 
        showsVerticalScrollIndicator={false}   
        onScroll={ async ({nativeEvent}) => {
-        if (isCloseToBottom(nativeEvent)) {
-            setloadingnewpost(true)
-         loadNewPosts(postData.posts[postData.posts.length-1]._id)
-            setloadingnewpost(false)
-            
-        }
+       scrollController(nativeEvent)
       }}
       scrollEventThrottle={400}
     refreshControl={

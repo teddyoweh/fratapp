@@ -16,7 +16,7 @@ const AudioRecorderPlayerComponent = () => {
 
   const startRecording = async () => {
     try {
-      console.log('Requesting recording permissions...');
+ 
       await Audio.requestPermissionsAsync();
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
@@ -58,7 +58,7 @@ const AudioRecorderPlayerComponent = () => {
     try {
       await recording.stopAndUnloadAsync();
       const uri = recording.getURI();
-      console.log('Recording stopped and stored at', uri);
+ 
     } catch (err) {
       console.error('Failed to stop recording', err);
     }

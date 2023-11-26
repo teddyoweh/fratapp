@@ -126,7 +126,7 @@ export default function PostPage({navigation,route}){
       }, []);
       async function FetchUsers(users){
         await axios.post(endpoints['getcommentuser'],{users:users}).then(res=>{
-            console.log(res.data)
+      
             setUsersData(res.data)
         })
     }

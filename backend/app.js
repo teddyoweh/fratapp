@@ -18,6 +18,8 @@ const studyhours = require('./routes/studyhours');
 const schools = require('./routes/school');
 const notifications = require('./routes/notifications');
 const ModDB = require('./services/db-mod');
+const compression = require('compression');
+
 
  
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
@@ -31,6 +33,8 @@ mongoose.connect(config.DB, { useNewUrlParser: true }).then(
 
 const app = express();
 
+
+app.use(compression())
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

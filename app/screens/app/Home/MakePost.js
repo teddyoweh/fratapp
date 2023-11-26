@@ -90,8 +90,7 @@ function RenderDateBottomSheet({dateBottomSheet,type,setstartDate,startdate,sete
       const currentYear = new Date().getFullYear();
  
       const [yearslist,setYearsList] = useState([...Array(41).keys()].map(i => currentYear - 20 + i))
-      console.log(yearslist)
- 
+  
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [selectedMonth,setSelectMonth] = useState(monthNames[new Date().getMonth()])
     const [activeDay,setActiveDay] = useState(new Date().getDate())
@@ -1024,11 +1023,11 @@ const uploadImages = async (random) =>{
 }
  
 const handleSheetChanges = useCallback((index) => {
-    console.log('handleSheetChanges', index);
+ 
   }, []);
 
   const updateUserPostType = (type) => {
-    console.log(type);
+ 
     
     if (userposttypes.includes(type)) {
       setUserPostTypes((prevUserPostTypes) => prevUserPostTypes.filter((t) => t !== type));
@@ -1108,9 +1107,8 @@ async function axiosMakePost(){
   
    await axios.post(endpoints['makepost'],{account_type:postedby.type, eventstartdate:eventstartdate,eventenddate:eventenddate, eventdescription:eventdescription,eventname:eventname,eventlocation:eventlocation, links:linkStore, random:random, email:user.username,content:postinput,isjob:opportunityOptionActive,isevent:eventOptionActive,isanouncement:announcementOptionActive,userid:user.userid,repostid:null,isrepost:false,images:images,posttype:selectedTab.toLowerCase(),pollsoptions:polls,pollsdeadline:polldate,userid:user.userid})
     .then(async (res)=>{
-        console.log(endpoints['makepost'])
-        console.log({account_type:postedby.type, eventstartdate:eventstartdate,eventenddate:eventenddate, eventdescription:eventdescription,eventname:eventname,eventlocation:eventlocation, links:linkStore, random:random, email:user.username,content:postinput,isjob:opportunityOptionActive,isevent:eventOptionActive,isanouncement:announcementOptionActive,userid:user.userid,repostid:null,isrepost:false,images:images,posttype:selectedTab.toLowerCase(),pollsoptions:polls,pollsdeadline:polldate,userid:user.userid})
-        
+ 
+         
         await uploadImages(random).then(res=>{
             navigation.goBack()
             setImages([])
@@ -1140,7 +1138,7 @@ const addImage = async () => {
  
     _image.assets.map((img,index)=>{
         if (!_image.canceled) {
-            console.log(_image)
+      
             setImages((prevImages) => [...prevImages, img]);
         }
     })

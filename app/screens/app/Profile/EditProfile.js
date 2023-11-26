@@ -200,7 +200,7 @@ export default function EditProfile({navigation}){
         });
         console.log(JSON.stringify(_image));
         if (!_image.canceled) {
-            console.log(_image)
+         
             setProfileImg(_image.uri)
             setInitialImg(false)
             setImage(_image)
@@ -218,7 +218,7 @@ export default function EditProfile({navigation}){
        
             name:'profile.jpg'
         })
-        console.log(data)
+ 
         await axios.post(endpoints['uploadprofile'],data).then(res=>{
             navigation.goBack()
         })
@@ -265,7 +265,7 @@ export default function EditProfile({navigation}){
     //   );
     const [pinnedorgid,setPinnedOrgId] = useState(medata.pinnedorg)
 
-    console.log(medata,'medata')
+ 
     return (
         <KeyboardAvoidingView style={{backgroundColor:color_scheme(colorMode,'white'),flex:1}}>
             <View style={{flexDirection:'row',justifyContent:'space-between'}}>

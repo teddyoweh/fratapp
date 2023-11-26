@@ -3,79 +3,12 @@ const Posts = require('../models/Posts');
   const Organizations = require('../models/Organizations');
   const User = require('../models/User'); 
 const Links = require('../models/Links');
-  async function fetchpostscontroller(req, res) {
-    const { cursor, userid, userid_, orgid } = req.body;
-    const limit = 100;
+const { fetchpostsService } = require('../services/post.services');
 
-    let query = {};
 
-    if (cursor) {
-      query._id = { $lt: cursor };
-    }
-    if (userid) {
-      query.userid = userid;
-    }
-
-    if (userid_ && orgid) {
-      query.orgid = orgid;
-    } else {
-      query.isorgpriv = false;
-    }
-
-    try {
-       const blockedUsers = await Links.find({ userid: userid, stat: "block" }).distinct('partyid');
-      
-       const usersWhoBlockedYou = await Links.find({ partyid: userid, stat: "block" }).distinct('userid');
-
- 
-      const allBlockedUsers = [...new Set([...blockedUsers, ...usersWhoBlockedYou])];
-
-      query.userid = { $nin: allBlockedUsers };
-
-      const posts = await Posts.find(query)
-        .sort({ _id: "desc" })
-        .limit(limit);
-
-      const [users, allPinnedOrgs] = await Promise.all([
-        User.find({ _id: { $in: posts.map((post) => post.userid) } }, {
-          firstname: 1,
-          lastname: 1,
-          username: 1,
-          uimg: 1,
-          id: 1,
-          isofficial: 1,
-          bio: 1,
-          pinnedorg: 1
-        }),
-        Organizations.find({ _id: { $in: posts.map((post) => post.userid) } })
-      ]);
-
-      const pinnedOrgsDict = allPinnedOrgs.reduce((acc, org) => {
-        acc[org._id] = org;
-        return acc;
-      }, {});
-
-      const usersDict = {};
-
-      for (const user of users) {
-        usersDict[user._id] = {
-          firstname: user.firstname,
-          lastname: user.lastname,
-          username: user.username,
-          uimg: user.uimg,
-          userid: user.id,
-          isofficial: user.isofficial,
-          bio: user.bio,
-          pinnedorg: pinnedOrgsDict[user.pinnedorg],
-        };
-      }
-      const res_data = { posts: posts, users: usersDict }  
-        res.json(res_data);
-
-    } catch (err) {
-      console.error("Error fetching posts:", err); // Log the error for debugging
-      res.json({ status: false, message: "An error occurred while fetching posts." });
-    }
+async function fetchpostscontroller(req, res) {
+  const ans  = await fetchpostsService(req.body)
+  res.json(ans)
 }
 
 
@@ -145,7 +78,7 @@ async function deletePost(req,res){
 async function fetchPostUserLikes(req, res) {
   try {
       const { postID } = req.body;
-      console.log(req.body);
+   
 
  
       const post = await Posts.findById(postID, 'likesuserlist');
@@ -155,7 +88,7 @@ async function fetchPostUserLikes(req, res) {
 
     
       const usersInfo = await User.find({ _id: { $in: post.likesuserlist } });
-      console.log(usersInfo);
+   
 
       res.json(usersInfo);
   } catch (error) {

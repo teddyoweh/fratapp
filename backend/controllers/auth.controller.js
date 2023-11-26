@@ -70,8 +70,7 @@ async function registercontroller(req, res) {
       res.status(400).json(errors);
     } else {
       const dateJoined = new Date();
-      console.log(password)
-      console.log(hashcode(password))
+   
       const newUser = new User({
         email: email,
         firstname: firstname,
@@ -102,7 +101,7 @@ async function registercontroller(req, res) {
       const savedCode = await newCode.save();
       const strcode = code.toLocaleString()
       sendEmail(email,emailHtml(firstname, strcode))
-      console.log(`New User Saved [${dateJoined}]`);
+ 
       const token = jwt.sign({ user: payload }, process.env.JWT_SECRET);
 
       res.status(200).json({ token:token,payload:payload, status: true });

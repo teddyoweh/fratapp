@@ -13,7 +13,7 @@ function mecontroller(req,res){
             if(user){
                 Organization.findById(user.pinnedorg).then(rex =>{
                     payload['user']={firstname:user.firstname,lastname:user.lastname,username:user.username,uimg:user.uimg,userid:user._id,bio:user.bio,pinnedorg:user.pinnedorg,pinnedorgdetail:rex, isofficial:user.isofficial,email:user.email}
-                    console.log(payload,'this is the payload token')
+            
                     res.status(200).json({user:payload.user,token,status:true});
                 })
                  

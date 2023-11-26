@@ -16,7 +16,7 @@ import PostLikes from "./PostLikes";
 import * as Haptics from 'expo-haptics'
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import MapView from "react-native-maps";
-
+ 
 function RenderImages({images}){
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
@@ -30,7 +30,7 @@ function RenderImages({images}){
 
     
 
-    console.log('Current page key:', currentPageIndex);
+  
     setPageHeight(scaleImageToScreen(images[currentPageIndex].width,images[currentPageIndex].height).height)
     setCindex(currentPageIndex)
     
@@ -147,7 +147,7 @@ function CommentInput({postid,setPost}){
     async function addComment(){
         await axios.post(endpoints['addcomment'],{userid:user.userid,comment:comment,postid:postid}).then(
             res=>{
-                console.log(res.data)
+     
                 setPost(res.data)
                 setComment('')
             }
@@ -967,7 +967,7 @@ const [likeno,setLikeNo] = useState(post.likesuserlist.length)
                     <View style={homestyles.posttopimg}>
  
                      
-                        <Image source={{uri:wrapUIMG(userdetails.uimg)}} style={homestyles.postuserimg}/>   
+                        <Image      source={{ uri: wrapUIMG(userdetails.uimg), cache: 'force-cache' }}  style={homestyles.postuserimg}/>   
                         
                     </View>
                     <Pressable style={homestyles.postuserdetails} onPress={()=>navigateToUser()}>

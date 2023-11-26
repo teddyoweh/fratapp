@@ -17,8 +17,8 @@ import PostSkeleton from "./PostSkeleton";
 export default function ProfilePosts({navigation,userid}){
     const {user} = useContext(AppContext)
     const [postData,setPostData] = useState(null)
-    console.log(user,'shi')
-    let id;
+    
+ 
     if(userid){
         id = userid
 
