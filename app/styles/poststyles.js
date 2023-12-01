@@ -17,6 +17,7 @@ const poststyles = StyleSheet.create({
     commenthead:{
         flexDirection:'row',
         alignItems:'center',
+        paddingTop:10,
         paddingHorizontal:10,
         paddingBottom:10,
         borderStyle:'solid',
@@ -28,7 +29,7 @@ const poststyles = StyleSheet.create({
         marginLeft:4,
         fontSize:15,
         fontWeight:'600',
-        color:'#333'
+        color:'#aaa'
     }
 
 })

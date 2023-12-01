@@ -16,7 +16,7 @@ import { registerForPushNotificationsAsync, setupNotifications } from "../config
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { color_scheme } from "../config/color_scheme";
-
+import * as Location from 'expo-location';
 function AuthScreens(){
     
     return (
@@ -60,23 +60,7 @@ export default function Screens(){
     const notificationListener = useRef();
  
     const responseListener = useRef();
-    // useEffect(() => {
-    
-    //   registerForPushNotificationsAsync().then(token);
   
-    //   notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-    //     setNotification(notification);
-    //   });
-  
-    //   responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-    //     console.log(response);
-    //   });
-  
-    //   return () => {
-    //     Notifications.removeNotificationSubscription(notificationListener.current);
-    //     Notifications.removeNotificationSubscription(responseListener.current);
-    //   };
-    // }, []);
     async function VerifyAuth(){
  
         const token1 = await AsyncStorage.getItem('token')
@@ -133,14 +117,42 @@ export default function Screens(){
  
         
       }, [])
-      
-
-
+ 
+      const [user_location, setLocation] = useState(null);
+      const [errorMsg, setErrorMsg] = useState(null);
+      useEffect(() => {
+        const fetchData = async () => {
+          try {
+ 
+            const temp_location = await AsyncStorage.getItem('location');
+            if (temp_location !== null) {
+              setLocation(JSON.parse(temp_location));
+            }
+            
+ 
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status === 'granted') {
+              let location_ = await Location.getCurrentPositionAsync({});
+              const x_ = JSON.stringify(location_.coords);
+              AsyncStorage.setItem('location', x_);
+              setLocation(location_.coords);
+            } else {
+              setErrorMsg('Permission to access location was denied');
+  
+            }
+          } catch (error) {
+            console.error('Error fetching or updating location:', error);
+ 
+          }
+        };
+    
+        fetchData();
+      }, []); 
    
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: color_scheme(colorMode,'white') }}>
             <AuthContext.Provider value={{isAuth,setIsAuth,setToken,token}}>
-<AppContext.Provider value={{user,setUser,colorMode,setColorMode,   color_scheme}}>
+<AppContext.Provider value={{user,setUser,colorMode,setColorMode,   color_scheme,user_location}}>
   <NotificationContext.Provider value={{notificationListener,responseListener,notification}}>
 
 

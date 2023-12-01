@@ -194,25 +194,7 @@ export default function HomeScreen({navigation}){
  const {colorMode} = useContext(AppContext)
 
 
- const [location, setLocation] = useState(null);
- const [errorMsg, setErrorMsg] = useState(null);
-
- useEffect(() => {
-   (async () => {
-     
-     let { status } = await Location.requestForegroundPermissionsAsync();
-     if (status !== 'granted') {
-       setErrorMsg('Permission to access location was denied');
-       return;
-     }
-
-     let location_ = await Location.getCurrentPositionAsync({});
-     const x_  = JSON.stringify(location_)
-     console.log(x_)
-    
-     setLocation(location_);
-   })();
- }, []);
+ 
     return (
         <>
        {
@@ -239,19 +221,7 @@ export default function HomeScreen({navigation}){
                     width:150,resizeMode:'contain'
                     
                     }}/>
-                        {/* <Image source={{uri:wrapUIMG(user.uimg)}} style={homestyles.topuserimg}/>
-                        <View style={{
-                            flexDirection:'row',
-                            alignItems:'center'
-                        }}>
-                            <Text style={[homestyles.topusername,{color:color_scheme(colorMode,'#333'),marginRight:5}]}>{`${user.firstname} ${user.lastname}`}</Text>
-                            {
-                                user.isofficial &&
-                           
-                            <Verify size="18" color="#1d9bf0" variant="Bold"/>
-                        }
-                        </View> */}
-
+                
                    
                     </View>
                     <View style={homestyles.topright}>

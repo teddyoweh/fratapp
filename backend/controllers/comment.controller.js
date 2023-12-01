@@ -1,52 +1,71 @@
+const Comments = require('../models/Comments');
 const Posts = require('../models/Posts');
 const User = require('../models/User');
 
-function addcommentscontroller(req, res) {
+async function addcommentscontroller(req, res) {
     console.log(req.body,'comments lol')
  
 
  
-    const mDate = new Date()
-    Posts.findByIdAndUpdate(req.body.postid, { $push: { commentslist: {userid:req.body.userid, comment:req.body.comment,date:mDate,postid:req.body.postid} } }, { new: true }).then(post => {
-
-        res.json(post)  
-    }).catch(err => {
-        console.log(err)
-        res.json({ status: false, data: err })
+    const  {postid,userid,comment} = req.body
+    const newComment = new Comments({
+        postid:postid,
+        userid:userid,
+        comment:comment,
+        likelist:[],
     })
-}
-async function getUserData(userIds) {
-    const userDataMap = {};
-  
-    try {
-      const users = await User.find({ _id: { $in: userIds } })
-        .select('user uimg firstname lastname _id username');
-      users.forEach(user => {
-        userDataMap[user._id] = {
-        
-          uimg: user.uimg,
-          firstname: user.firstname,
-          lastname: user.lastname,
-          username:user.username,
-          id: user.id
-        };
-      });
-    } catch (error) {
-      console.error('Error retrieving user data:', error);
+    await newComment.save().then(async (resp)=>{
+
+    })
+
+}async function getComments(req,res) {
+  const {postId} = req.body
+  try {
+    const comment = await Comment.findOne({ postid: postId });
+
+    if (!comment) {
+      return { error: 'Comment not found' };
     }
-  
-    return userDataMap;
+
+    const userData = await User.findById(comment.userid);
+
+    if (!userData) {
+      return { error: 'User data not found' };
+    }
+
+    const commentWithUserData = {
+      postid: comment.postid,
+      userid: comment.userid,
+      comment: comment.comment,
+      likelist: comment.likelist,
+      date: comment.date,
+      userdata: {
+        firstname: userData.firstname,
+        lastname: userData.lastname,
+        username: userData.username,
+        email: userData.email,
+        bio: userData.bio,
+        schools: userData.schools,
+        orgs: userData.orgs,
+        pinnedorg: userData.pinnedorg,
+        isverified: userData.isverified,
+        isofficial: userData.isofficial,
+        uimg: userData.uimg,
+        date: userData.date,
+        isfirsttime: userData.isfirsttime,
+      },
+    };
+
+    res.json(commentWithUserData) ;
+  } catch (error) {
+    console.log(error);
+    return { error: 'Something went wrong' };
   }
-async function getCommentUser(req,res){
-    const {users} = req.body
-
-    const resp = await getUserData(users)
-    console.log(resp)
-
-    res.json(resp)
-
-
-
+}
+async function deleteComment(req,res) {
+  Comments.deleteOne({_id:req.body.id}).then((resp)=>{
+    res.json({status:true})
+  })
 }
 
-module.exports = {addcommentscontroller,getCommentUser}
+module.exports = {addcommentscontroller,getComments,deleteComment}

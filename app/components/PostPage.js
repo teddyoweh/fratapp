@@ -1,8 +1,8 @@
-import React,{useContext, useEffect, useRef, useState}from "react";
-import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,RefreshControl} from "react-native";
+import React,{useCallback, useContext, useEffect, useRef, useState}from "react";
+import { View,Text,Image,TouchableOpacity, ScrollView, TextInput,RefreshControl, KeyboardAvoidingView, ActionSheetIOS, Alert} from "react-native";
 import { homestyles,poststyles } from "../styles";
-import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Back, MessageSearch} from 'iconsax-react-native';
-import { FontAwesome5,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
+import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, Back, MessageSearch, Verify} from 'iconsax-react-native';
+import { FontAwesome5,Entypo,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
 import PostsList from "./PostsList";
 import axios from "axios";
 import { endpoints } from "../config/endpoints";
@@ -10,32 +10,116 @@ import { getTimeDifference, wrapUIMG } from "../utils/utils";
 import Spinner from "./Spinner";
 import { AppContext } from "../context/appContext";
 import { color_scheme } from "../config/color_scheme";
-function RenderComments({post,FetchUsers,usersData}){
- const {colorMode} = useContext(AppContext)
+
+
+function RenderComments({post,FetchPost}){
+ const {user,colorMode} = useContext(AppContext)
+ const leng = 10
+ 
+ const memoizedLoadPosts = useCallback(async () => {
+    const cux = postData?.posts[0]?._id
+    const cstat = postData?"prev":null
+    await api.post(endpoints['getposts'], {postids_:postData?.postids, userid:user.userid,user_location,cursor_stat:cstat,cursor:cux}).then(res => {
+
+        if(postData){
+            const xposts = [... new Set([...res.data.posts,...postData.posts])]
+          
+            setPostData((prevData) => ({
+                users: { ...prevData.users, ...res.data.users },
+                posts: [...new Set([ ...res.data.posts,...prevData.posts])],
+                  postids:[...new Set([...prevData.postids,...res.data.postids])],
+                  cursor:xposts[xposts.length-1]?._id,
+              }));
+            
+        }else{
+            
+            setPostData(res.data)
+        
+        }
+    
+  
+            
+        
+ 
+ 
+    });
+});
+  
+ 
+function deleteComment(id){
+    axios.post(endpoints['deletecomment'],{id:id}).then(res=>{
+        FetchPost()
+    })
+
+}
+const [activedel,setActivedel] = useState('')
+const onMore = (id) =>
+  
+ActionSheetIOS.showActionSheetWithOptions(
+    {
+      options: ['Delete', 'Cancel'],
+      destructiveButtonIndex: 0,
+      cancelButtonIndex: 1,
+      userInterfaceStyle: 'dark',
+    },
+    (buttonIndex) => {
+      if (buttonIndex === 1) {
+        // cancel action
+        Alert.alert('Cancel', 'Delete action canceled');
+      } else if (buttonIndex === 0) {
+        if (post.userid === user.userid) {
+          // Double verification
+          Alert.alert(
+            'Confirm Delete',
+            'Are you sure you want to delete?',
+            [
+              {
+                text: 'Cancel',
+                style: 'cancel',
+              },
+              {
+                text: 'Delete',
+                onPress: () => deleteComment(id),
+                style: 'destructive',
+              },
+            ],
+            { cancelable: true }
+          );
+        } else {
+          Alert.alert('Unauthorized', 'You are not authorized to delete this comment');
+        }
+      }
+    }
+  );
     return ( 
         <View
         style={{
             flexDirection:"column",
-            paddingBottom:15
+            paddingBottom:10,
+            backgroundColor:"#191919",
+            marginHorizontal:10,
+            borderRadius:15,
         }}
         >
-            {post.commentslist.map((comment,index)=>{
+            {post.comments.map((comment,index)=>{
                 return (
 
     
                 <View key={index}
                 style={{
                     flexDirection:'row',
-                    alignItems:'center',
+                    alignItems:'flex-start',
                     paddingHorizontal:10,
                     paddingVertical:10,
                     width:'98%',
-                    borderBottomWidth: index==post.commentslist.length-1?0: 1,
-                    borderBottomColor:color_scheme(colorMode,'#eee')
+                    marginBottom:10
+                 
+                    // borderBottomWidth: index==leng-1?0: 1,
+                    // borderBottomColor:color_scheme(colorMode,'#eee')
                 }}
                 >
-                    <Image source={{uri: wrapUIMG(usersData[comment.userid].uimg)}} style={{
-                        height:40,width:40,borderRadius:100}}/>
+                    <Image source={{uri: wrapUIMG(comment.userdata.uimg)}} style={{
+                        height:36,width:36,borderRadius:100}}/>
                     <View
                     style={{
                         flexDirection:'column',
@@ -48,54 +132,86 @@ function RenderComments({post,FetchUsers,usersData}){
                         <View
                         style={{
                             flexDirection:'row',
-                            alignItems:'center',
+                            alignItems:'flex-start',
                             justifyContent:'space-between'
                         }}
                         >
                             <View
                               style={{
                                 flexDirection:'row',
-                                alignItems:'center'
+                                alignItems:'flex-start'
                             }}
                             >
 
-                            <Text
-                            style={{
-                                fontSize:14,
-                                color:"#333",
-                                fontWeight:'600',
-                                marginRight:5
-                            }}
-                            >
-                                {usersData[comment.userid].firstname+' '+usersData[comment.userid].lastname}
-                            </Text>
+                         
                             <Text
                              style={{
                                 fontSize:13,
-                                color:"#aaa",
-                                fontWeight:'400',
+                                color:"#fff",
+                                fontWeight:'600',
                                 marginRight:5
+                       
                             }}
                             >
-                                @{usersData[comment.userid].username}
+                                @{comment.userdata.username}
                             </Text>
+                            {
+                                comment.userdata.isofficial &&
+                            
+                            <Verify size="12" color="#1d9bf0" variant="Bold"/>
+                        }
                             </View>
+                            <View
+                            
+                            >
+                    
                             <Text
                               style={{
-                                fontSize:12,
-                                color:"#aaa",
+                                fontSize:10,
                                 fontWeight:'400',
-                                marginRight:5
+                                color:'#828282',
+                                marginRight:5,
+                                
                             }}
                             >
                             {
                                     getTimeDifference(comment.date)
                                 } ago
                             </Text>
+                     
+                            </View>
                         </View>
-                        <Text>
+                        <View
+                        style={{
+                            flexDirection:'row',
+                            alignItems:'flex-end',
+                            justifyContent:'space-between',
+                            width:'94%',
+                            marginTop:9
+                        
+                        }}
+                        >
+                        <Text
+                        style={{
+                            fontSize:14,
+                            color:color_scheme(colorMode,'black'),
+                            fontWeight:'400',
+                            marginRight:5,
+               
+                        }}
+                        >
                             {comment.comment}
+         
                         </Text>
+                        <TouchableOpacity  style={[ {
+            
+            }]} onPress={()=>onMore(comment.id)} >
+            <Entypo name="dots-three-horizontal"   size={18} color={  color_scheme(colorMode,'#aaa')} />
+        
+            </TouchableOpacity>
+                        </View>
+                       
+                        
                     </View>
                 </View>
                             )
@@ -106,7 +222,7 @@ function RenderComments({post,FetchUsers,usersData}){
 
 export default function PostPage({navigation,route}){
     const user_ids = []
-    const [usersData,setUsersData]= useState(null)
+   
     const {post,userdetails} = route.params
     for (let index = 0; index < post.commentslist.length; index++) {
             if(!user_ids.includes(post.commentslist[index].userid)){
@@ -117,31 +233,50 @@ export default function PostPage({navigation,route}){
     }
     const likeBottomSheet = useRef();
     const [refreshing, setRefreshing]  =useState(false);
+    const [posti,setPosti] = useState(null)
+     const FetchPost= useCallback(async ()=>{
+        await axios.post(endpoints['getonepost'],{id:post._id}).then(res=>{
+         
+            setPosti(res.data)
+   
+        })  })
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        FetchUsers(user_ids)
+   
+        FetchPost()
         setTimeout(() => {
           setRefreshing(false);
         }, 2000);
       }, []);
-      async function FetchUsers(users){
-        await axios.post(endpoints['getcommentuser'],{users:users}).then(res=>{
       
-            setUsersData(res.data)
-        })
-    }
-   
   
+      const fetchNextPost = React.useCallback(() => {
+ 
+   
+        FetchPost()
+      
+      }, []);
+      
+
     useEffect(()=>{
-        FetchUsers(user_ids)
+      FetchPost()
     },[])
     const {colorMode} = useContext(AppContext)
     return (
+ 
         <ScrollView style={[poststyles.container,{backgroundColor:color_scheme(colorMode,'white')}]}
         refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            <RefreshControl refreshing={refreshing} onRefresh={fetchNextPost} />
         
         }>
+                   <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{
+         
+          flex:1,
+      }}
+      keyboardVerticalOffset={60}
+      > 
             <View style={poststyles.top}>
             <TouchableOpacity onPress={()=>navigation.goBack()}>
 
@@ -150,28 +285,39 @@ export default function PostPage({navigation,route}){
             </TouchableOpacity>
             </View>
             <View style={[poststyles.content,{backgroundColor:color_scheme('white')}]}>
-                <PostsList navigation={navigation} index={1} move={false} route={route} posti={post} userdetails={userdetails}/>
+                <PostsList navigation={navigation} index={1} move={false} route={route} posti={post} userdetails={userdetails} ispostpage={true} commentOnRefresh={onRefresh}/>
+                {
+                        posti &&
                 <View style={poststyles.commentssec}>
-                    <View style={[poststyles.commenthead,{borderColor:color_scheme(colorMode,'#eee')}]}
+                    <View style={[poststyles.commenthead, ]}
                     
                     >
-                    <Messages2 variant="Bulk" color="#333" />
+                    <Messages2 variant="Bold" color="#aaa" />
+           
+               
                     <Text style={poststyles.commentheadtext}>
-          Comments ({post.commentslist.length})
+          Comments ({posti.comments.length})
 
 
-                    </Text>
+                    </Text>    
                     </View>
                     <View style={poststyles.comment}>
                 
                     </View>
                 </View>
+                 }
             </View>
             {
-                usersData==null?<Spinner/>:
+                posti==null?<View style={{
+                    marginTop:20
+                }}>
+               <Spinner/>     
+               </View>:
        
-            <RenderComments post={post} FetchUsers={FetchUsers} usersData={usersData} />     }
+            <RenderComments post={posti} FetchPost={FetchPost}  />     }
+                    </KeyboardAvoidingView>
         </ScrollView>
+
 
     )
 }

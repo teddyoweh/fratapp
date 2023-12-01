@@ -100,7 +100,7 @@ const homestyles = StyleSheet.create({
         borderRadius:15,
         paddingVertical:19,
         paddingHorizontal:1.,
-        marginBottom:10,
+        marginBottom:4,
         borderStyle:'solid',
         borderBottomWidth:0.4,
      
@@ -161,8 +161,8 @@ const homestyles = StyleSheet.create({
        width:"90%"
     },
     postcontenttext:{
-        fontSize:16,
-        fontWeight:'300',
+        fontSize:17,
+        fontWeight:'500',
         width:"100%"
      
          

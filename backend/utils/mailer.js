@@ -9,15 +9,15 @@ host: "smtp.titan.email",
 port: 465,
 secure: true,
 auth: {
-user: "info@beardb.net",
+user: "team@herds.app",
 pass: process.env.EMAIL_PASSWORD
 },
 });
 
 let info = transporter.sendMail({
-from: '"Union " <info@beardb.net>',
+from: '"Herds " <team@herds.app>',
 to: email,
-subject: "Union - Verification Code",
+subject: "Herds - Verification Code",
 text: "Hello world?",
 html:code
 });
@@ -26,7 +26,7 @@ console.log("Message sent: %s", info.messageId);
 return true;
 }
 function emailHtml(firstname,code){
-    const logo =`http://${ip}:9990/images/assets/union.png`
+    const logo =`https://www.herds.app/`
     
     return `
     <!DOCTYPE html>
@@ -92,7 +92,7 @@ function emailHtml(firstname,code){
       
         <img class="logo" src="${logo}" alt="Union Logo" width="150" />
         <h2>${firstname}</h2>
-        <p class="message">Thank you for signing up with Union! Please use the verification code below to verify your email address</p>
+        <p class="message">Thank you for signing up with Herds! Please use the verification code below to verify your email address</p>
         <b>
         ${code}
         </b>    

@@ -16,8 +16,10 @@ const endpoints = {
     'updatelink':`${serverip}/api/link/link`,
     'update_link_stat':`${serverip}/api/link/update`,
     'block_link':`${serverip}/api/link/block`,
+    
 
-
+    'deletecomment':`${serverip}/api/posts/deletecomment`,
+    'getonepost':`${serverip}/api/posts/getonepost`,
     'makepost':`${serverip}/api/posts/add`,
     'getposts':`${serverip}/api/posts/fetch`,
     'fetchmyposts':`${serverip}/api/posts/fetchmyposts`,

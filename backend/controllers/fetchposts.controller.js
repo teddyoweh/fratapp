@@ -4,6 +4,8 @@ const Posts = require('../models/Posts');
   const User = require('../models/User'); 
 const Links = require('../models/Links');
 const { fetchpostsService } = require('../services/post.services');
+const { getComments } = require('./comment.controller');
+const Comments = require('../models/Comments');
 
 
 async function fetchpostscontroller(req, res) {
@@ -55,16 +57,62 @@ async function fetchpostscontroller(req, res) {
   }
   
   
-function getOnePost(req,res){
-    Posts.findOne({ _id: req.body.id }).then(post => {
-        res.json(post)
-        }).catch(err => {
-            console.log(err)
-            res.json({ status: false, data: err })
-            })
+  async function getOnePost(req, res) {
+ 
     
-
-}
+    try {
+      const postId = req.body.id;
+  
+      const post = await Posts.findOne({ _id: postId });
+  
+      if (!post) {
+        return res.json({ error: 'Post not found' });
+      }
+  
+      const comments = await Comments.find({ postid: postId });
+  
+      
+  
+      const commentPromises = comments.map(async (comment) => {
+        const userData = await User.findById(comment.userid);
+        return {
+          postid: comment.postid,
+          userid: comment.userid,
+          comment: comment.comment,
+          likelist: comment.likelist,
+          date: comment.date,
+          id: comment._id.toString(),
+          userdata: {
+            firstname: userData.firstname,
+            lastname: userData.lastname,
+            username: userData.username,
+            email: userData.email,
+            bio: userData.bio,
+            schools: userData.schools,
+            orgs: userData.orgs,
+            pinnedorg: userData.pinnedorg,
+            isverified: userData.isverified,
+            isofficial: userData.isofficial,
+            uimg: userData.uimg,
+            date: userData.date,
+            isfirsttime: userData.isfirsttime,
+          },
+        };
+      });
+  
+      const commentsWithUserData = await Promise.all(commentPromises);
+       const val = {...post._doc,comments:commentsWithUserData,id:post._id.toString()}
+ 
+      res.json(val);
+    } catch (error) {
+      console.error(error);
+      res.json({ error: 'Something went wrong' });
+    }
+  }
+  
+  
+  
+ 
 async function deletePost(req,res){
     Posts.findOneAndDelete({ _id: req.body.id }).then(post => {
         res.json(post)

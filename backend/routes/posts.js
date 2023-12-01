@@ -8,7 +8,7 @@ const  {fetchpostscontroller,getOnePost,fetchmypostscontroller, fetchPostUserLik
 const fetchhotposts = require('../controllers/fetchhotposts.controller');
 const searchpostscontroller = require('../controllers/searchposts.controller');
 const likespostscontoller = require('../controllers/likesposts.controller')
-const {addcommentscontroller, getCommentUser} = require('../controllers/comment.controller')
+const {addcommentscontroller, getComments, deleteComment} = require('../controllers/comment.controller')
 const fetchcommentscontroller = require('../controllers/fetchcomments.controller')
 const {uploadcontroller, uploadPostImg} = require('../controllers/upload.controller')
 
@@ -45,7 +45,7 @@ var upload = multer({ storage: storage });
 router.post('/add', (req, res) => { postscontoller(req, res) })
 router.post('/like', (req, res) => { likespostscontoller(req, res) })
 router.post('/find', (req, res) => { findpostcontroller(req, res) })
- 
+router.post('/deletecomment', (req, res) => { deleteComment(req,res)})
 router.post('/getonepost', (req, res) => { getOnePost(req, res) })
 router.post('/fetchmyposts', (req, res) => { fetchmypostscontroller(req, res) })
 router.post('/fetchlikeusers', (req, res) => { fetchPostUserLikes(req, res) })
@@ -58,8 +58,7 @@ router.post('/newsfeed', (req, res) => { newsfeed(req, res) })
 router.post('/fetchpinned', (req, res) => { fetchpinnedposts(req, res) })
 router.post('/search', (req, res) => { searchpostscontroller(req,res)})
 router.post('/addcomment', (req, res) => { addcommentscontroller(req, res) })
-router.post('/getcommentuser',(req,res)=>{getCommentUser(req,res)})
-router.post('/fetchcomments', (req, res) => { fetchcommentscontroller(req, res) })
+router.post('/fetchcomments', (req, res) => { getComments(req, res) })
 router.post('/uploadpost',upload.single('fileData'),uploadPostImg)
 router.post('/delete', (req, res) => { deletePost(req,res)})
 

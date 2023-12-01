@@ -624,6 +624,7 @@ function RenderMakeEvent({startdate,enddate,setStartDate,setEndDate,eventtype, s
     const [activeDateType,setActiveDateType] = useState('start')
     const [eventOthertype,setEventOtherType] = useState('')
     const {colorMode} = useContext(AppContext)
+
     const eventtypes = [
         "Club Meeting",
         "Workshop",
@@ -644,7 +645,7 @@ function RenderMakeEvent({startdate,enddate,setStartDate,setEndDate,eventtype, s
           lat: e.nativeEvent.coordinate.latitude,
           long: e.nativeEvent.coordinate.longitude,
         };
-        alert(JSON.stringify(newLocation));
+ 
         setEventLocation(newLocation);
     }    
     function openDateSheet(type){
@@ -972,7 +973,8 @@ const {setPost,postd} = route.params
     const [userposttypes,setUserPostTypes] = useState([])
 const [linkStore, setLinkStore] = useState([])
 const snapPoints = useMemo(() => ['25%', '50%'], []);
-const {user} = useContext(AppContext)
+const {user,location} = useContext(AppContext)
+// alert(JSON.stringify(location))
 const [postedby,setPostedBy] = useState({
     name:user.username,
     id:user.userid,
@@ -1102,17 +1104,26 @@ const handleSheetChanges = useCallback((index) => {
     lat: 37.78825,
     long: -122.4324,
  })
+ 
 async function axiosMakePost(){
     const random = randomNumberString()
   
-   await axios.post(endpoints['makepost'],{account_type:postedby.type, eventstartdate:eventstartdate,eventenddate:eventenddate, eventdescription:eventdescription,eventname:eventname,eventlocation:eventlocation, links:linkStore, random:random, email:user.username,content:postinput,isjob:opportunityOptionActive,isevent:eventOptionActive,isanouncement:announcementOptionActive,userid:user.userid,repostid:null,isrepost:false,images:images,posttype:selectedTab.toLowerCase(),pollsoptions:polls,pollsdeadline:polldate,userid:user.userid})
+   await axios.post(endpoints['makepost'],{account_type:postedby.type, eventstartdate:eventstartdate,eventenddate:eventenddate, eventdescription:eventdescription,eventname:eventname,eventlocation:eventlocation, links:linkStore, random:random, email:user.username,content:postinput,isjob:opportunityOptionActive,isevent:eventOptionActive,isanouncement:announcementOptionActive,userid:user.userid,repostid:null,isrepost:false,images:images,posttype:selectedTab.toLowerCase(),pollsoptions:polls,pollsdeadline:polldate,userid:user.userid,lat:user_location.latitude,long:user_location.longitude})
     .then(async (res)=>{
  
-         
+        if(images.length>0){
+
+     
         await uploadImages(random).then(res=>{
-            navigation.goBack()
+       
             setImages([])
         })
+    }
+ 
+    navigation.goBack(null,{msg_key:'posted'})
+     
+
+    
         // setPost([...postd,res.data])
    
     })
@@ -1121,9 +1132,9 @@ async function axiosMakePost(){
 
 }
 
-  function onSubmit(){
+  async function onSubmit(){
     Haptics.impactAsync('medium')
-    axiosMakePost() 
+    await axiosMakePost() 
 }11
 const addImage = async () => {
     let _image = await ImagePicker.launchImageLibraryAsync({
@@ -1155,7 +1166,7 @@ const addImage = async () => {
 // useEffect(() => {
 //     checkForCameraRollPermission()
 //   }, []);
-const {colorMode} = useContext(AppContext)
+const {colorMode,user_location} = useContext(AppContext)
 
 return (
     <KeyboardAvoidingView
@@ -1191,7 +1202,9 @@ style={{
 >
 <TouchableOpacity onPress={()=>{
                        Haptics.impactAsync('medium')
-                        navigation.goBack()}}
+                
+                       navigation.goBack(null,{msg_key:'posted'})
+}}
                     style={{
                         flexDirection:"row",
                         alignItems:'center',

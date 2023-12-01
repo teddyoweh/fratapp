@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useContext, useRef}from "react";
-import { View,Text,Dimensions, Image,TouchableOpacity, ScrollView, TextInput, Pressable, Share, ActionSheetIOS, KeyboardAvoidingView, InputAccessoryView, Button} from "react-native";
+import { View,Text,Dimensions, Image,TouchableOpacity, ScrollView, TextInput, Pressable, Share, ActionSheetIOS, KeyboardAvoidingView, InputAccessoryView, Button, Alert} from "react-native";
 import { homestyles } from "../styles";
 import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, MessageText, Link2, Link, MessageText1, Send2, ArrowUp, Verify, Calendar, Calendar2, ArrowRight} from 'iconsax-react-native';
 import { FontAwesome5,Entypo,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
@@ -8,7 +8,7 @@ import * as Sharing from 'expo-sharing';
 import LikeBtn from "./LikeBtn";
 import axios from "axios";
 import { endpoints } from "../config/endpoints";
-import { getTimeDifference, wrapPostImg, wrapUIMG } from "../utils/utils";
+import { calculatePostDistance, getTimeDifference, wrapPostImg, wrapUIMG } from "../utils/utils";
 import { AppContext } from "../context/appContext";
 import { color_scheme } from "../config/color_scheme";
 import PagerView from 'react-native-pager-view';
@@ -141,15 +141,16 @@ function RenderImages({images}){
 
 }
 
-function CommentInput({postid,setPost}){
+function CommentInput({postid,commentOnRefresh}){
     const {user} = useContext(AppContext)
     const [comment,setComment] = useState('')
     async function addComment(){
         await axios.post(endpoints['addcomment'],{userid:user.userid,comment:comment,postid:postid}).then(
             res=>{
      
-                setPost(res.data)
-                setComment('')
+             
+         
+     
             }
         )
     }
@@ -162,6 +163,7 @@ function CommentInput({postid,setPost}){
         alignItems:'center',
         width:'100%',
         borderWidth:0.5,
+        backgroundColor:"#111",
        
         borderColor:color_scheme(colorMode,'#ddd')
     }]}>
@@ -185,7 +187,12 @@ function CommentInput({postid,setPost}){
         multiline={true}
         />
        <Pressable
-onPress={()=>addComment()}
+onPress={()=>{
+    Haptics.impactAsync("medium")
+    addComment()
+    setComment('')
+    commentOnRefresh()
+}}
 
 
 style={{
@@ -268,7 +275,7 @@ function RenderPollVote({ post, setPosti }) {
         console.error(error);
       }
     }
-  
+
     return (
       <View
         style={{
@@ -810,12 +817,12 @@ function RenderEvent({ post, setPosti }){
         </View>
     )
 }
-export default function PostsList({index,navigation,posti,userdetails,move}){
+export default function PostsList({index,navigation,posti,userdetails,move,ispostpage=false,commentOnRefresh=false}){
     
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
     const windowScale = Dimensions.get('window').scale;
-    
+
  const [post,setPosti] =useState(posti)
  const [showPost,setShowPost] = useState(true)
  
@@ -876,7 +883,7 @@ function scaleImageToScreen(imageWidth, imageHeight) {
     }
   };
 
-  const {colorMode} = useContext(AppContext)
+  const {colorMode,user_location} = useContext(AppContext)
 
   async function shareBtn() {
  
@@ -917,28 +924,72 @@ function scaleImageToScreen(imageWidth, imageHeight) {
   
   ActionSheetIOS.showActionSheetWithOptions(
     {
-      options: morepostoptions ,
+      options: morepostoptions,
       destructiveButtonIndex: 2,
       cancelButtonIndex: 0,
       userInterfaceStyle: 'dark',
     },
-    buttonIndex => {
+    (buttonIndex) => {
       if (buttonIndex === 0) {
         // cancel action
       } else if (buttonIndex === 1) {
-        alert(`Successfuly Reported this post, We will review this post and take action if necessary.`)
+        Alert.alert(
+          'Confirm Report',
+          'Are you sure you want to report this post?',
+          [
+            {
+              text: 'Cancel',
+              style: 'cancel',
+            },
+            {
+              text: 'Report',
+              onPress: () => alert('Successfully Reported this post. We will review this post and take action if necessary.'),
+              style: 'destructive',
+            },
+          ],
+          { cancelable: true }
+        );
       } else if (buttonIndex === 2) {
-        if (post.userid ==user.userid){
-            deletePost(id)
+        if (post.userid === user.userid) {
+          Alert.alert(
+            'Confirm Delete',
+            'Are you sure you want to delete this post?',
+            [
+              {
+                text: 'Cancel',
+                style: 'cancel',
+              },
+              {
+                text: 'Delete',
+                onPress: () => deletePost(id),
+                style: 'destructive',
+              },
+            ],
+            { cancelable: true }
+          );
+        } else {
+          Alert.alert(
+            'Confirm Block',
+            'Are you sure you want to block this user? Refresh Feed to see changes.',
+            [
+              {
+                text: 'Cancel',
+                style: 'cancel',
+              },
+              {
+                text: 'Block',
+                onPress: () => {
+                  blockUser();
+                  alert('Successfully Blocked. Refresh Feed to see changes.');
+                },
+                style: 'destructive',
+              },
+            ],
+            { cancelable: true }
+          );
         }
-        else{
-            blockUser()
-            alert(`Successfully Blocked @${userdetails.username}\n Refresh Feed to see changes.`)
-        }
-    
-        
       }
-    },
+    }
   );
   async function blockUser(){
     await axios.post(endpoints['block_link'],{
@@ -951,11 +1002,12 @@ function scaleImageToScreen(imageWidth, imageHeight) {
   const inputcommentid = 'uniqueID';
 const likeBottomSheet = useRef(null);
 const [likeno,setLikeNo] = useState(post.likesuserlist.length)
+
     return (
         showPost &&   userdetails && 
         <>
 
-        <View style={[homestyles.post,{borderColor:color_scheme(colorMode,'#dddd')}]} key={index} 
+        <View style={[homestyles.post,{borderColor:color_scheme(colorMode,'#dddd')}]}  
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 
         >
@@ -1124,8 +1176,28 @@ const [likeno,setLikeNo] = useState(post.likesuserlist.length)
                  
             </View>
            
-            <View>
+            <View
+            style={{
+                flexDirection:'row',
+                alignItems:'center',
+       
+                paddingBottom:10
+            
+            }}
+            >
+                {user_location&&
+                <Text
                 
+                style={{
+                    color:color_scheme(colorMode,'#aaa'),
+                    fontWeight:"600",
+                    fontSize:13,
+                    marginRight:5,
+                    textAlign:'right'
+                }}
+                >
+                   {'<'} { calculatePostDistance(user_location.latitude,user_location.longitude,post.location.coordinates[1],post.location.coordinates[0])} mi
+                </Text>}
             <TouchableOpacity  style={[homestyles.insightbtn,{
                 marginRight:6
             }]} onPress={()=>onMore(post._id)} >
@@ -1222,7 +1294,10 @@ const [likeno,setLikeNo] = useState(post.likesuserlist.length)
                 paddingHorizontal:10
             }}
             >
-            {/* <CommentInput  /> */}
+                {
+                    ispostpage==true &&         <CommentInput postid={post._id}  commentOnRefresh={commentOnRefresh}/>
+                }
+   
             </View>
          
             

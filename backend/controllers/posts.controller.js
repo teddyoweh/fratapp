@@ -16,7 +16,7 @@ function hashcode(data){
         return hashcode(hashcode(filename)+hashcode(hashcode(email)+hashcode(randomNumberString1)))+'.jpeg';
     
      }
-function postscontroller(req, res) {
+async function postscontroller(req, res) {
     const images = []
     const {userid} = req.body
     console.log(req.body.images)
@@ -63,7 +63,10 @@ function postscontroller(req, res) {
         isorgpriv:req.body.isorgpriv,
         orgid:req.body.orgid,
         eventdescription:req.body.eventdescription,
-        
+        location:{
+            type: "Point",
+            coordinates: [req.body.long, req.body.lat]
+        },
         pollsoptions:req.body.pollsoptions,
     
         pollsdeadline:req.body.pollsdeadline,
@@ -76,23 +79,20 @@ function postscontroller(req, res) {
 
     });
    
-    newPost.save()
-        .then(post => {
-            if(req.body.isrepost){
-                // Posts.findById(req.body.isrepostid)
-                Posts.findByIdAndUpdate(req.body.repostid, { $inc: { repostno: 1 }, $push: { repostlist: [req.body.userid, post._id] } }, { new: true }).then(post1 => {
+    await new Promise(resolve => setTimeout(resolve, 1));
 
-                    
-                })
-            }
+    const post = await newPost.save();
+
+    if (req.body.isrepost) {
+        await Posts.findByIdAndUpdate(repostid, {
+            $inc: { repostno: 1 },
+            $push: { repostlist: [userid, post._id] },
+        }, { new: true });
+    }
  
-    res.json(post)
-            
 
-  
- }
-             )
-        .catch(err => { res.json({ status: false, data: err }) });
+    res.json(post)
+ 
 
 }
 

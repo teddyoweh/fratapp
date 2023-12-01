@@ -195,12 +195,12 @@ function RegisterPage({navigation}) {
   }
 
   const {colorMode} = useContext(AppContext)
-  const applogo =require('../../../assets/HERDS-icon.png') 
-  const logostyle  = colorMode=='dark'?{      width: 150,
-      height:150}:{
-          width:500,
-          height:500,
-      }
+  const applogo =require('../../../assets/HERDS_CLEAN.png') 
+  const logostyle  =  {
+    marginTop: 20,
+    width: 200,
+    height: 100,
+  }
   return ( 
     <KeyboardAvoidingView
  style={[authstyles.container,{
