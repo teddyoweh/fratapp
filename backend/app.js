@@ -60,7 +60,8 @@ const { chatSocket, unreadCountSocket } = require('./sockets/messages.socket');
 
  
 ModDB();
-chatSocket(app);
+// r
+
 //unreadCountSocket(app);
 
 app.get('/', function (req, res) {

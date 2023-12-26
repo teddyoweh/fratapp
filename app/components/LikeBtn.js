@@ -39,7 +39,7 @@ await LikeFunction()
    
     return(
         <TouchableOpacity  style={homestyles.insightbtn} onPress={()=>onClick()}>
-            <Heart color={isLike?"#FF0000":"#333"} size={24} variant={isLike?colorMode=='dark'?'Bold':"Bulk":"Linear"}
+            <Heart color={isLike?"#FF0000":"#555"} size={24} variant={isLike?colorMode=='dark'?'Bold':"Bulk":"Linear"}
           
             />
          

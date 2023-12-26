@@ -33,13 +33,20 @@ function RenderOrgs({Orgs,setOrgs,FetchOrgs,navigation}){
             <View
             style={{
                 flex:1,
+                flexDirection:'column',
                 alignItems:'center',
                 justifyContent:'center'
             }}
             >
+                  <Image source={require("../../../assets/island.png")}
+          style={{
+            height:200,
+            width:200
+          }}
+          />
                 <Text
                 style={{
-                    color:color_scheme(colorMode,'#aaa'),
+                    color:color_scheme(colorMode,'#eee'),
                     fontSize:18,
                     fontWeight:'700'
                 }}

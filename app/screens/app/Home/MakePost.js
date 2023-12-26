@@ -963,7 +963,7 @@ const finalHeight = Math.max(minValue, Math.min(maxValue, calculatedHeight));
  )   
 }
 export default function MakePost({navigation,route}){
-const {setPost,postd} = route.params
+const {setPost,postd,repost} = route.params
 
 
  const [postinput,setPostInput] = useState('')
@@ -1108,7 +1108,7 @@ const handleSheetChanges = useCallback((index) => {
 async function axiosMakePost(){
     const random = randomNumberString()
   
-   await axios.post(endpoints['makepost'],{account_type:postedby.type, eventstartdate:eventstartdate,eventenddate:eventenddate, eventdescription:eventdescription,eventname:eventname,eventlocation:eventlocation, links:linkStore, random:random, email:user.username,content:postinput,isjob:opportunityOptionActive,isevent:eventOptionActive,isanouncement:announcementOptionActive,userid:user.userid,repostid:null,isrepost:false,images:images,posttype:selectedTab.toLowerCase(),pollsoptions:polls,pollsdeadline:polldate,userid:user.userid,lat:user_location.latitude,long:user_location.longitude})
+   await axios.post(endpoints['makepost'],{account_type:postedby.type, eventstartdate:eventstartdate,eventenddate:eventenddate, eventdescription:eventdescription,eventname:eventname,eventlocation:eventlocation, links:linkStore, random:random, email:user.username,content:postinput,isjob:opportunityOptionActive,isevent:eventOptionActive,isanouncement:announcementOptionActive,userid:user.userid,repostid:repost,isrepost:repost!=null,images:images,posttype:selectedTab.toLowerCase(),pollsoptions:polls,pollsdeadline:polldate,userid:user.userid,lat:user_location.latitude,long:user_location.longitude})
     .then(async (res)=>{
  
         if(images.length>0){
@@ -1363,14 +1363,23 @@ style={{
                
          
 
-                {linkStore.length>0&& 
-                <LinkBox links={linkStore} removeLinks={removeLinks}/>
-                }
+            
             </View>
         
             <View style={{paddingHorizontal:10}}>
                 <RenderImages images={images} setImages={setImages}/>
             </View>
+            {
+                repost&&
+                <View
+                style={{
+                    marginTop:10
+                }}
+                >
+
+                <PostsList posti={repost.post} navigation={navigation} userdetails={repost.userdetails}/>
+                </View>
+            }
 
       
 

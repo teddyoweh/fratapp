@@ -95,7 +95,7 @@ const homestyles = StyleSheet.create({
     },
     post:{
         // paddingHorizontal:6,
-        backgroundColor:'#191919',
+        backgroundColor:"#191919",
         marginHorizontal:10,
         borderRadius:15,
         paddingVertical:19,
@@ -227,7 +227,7 @@ const homestyles = StyleSheet.create({
         fontWeight:'bold',
     },
     insightbtn:{
-      paddingHorizontal:5,
+      paddingHorizontal:7,
       paddingVertical:5,
       
  

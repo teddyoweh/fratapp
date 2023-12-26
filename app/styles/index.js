@@ -5,4 +5,5 @@ import { authstyles } from "./authstyles";
 import { profilestyles } from "./profilestyles";
 import {calendarstyles} from './calendarstyle'
 import { poststyles } from "./poststyles";
-export { homestyles, globalstyles, discoverstyles, authstyles,profilestyles,calendarstyles,poststyles};
+import {marketplacestyles} from "./marketplacestyles"
+export { homestyles, globalstyles, discoverstyles, authstyles,profilestyles,calendarstyles,poststyles,marketplacestyles};

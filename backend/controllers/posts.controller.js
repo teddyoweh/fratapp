@@ -84,7 +84,7 @@ async function postscontroller(req, res) {
     const post = await newPost.save();
 
     if (req.body.isrepost) {
-        await Posts.findByIdAndUpdate(repostid, {
+        await Posts.findByIdAndUpdate(req.body.repostid.post._id, {
             $inc: { repostno: 1 },
             $push: { repostlist: [userid, post._id] },
         }, { new: true });

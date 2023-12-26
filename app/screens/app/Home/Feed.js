@@ -258,16 +258,22 @@ return (
         style={{
             flex:1,
             height:Dimensions.get('screen').height/2,
-            flexDirection:'row',
+            flexDirection:'column',
             alignItems:"center",
             justifyContent:"center",
             
             
         }}
         >
+          <Image source={require("../../../assets/island.png")}
+          style={{
+            height:200,
+            width:200
+          }}
+          />
             <Text
             style={{
-                color:color_scheme(colorMode,'#aaa'),
+                color:color_scheme(colorMode,'#eee'),
                 fontSize:25,
                 fontWeight:'600'
             }}
@@ -310,8 +316,7 @@ return (
                 <TouchableOpacity style={homestyles.postbtn} onPress={()=>{
                     Haptics.impactAsync('light')
                     navigation.navigate("MakePost",{
-                        setPost:setPostData,
-                        postd:postData,
+                       
                    
                     })
                    }}> 

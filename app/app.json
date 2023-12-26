@@ -2,7 +2,7 @@
   "expo": {
     "name": "HERDS",
     "slug": "herds",
-    "version": "4.0.0",
+    "version": "4.0.1",
     "orientation": "portrait",
     "icon": "./assets/HERDS-icon.png",
     "userInterfaceStyle": "dark",
@@ -20,7 +20,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.teddyoweh.herds",
-      "buildNumber": "17"
+      "buildNumber": "19"
     },
     "android": {
       "adaptiveIcon": {

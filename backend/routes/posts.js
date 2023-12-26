@@ -4,7 +4,7 @@ const router = express.Router();
 const{ fetchannouncementposts,fetcheventposts,fetchpinnedposts,newsfeed} = require('../controllers/queryposts.controller')
 const postscontoller = require('../controllers/posts.controller');
 const findpostcontroller = require('../controllers/findpost.controller');
-const  {fetchpostscontroller,getOnePost,fetchmypostscontroller, fetchPostUserLikes, deletePost, updatePoll} = require('../controllers/fetchposts.controller')
+const  {fetchpostscontroller,getOnePost,fetchmypostscontroller, fetchPostUserLikes, deletePost, updatePoll, fetchComments} = require('../controllers/fetchposts.controller')
 const fetchhotposts = require('../controllers/fetchhotposts.controller');
 const searchpostscontroller = require('../controllers/searchposts.controller');
 const likespostscontoller = require('../controllers/likesposts.controller')
@@ -58,7 +58,7 @@ router.post('/newsfeed', (req, res) => { newsfeed(req, res) })
 router.post('/fetchpinned', (req, res) => { fetchpinnedposts(req, res) })
 router.post('/search', (req, res) => { searchpostscontroller(req,res)})
 router.post('/addcomment', (req, res) => { addcommentscontroller(req, res) })
-router.post('/fetchcomments', (req, res) => { getComments(req, res) })
+router.post('/fetchcomments', (req, res) => { fetchComments(req, res) })
 router.post('/uploadpost',upload.single('fileData'),uploadPostImg)
 router.post('/delete', (req, res) => { deletePost(req,res)})
 

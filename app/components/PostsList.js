@@ -1,7 +1,7 @@
 import React,{useState,useEffect,useContext, useRef}from "react";
 import { View,Text,Dimensions, Image,TouchableOpacity, ScrollView, TextInput, Pressable, Share, ActionSheetIOS, KeyboardAvoidingView, InputAccessoryView, Button, Alert} from "react-native";
 import { homestyles } from "../styles";
-import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, MessageText, Link2, Link, MessageText1, Send2, ArrowUp, Verify, Calendar, Calendar2, ArrowRight} from 'iconsax-react-native';
+import { Message, Messages1,Message2, Messages2, Messages3, MessageSquare,More,Like, Like1,AddCircle, MessageText, Link2, Link, MessageText1, Send2, ArrowUp, Verify, Calendar, Calendar2, ArrowRight, Repeat} from 'iconsax-react-native';
 import { FontAwesome5,Entypo,Ionicons,AntDesign, MaterialIcons} from '@expo/vector-icons';
 import { captureRef, captureScreen } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
@@ -163,7 +163,7 @@ function CommentInput({postid,commentOnRefresh}){
         alignItems:'center',
         width:'100%',
         borderWidth:0.5,
-        backgroundColor:"#111",
+        backgroundColor:"#000",
        
         borderColor:color_scheme(colorMode,'#ddd')
     }]}>
@@ -817,7 +817,7 @@ function RenderEvent({ post, setPosti }){
         </View>
     )
 }
-export default function PostsList({index,navigation,posti,userdetails,move,ispostpage=false,commentOnRefresh=false}){
+export default function PostsList({index,navigation,posti,userdetails,move,ispostpage=false,commentOnRefresh=false,repost}){
     
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
@@ -1088,7 +1088,9 @@ const [likeno,setLikeNo] = useState(post.likesuserlist.length)
                 <Text selectable={true} style={[homestyles.postcontenttext,{color:color_scheme(colorMode,'#333')}]}>
                    {post.content}
                 </Text>
+
             </Pressable>
+          
             </View>
             {
                 post.posttype=='poll'&& 
@@ -1098,6 +1100,7 @@ const [likeno,setLikeNo] = useState(post.likesuserlist.length)
                 post.posttype=='event'&&
                 <RenderEvent post={post} setPosti={setPosti}/>
             }
+
         {/* <View
         style={{
             width:'100%',
@@ -1144,6 +1147,23 @@ const [likeno,setLikeNo] = useState(post.likesuserlist.length)
             }
        
         </View>
+          {
+                post.isrepost&&repost!=true&&
+                <View
+                style={{
+                    borderWidth:1,
+     
+                    borderStyle:'solid',
+                    borderColor:"#444",
+                    marginHorizontal:10,
+                    borderRadius:10,
+                    marginBottom:10
+                }}
+                >
+
+                <PostsList navigation={navigation} posti={post.repostid.post} userdetails={post.repostid.userdetails} repost={true} move={true}/>
+                </View>
+            }
         <View
         style={{
             width:'100%',
@@ -1160,15 +1180,30 @@ const [likeno,setLikeNo] = useState(post.likesuserlist.length)
                 </View>
                  
                <View>
+
                <Pressable onPress={()=>moveToPost()}  style={homestyles.insightbtn}  >
-            <MessageText1 color={  color_scheme(colorMode,'#aaa')} size={23} variant="Bold"/>
-            <Text style={homestyles.postinsights1text}>
-   
-                </Text>
+            <MessageText1 color={  color_scheme(colorMode,'#aaa')} size={23} variant="Linear"/>
+          
         </Pressable> 
+    
                </View>
+               <Pressable onPress={()=>{
+
+Haptics.impactAsync('light')
+navigation.navigate("MakePost",{
+    repost:{
+        post:post,
+        userdetails
+    }
+   
+
+})
+               }}  style={homestyles.insightbtn}  >
+        <Repeat   color={  color_scheme(colorMode,'#aaa')} size={23} variant="Bold"/>
+          
+        </Pressable>
                <TouchableOpacity  style={homestyles.insightbtn}  onPress={()=>shareBtn()} >
-            <Send2 color={  color_scheme(colorMode,'#aaa')} size={23} variant="Bold"/>
+            <Send2 color={  color_scheme(colorMode,'#aaa')} size={23} variant="Linear"/>
             <Text style={homestyles.postinsights1text}>
    
                 </Text>

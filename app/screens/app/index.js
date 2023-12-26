@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { View,Text,StyleSheet } from "react-native";
+import { View,Text,StyleSheet,Image } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Home,Home2,Home3,SafeHome,Discover,Activity, LocationDiscover,Calendar,Profile,Notification1, Global, Bubble, Calendar2, SearchStatus, SearchNormal, SearchNormal1} from 'iconsax-react-native';
+import { Home,Home2,Home3,SafeHome,Discover,Activity, LocationDiscover,Calendar,Profile,Notification1, Global, Bubble, Calendar2, SearchStatus, SearchNormal, SearchNormal1, ShoppingBag, ShoppingCart} from 'iconsax-react-native';
 import { BlurView } from 'expo-blur';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -20,12 +20,15 @@ import * as Notifications from 'expo-notifications';
 import { color_scheme } from "../../config/color_scheme";
 import { AppContext } from "../../context/appContext";
 import NotificationStacks from "./Notification";
+import MarketPlaceScreen from "./Marketplace/Marketplace";
+import MarketPlaceStacks from "./Marketplace";
+import { wrapUIMG } from "../../utils/utils";
 
 const AppTab = createBottomTabNavigator()  
 const AppStack = createStackNavigator()
 
  function AppScreen(){
-  const {colorMode} = useContext(AppContext)
+  const {colorMode,user} = useContext(AppContext)
 
     return (
        
@@ -75,18 +78,18 @@ const AppStack = createStackNavigator()
                   ?<Profile color={  color_scheme(colorMode,'black')}variant="Bulk" size={25} />
 
                   : <Profile  color={color_scheme(colorMode,'#aaa')} variant="Bold" size={25} />
-                  return   iconName
+                  return   <Image source={{uri:wrapUIMG(user.uimg)}} style={{width:30,height:30,borderRadius:50}}/>
               }
   
-              else if (route.name === 'Notification') {
+              else if (route.name === 'Marketplace') {
           
 
                 iconName = focused
-                  ?             <Activity color={  color_scheme(colorMode,'black')}variant="Bulk" size={25} />
+                  ?             <ShoppingCart color={  color_scheme(colorMode,'black')}variant="Bold" size={25} />
 
                   : 
                   
-                  <Activity  color={color_scheme(colorMode,'#aaa')} variant="Bold" size={25} />
+                  <ShoppingCart  color={color_scheme(colorMode,'#aaa')} variant="Bold" size={25} />
                   return   iconName
                   
               }
@@ -123,13 +126,13 @@ const AppStack = createStackNavigator()
           }}
           /> */}
                   
-          {/* <AppTab.Screen name="Notification" component={SafeHome} options={{
+          <AppTab.Screen name="Marketplace" component={MarketPlaceStacks} options={{
                   tabBarBadge:1,
                   tabBarBadgeStyle:{
                     backgroundColor:'#a330d0'
                   }
 
-          }} /> */}
+          }} />
 
           <AppTab.Screen name="Profile" component={ProfileStacks} />
          

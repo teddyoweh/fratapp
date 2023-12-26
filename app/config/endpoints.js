@@ -19,6 +19,7 @@ const endpoints = {
     
 
     'deletecomment':`${serverip}/api/posts/deletecomment`,
+    'fetchcomments':`${serverip}/api/posts/fetchcomments`,
     'getonepost':`${serverip}/api/posts/getonepost`,
     'makepost':`${serverip}/api/posts/add`,
     'getposts':`${serverip}/api/posts/fetch`,

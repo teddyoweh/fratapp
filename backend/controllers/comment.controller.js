@@ -18,9 +18,14 @@ async function addcommentscontroller(req, res) {
 
     })
 
-}async function getComments(req,res) {
+}
+
+
+async function getComments(req,res) {
   const {postId} = req.body
+  query = { postid: postId };
   try {
+
     const comment = await Comment.findOne({ postid: postId });
 
     if (!comment) {

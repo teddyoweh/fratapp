@@ -56,21 +56,69 @@ async function fetchpostscontroller(req, res) {
     }
   }
   
-  
-  async function getOnePost(req, res) {
+  async function fetchComments(req,res){
+    const {postId,cursor} = req.body
+    query ={postid:postId}
+    if (cursor) {
+      query._id = { $lt: cursor };
+    }
+    const comments = await Comments.find(query)
+
+    const commentPromises = comments.map(async (comment) => {
+      const userData = await User.findById(comment.userid);
+      return {
+        postid: comment.postid,
+        userid: comment.userid,
+        comment: comment.comment,
+        likelist: comment.likelist,
+        date: comment.date,
+        id: comment._id.toString(),
+        userdata: {
+          firstname: userData.firstname,
+          lastname: userData.lastname,
+          username: userData.username,
+          email: userData.email,
+          bio: userData.bio,
+          schools: userData.schools,
+          orgs: userData.orgs,
+          pinnedorg: userData.pinnedorg,
+          isverified: userData.isverified,
+          isofficial: userData.isofficial,
+          uimg: userData.uimg,
+          date: userData.date,
+          isfirsttime: userData.isfirsttime,
+        },
+      };
+    });
+
+    const commentsWithUserData = await Promise.all(commentPromises);
  
-    
+return {
+  comments:commentsWithUserData,
+  cursor:comments[comments.length-1]._id.toString()
+}
+
+
+  }
+  async function getOnePost(req, res) {
+    const limit = 5
+    const {cursor}=req.body
     try {
       const postId = req.body.id;
+      
   
       const post = await Posts.findOne({ _id: postId });
   
       if (!post) {
         return res.json({ error: 'Post not found' });
       }
-  
-      const comments = await Comments.find({ postid: postId });
-  
+      let query ={postid:postId}
+      if (cursor) {
+        query._id = { $gt: cursor };
+      }
+      console.log(query)
+      const comments = await Comments.find(query).limit(limit).lean();
+      const count = await Comments.countDocuments({postid:postId})
       
   
       const commentPromises = comments.map(async (comment) => {
@@ -101,9 +149,11 @@ async function fetchpostscontroller(req, res) {
       });
   
       const commentsWithUserData = await Promise.all(commentPromises);
-       const val = {...post._doc,comments:commentsWithUserData,id:post._id.toString()}
- 
-      res.json(val);
+       const val = {...post._doc,comments:commentsWithUserData,id:post._id.toString(),
+        cursor:comments[comments.length-1]?._id.toString(),
+        count:count}
+        console.log(commentsWithUserData,'this is the comments')
+       res.json(val);
     } catch (error) {
       console.error(error);
       res.json({ error: 'Something went wrong' });
@@ -202,4 +252,4 @@ async function updatePoll(req, res) {
 
 
 
-module.exports = {fetchpostscontroller,updatePoll,getOnePost,fetchmypostscontroller,fetchPostUserLikes,deletePost}
+module.exports = {fetchpostscontroller,updatePoll,getOnePost,fetchmypostscontroller,fetchPostUserLikes,deletePost,fetchComments}
