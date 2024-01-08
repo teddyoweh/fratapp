@@ -19,7 +19,7 @@ function hashcode(data){
 
 function uploadPostImg(req,res){
    
-
+   console.log('this is the file',req.file)
        
          
         fs.readFile(req.file.path,(err, contents)=> {

@@ -1,15 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const{ fetchannouncementposts,fetcheventposts,fetchpinnedposts,newsfeed} = require('../controllers/queryposts.controller')
-const postscontoller = require('../controllers/posts.controller');
-const findpostcontroller = require('../controllers/findpost.controller');
-const  {fetchpostscontroller,getOnePost,fetchmypostscontroller, fetchPostUserLikes, deletePost, updatePoll, fetchComments} = require('../controllers/fetchposts.controller')
-const fetchhotposts = require('../controllers/fetchhotposts.controller');
-const searchpostscontroller = require('../controllers/searchposts.controller');
-const likespostscontoller = require('../controllers/likesposts.controller')
-const {addcommentscontroller, getComments, deleteComment} = require('../controllers/comment.controller')
-const fetchcommentscontroller = require('../controllers/fetchcomments.controller')
+ 
 const {uploadcontroller, uploadPostImg} = require('../controllers/upload.controller')
 
 var multer  = require('multer');
@@ -41,26 +33,9 @@ return hashedData
 
  }
 var upload = multer({ storage: storage });
-// var upload = multer({ dest: 'uploads' , limits: { fieldSize: 2 * 1024 * 1024 }});
-router.post('/add', (req, res) => { postscontoller(req, res) })
-router.post('/like', (req, res) => { likespostscontoller(req, res) })
-router.post('/find', (req, res) => { findpostcontroller(req, res) })
-router.post('/deletecomment', (req, res) => { deleteComment(req,res)})
-router.post('/getonepost', (req, res) => { getOnePost(req, res) })
-router.post('/fetchmyposts', (req, res) => { fetchmypostscontroller(req, res) })
-router.post('/fetchlikeusers', (req, res) => { fetchPostUserLikes(req, res) })
-router.post('/fetch', (req, res) => { fetchpostscontroller(req, res) })
-router.post('/fetchhot', (req, res) => { fetchhotposts(req,res) })
-router.post('/fetchevents', (req, res) => { fetcheventposts(req, res) })
-router.post('/updatepoll', (req, res) => { updatePoll(req, res) })
-router.post('/fetchannouncements', (req, res) => { fetchannouncementposts(req, res) })
-router.post('/newsfeed', (req, res) => { newsfeed(req, res) })
-router.post('/fetchpinned', (req, res) => { fetchpinnedposts(req, res) })
-router.post('/search', (req, res) => { searchpostscontroller(req,res)})
-router.post('/addcomment', (req, res) => { addcommentscontroller(req, res) })
-router.post('/fetchcomments', (req, res) => { fetchComments(req, res) })
-router.post('/uploadpost',upload.single('fileData'),uploadPostImg)
-router.post('/delete', (req, res) => { deletePost(req,res)})
+ 
+ router.post('/uploadpost',upload.single('fileData'),uploadPostImg)
+
 
 
 module.exports = router
