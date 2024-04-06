@@ -5,8 +5,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const config = require('./db');
 const cors = require('cors');
-const posts = require('./routes/posts');
-const auth = require('./routes/auth');
  
  
 
